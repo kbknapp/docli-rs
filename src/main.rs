@@ -31,15 +31,39 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                           -n --nosend        'Does NOT execute network send of JSON'
                           -t --token [token] 'Digital Ocean Auth Token (Defaults to contents \
                                               of DO_AUTH_TOKEN env var if omitted)'")
+        .subcommand(SubCommand::new("list")
+            .about("Commands for displaying available information")
+            .subcommand(SubCommand::new("regions")
+                .about("Displays available regions"))
+            .subcommand(SubCommand::new("sizes")
+                .about("Displays available droplet sizes"))
+            .subcommand(SubCommand::new("images")
+                .args_from_usage("--distrobutions   'Displays all distrobution images'
+                                  --applications    'Displays all application images'
+                                  --private         'Displays all private user images'
+                                  --available       'Displays all available images (Default)'")
+                .about("Displays avaiable droplet images")
+                .arg_group(ArgGroup::with_name("images").add_all(vec!["distrobutions",
+                                                                      "applications",
+                                                                      "private",
+                                                                      "available"])))
+            .subcommand(SubCommand::new("ssh-keys")
+                .about("Displays available SSH keys"))
+            .subcommand(SubCommand::new("droplets")
+                .about("Displays available droplets"))
+            .subcomamnd(SubCommand::new("domains")
+                .about("Displays available domains"))
+            .subcomamnd(SubCommand::new("account-info")
+                .about("Displays all account information"))
+            .subcommand(SubCommand::new("account-actions")
+                .about("Displays all current and previous account actions")))
         .subcommand(SubCommand::new("account")
-            .about("Gets or sets info on one's account")
-            .subcommand(SubCommand::new("actions")
-                .about("Gets or sets info on account actions")
-                .subcommand(SubCommand::new("retrieve")
-                    .about("Gets information about a particular account action")
-                    .arg_from_usage("<action_id> 'The action id to retrieve"))))
+            .about("Commands related to a single account")
+            .subcommand(SubCommand::new("retrieve-actions")
+                .about("Gets information about a particular account action")
+                .arg_from_usage("<action_id> 'The action id to retrieve")))
         .subcommand(SubCommand::new("domains")
-            .about("Gets or sets information on domains")
+            .about("Commands for managing domains")
             .subcommand(SubCommand::new("create")
                 .about("Creates a new domain")
                 .args_from_usage("<name> 'The name for the domain'
@@ -49,28 +73,28 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                 .arg_from_usage("<name> 'The name of the domain to get'"))
             .subcommand(SubCommand::new("delete")
                 .about("Deletes a domain")
-                .arg_from_usage("<name> 'The domain to delete'"))
-            .subcommand(SubCommand::new("domain")
-                .about("Gets or sets information on a specific domain")
-                .arg_from_usage("<name> 'The domain name to use'")
-                .subcommand(SubCommand::new("create-record")
-                    .about("Creates a new DNS record for a domain")
-                    .arg_from_usage("<type> 'The type of record to create (i.e. A, AAAA, CNAME, \
-                                             MX, NS, SRV, TXT)'")
-                    .args_from_usage(dns_args))
-                .subcommand(SubCommand::new("retrieve-record")
-                    .about("Gets information on a specific DNS record")
-                    .arg_from_usage("<id>   'The domain ID to retrieve info on'"))
-                .subcommand(SubCommand::new("update-record")
-                    .about("Updates a DNS record")
-                    .arg_from_usage("<type> 'The type of record to create (i.e. A, AAAA, CNAME, \
-                                             MX, NS, SRV, TXT)'")
-                    .args_from_usage(dns_args))
-                .subcommand(SubCommand::new("delete-record")
-                    .about("Deletes a DNS record")
-                    .arg_from_usage("<id>   'The domain ID to delete'"))))
+                .arg_from_usage("<name> 'The domain to delete'")))
+        .subcommand(SubCommand::new("domain")
+            .about("Commands for managing a specific domain")
+            .arg_from_usage("<name> 'The domain name to use'")
+            .subcommand(SubCommand::new("create-record")
+                .about("Creates a new DNS record for a domain")
+                .arg_from_usage("<type> 'The type of record to create (i.e. A, AAAA, CNAME, \
+                                         MX, NS, SRV, TXT)'")
+                .args_from_usage(dns_args))
+            .subcommand(SubCommand::new("retrieve-record")
+                .about("Gets information on a specific DNS record")
+                .arg_from_usage("<id>   'The domain ID to retrieve info on'"))
+            .subcommand(SubCommand::new("update-record")
+                .about("Updates a DNS record")
+                .arg_from_usage("<type> 'The type of record to create (i.e. A, AAAA, CNAME, \
+                                         MX, NS, SRV, TXT)'")
+                .args_from_usage(dns_args))
+            .subcommand(SubCommand::new("delete-record")
+                .about("Deletes a DNS record")
+                .arg_from_usage("<id>   'The domain ID to delete'")))
         .subcommand(SubCommand::new("droplets")
-            .about("Gets or sets information on all droplets")
+            .about("Commands for managing droplets")
             .subcommand(SubCommand::new("list-all-neighbors")
                 .about("Displays all droplets running on the same physical hardware"))
             .subcommand(SubCommand::new("list-upgrades")
@@ -87,7 +111,7 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                                   --private-networking        'Use private networking'
                                   -u --user-data [data]       'User data'")))
         .subcommand(SubCommand::new("droplet")
-            .about("Gets or sets information on a single droplet")
+            .about("Commands for managing a single droplet")
             .arg_from_usage("<id> 'The droplet ID to use'")
             .subcommand(SubCommand::new("retrieve")
                 .about("Display the information on the droplet"))
@@ -144,11 +168,6 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                 .arg_from_usage("<action_id> 'The action ID to display'"))
             .subcommand(SubCommand::new("upgrade")
                 .about("Performs pending upgrades")))
-        .subcommand(SubCommand::new("images")
-            .about("Displays information about available images")
-            .args_from_usage("--distrobutions   'Displays all distrobution images'
-                              --applications    'Displays all application images'
-                              --private         'Displays all private user images'"))
         .subcommand(SubCommand::new("image")
             .about("Gets or sets information on a particular image")
             .arg_from_usage("<id> 'The image ID to use'")
@@ -156,7 +175,8 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                 .about("Lists all previous and current actions for an image"))
             .subcommand(SubCommand::new("retrieve")
                 .about("Displays a particular image")
-                .arg_from_usage("--slug 'The <id> provided to \'docli image\' is a slug and NOT image ID'"))
+                .arg_from_usage("--slug 'The <id> provided to \'docli image\' is a slug and \
+                                         NOT an image ID'"))
             .subcommand(SubCommand::new("update")
                 .about("Performs pending updates"))
             .subcommand(SubCommand::new("delete")
@@ -225,5 +245,18 @@ fn main() {
     let DEBUG = m.is_present("debug");
     let SEND = m.is_present("nosend");
     let AUTH_TOKEN = get_auth_token(&m);
+
+    match m.subcommand() {
+        ("account", Some(m))  =>(),
+        ("domains", Some(m))  =>(),
+        ("domain", Some(m))   =>(),
+        ("droplets", Some(m)) =>(),
+        ("droplet", Some(m))  =>(),
+        ("image", Some(m))    =>(),
+        ("ssh-keys", Some(m)) =>(),
+        ("list", Some(m))     =>(),
+        _                     => println!("No command was provided\n\n{}",m.usage())
+    }
+
     println!("Done");
 }
