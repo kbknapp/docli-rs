@@ -6,3 +6,4 @@ pub mod droplets;
 pub mod domain;
 pub mod domains;
 pub mod account;
+pub mod errors;

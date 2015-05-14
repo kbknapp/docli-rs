@@ -1,13 +1,21 @@
 use clap::ArgMatches;
 
 use config::Config;
+use cli::errors::{CliError, CliResult};
 
-pub fn run(m: &ArgMatches, cfg: &Config) {
-    if let Some(m) = m.subcommand_matches("retrieve-action") {
-        // PLACEHOLDER
-        println!("Retrieving action id: {}", m.value_of("action_id").unwrap());
-    } else {
-        println!("No command was provided\n\n{}\n\n\
-                  For more information try --help",m.usage());
+pub fn run(m: &ArgMatches, cfg: &Config) -> CliResult {
+    match m.subcommand() {
+        ("show-action", Some(m)) => {
+            // PLACEHOLDER
+            println!("Retrieving action id: {}", m.value_of("action_id").unwrap());
+            Ok(())
+        },
+        ("show", Some(m))        => {
+            // PLACEHOLDER
+            println!("Retrieving acount info");
+            Ok(())
+
+        },
+        _                        => Err(CliError::NoCommand)
     }
 }

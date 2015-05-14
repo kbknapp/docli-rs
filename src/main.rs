@@ -7,6 +7,7 @@ mod cli;
 mod config;
 
 use config::Config;
+use cli::errors::CliError;
 use cli::{list, account, domain, domains, droplet, droplets, image, ssh_keys};
 
 arg_enum!{
@@ -58,13 +59,13 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                 .about("Displays available droplets"))
             .subcommand(SubCommand::new("domains")
                 .about("Displays available domains"))
-            .subcommand(SubCommand::new("account-info")
-                .about("Displays all account information"))
             .subcommand(SubCommand::new("account-actions")
                 .about("Displays all current and previous account actions")))
         .subcommand(SubCommand::new("account")
             .about("Commands related to a single account")
-            .subcommand(SubCommand::new("retrieve-action")
+            .subcommand(SubCommand::new("show")
+                .about("Display account information"))
+            .subcommand(SubCommand::new("show-action")
                 .about("Gets information about a particular account action")
                 .arg_from_usage("<action_id> 'The action id to retrieve")))
         .subcommand(SubCommand::new("domains")
@@ -73,7 +74,7 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                 .about("Creates a new domain")
                 .args_from_usage("<name> 'The name for the domain'
                                   <ip>   'The IP address of the domain'"))
-            .subcommand(SubCommand::new("retrieve")
+            .subcommand(SubCommand::new("show-domain")
                 .about("Gets information on a particular domain")
                 .arg_from_usage("<name> 'The name of the domain to get'"))
             .subcommand(SubCommand::new("delete")
@@ -87,7 +88,7 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                 .arg_from_usage("<type> 'The type of record to create (i.e. A, AAAA, CNAME, \
                                          MX, NS, SRV, TXT)'")
                 .args_from_usage(dns_args))
-            .subcommand(SubCommand::new("retrieve-record")
+            .subcommand(SubCommand::new("show-record")
                 .about("Gets information on a specific DNS record")
                 .arg_from_usage("<id>   'The domain ID to retrieve info on'"))
             .subcommand(SubCommand::new("update-record")
@@ -118,7 +119,7 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
         .subcommand(SubCommand::new("droplet")
             .about("Commands for managing a single droplet")
             .arg_from_usage("<id> 'The droplet ID to use'")
-            .subcommand(SubCommand::new("retrieve")
+            .subcommand(SubCommand::new("show")
                 .about("Display the information on the droplet"))
             .subcommand(SubCommand::new("list-kernels")
                 .about("Display all available kernels"))
@@ -200,7 +201,7 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                 .about("Creatse a new SSH key")
                 .arg_from_usage("<name>       'The name of the SSH key'
                                  <public_key> 'The public key of the SSH key'"))
-            .subcommand(SubCommand::new("retrieve")
+            .subcommand(SubCommand::new("show-key")
                 .about("Displays information on a particular key")
                 .args_from_usage("<key_id>       'The key ID of the key to display'
                                   <finger_print> 'The fingerprint of the key to display'"))
@@ -221,10 +222,6 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                     .add_all(vec!["key_id",
                                   "finger_print"])
                     .required(true))))
-        .subcommand(SubCommand::new("list-regions")
-            .about("Display all available regions"))
-        .subcommand(SubCommand::new("list-sizes")
-            .about("Display all available sizes"))
         .get_matches()
 }
 
@@ -253,7 +250,7 @@ fn main() {
         auth: get_auth_token(&m)
     };
 
-    match m.subcommand() {
+    let res = match m.subcommand() {
         ("account", Some(m))  => account::run(m, &cfg),
         ("domains", Some(m))  => domains::run(m, &cfg),
         ("domain", Some(m))   => domain::run(m, &cfg),
@@ -262,7 +259,14 @@ fn main() {
         ("image", Some(m))    => image::run(m, &cfg),
         ("ssh-keys", Some(m)) => ssh_keys::run(m, &cfg),
         ("list", Some(m))     => list::run(m, &cfg),
-        _                     => println!("No command was provided\n\n{}\n\n\
-                                           For more information try --help",m.usage())
+        _                     => Err(CliError::NoCommand)
+    };
+
+    match res {
+        Err(CliError::NoCommand) => {
+            println!("No command was provided\n\nFor more information try --help");
+            std::process::exit(1);
+        },
+        Ok(_)                    => ()
     }
 }
