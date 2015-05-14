@@ -1,5 +1,5 @@
 [package]
-name = "docli-rs"
+name = "docli"
 version = "0.1.0"
 authors = ["Kevin K <kbknapp@gmail.com>"]
 

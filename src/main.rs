@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate clap;
 
-use clap::{App, Arg, ArgGroup, ArgMatches, SubCommand};
+use clap::{App, ArgGroup, ArgMatches, SubCommand};
 
 arg_enum!{
     #[derive(Debug)]
@@ -16,7 +16,6 @@ arg_enum!{
     }
 }
 
-const DOMAIN_REC_TYPES: [&'static str; 7] = ["A", "AAAA", "CNAME", "MX", "NS", "SRV", "TXT"];
 
 fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
     let dns_args = "[name]     'The name to use'
@@ -30,9 +29,8 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
         .author("Kevin K. <kbknapp@gmail.com>")
         .args_from_usage("-d --debug         'Displays JSON being sent to server'
                           -n --nosend        'Does NOT execute network send of JSON'
-                          -t --token [token] 'The Digital Ocean Auth Token (Defaults to contents \
-                                              of DO_AUTH_TOKEN environmental variable if \
-                                              omitted)'")
+                          -t --token [token] 'Digital Ocean Auth Token (Defaults to contents \
+                                              of DO_AUTH_TOKEN env var if omitted)'")
         .subcommand(SubCommand::new("account")
             .about("Gets or sets info on one's account")
             .subcommand(SubCommand::new("actions")
@@ -57,20 +55,20 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                 .arg_from_usage("<name> 'The domain name to use'")
                 .subcommand(SubCommand::new("create-record")
                     .about("Creates a new DNS record for a domain")
-                    .arg(Arg::from_usage("<type> 'The type of record to create'")
-                        .possible_values(&DOMAIN_REC_TYPES))
+                    .arg_from_usage("<type> 'The type of record to create (i.e. A, AAAA, CNAME, \
+                                             MX, NS, SRV, TXT)'")
                     .args_from_usage(dns_args))
                 .subcommand(SubCommand::new("retrieve-record")
                     .about("Gets information on a specific DNS record")
                     .arg_from_usage("<id>   'The domain ID to retrieve info on'"))
                 .subcommand(SubCommand::new("update-record")
                     .about("Updates a DNS record")
-                    .arg(Arg::from_usage("<type> 'The type of record to create'")
-                        .possible_values(&DOMAIN_REC_TYPES))
+                    .arg_from_usage("<type> 'The type of record to create (i.e. A, AAAA, CNAME, \
+                                             MX, NS, SRV, TXT)'")
                     .args_from_usage(dns_args))
                 .subcommand(SubCommand::new("delete-record")
                     .about("Deletes a DNS record")
-                    .arg_from_usage("<id>   'The domain ID to delete'")))
+                    .arg_from_usage("<id>   'The domain ID to delete'"))))
         .subcommand(SubCommand::new("droplets")
             .about("Gets or sets information on all droplets")
             .subcommand(SubCommand::new("list-all-neighbors")
@@ -105,7 +103,7 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                 .about("Display all droplets running on the same physical hardware"))
             .subcommand(SubCommand::new("delete")
                 .about("Deletes a droplet"))
-            subcommand(SubCommand::new("disable-backups")
+            .subcommand(SubCommand::new("disable-backups")
                 .about("Disables backups for a droplet"))
             .subcommand(SubCommand::new("reboot")
                 .about("Reboots a droplet"))
@@ -198,15 +196,34 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                     .add_all(vec!["key_id",
                                   "finger_print"])
                     .required(true))))
-        .subcommand(SubCommand::new("regions")
+        .subcommand(SubCommand::new("list-regions")
             .about("Display all available regions"))
-        .subcommand(SubCommand::new("sizes")
+        .subcommand(SubCommand::new("list-sizes")
             .about("Display all available sizes"))
         .get_matches()
+}
+
+fn get_auth_token(m: &ArgMatches) -> String {
+    let tok = if let Some(auth_tok) = m.value_of("token") {
+            auth_tok.to_owned()
+    } else {
+        std::env::vars().filter(|&(ref k, _)| k == "DO_AUTH_TOKEN")
+                        .map(|(_, v)| v.clone() )
+                        .next().unwrap_or("".to_owned())
+    };
+    if tok.len() != 64 {
+        println!("No DigitalOcean Auth Token found.\n\n\
+        Use `docli --token <token>` or set the DO_AUTH_TOKEN environment variable and try again");
+        std::process::exit(1);
+    }
+    tok
 }
 
 fn main() {
     let m = parse_args();
 
+    let DEBUG = m.is_present("debug");
+    let SEND = m.is_present("nosend");
+    let AUTH_TOKEN = get_auth_token(&m);
     println!("Done");
 }
