@@ -255,8 +255,7 @@ fn main() {
         ("image", Some(m))    =>(),
         ("ssh-keys", Some(m)) =>(),
         ("list", Some(m))     =>(),
-        _                     => println!("No command was provided\n\n{}",m.usage())
+        _                     => println!("No command was provided\n\n{}\n\n\
+                                           For more information try --help",m.usage())
     }
-
-    println!("Done");
 }
