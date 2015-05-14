@@ -3,6 +3,12 @@ extern crate clap;
 
 use clap::{App, ArgGroup, ArgMatches, SubCommand};
 
+mod cli;
+mod config;
+
+use config::Config;
+use cli::{list, account, domain, domains, droplet, droplets, image, ssh_keys};
+
 arg_enum!{
     #[derive(Debug)]
     enum DomainRec {
@@ -15,7 +21,6 @@ arg_enum!{
         TXT
     }
 }
-
 
 fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
     let dns_args = "[name]     'The name to use'
@@ -59,7 +64,7 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                 .about("Displays all current and previous account actions")))
         .subcommand(SubCommand::new("account")
             .about("Commands related to a single account")
-            .subcommand(SubCommand::new("retrieve-actions")
+            .subcommand(SubCommand::new("retrieve-action")
                 .about("Gets information about a particular account action")
                 .arg_from_usage("<action_id> 'The action id to retrieve")))
         .subcommand(SubCommand::new("domains")
@@ -242,19 +247,21 @@ fn get_auth_token(m: &ArgMatches) -> String {
 fn main() {
     let m = parse_args();
 
-    let DEBUG = m.is_present("debug");
-    let SEND = m.is_present("nosend");
-    let AUTH_TOKEN = get_auth_token(&m);
+    let cfg = Config {
+        debug: m.is_present("debug"),
+        nosend: !m.is_present("nosend"),
+        auth: get_auth_token(&m)
+    };
 
     match m.subcommand() {
-        ("account", Some(m))  =>(),
-        ("domains", Some(m))  =>(),
-        ("domain", Some(m))   =>(),
-        ("droplets", Some(m)) =>(),
-        ("droplet", Some(m))  =>(),
-        ("image", Some(m))    =>(),
-        ("ssh-keys", Some(m)) =>(),
-        ("list", Some(m))     =>(),
+        ("account", Some(m))  => account::run(m, &cfg),
+        ("domains", Some(m))  => domains::run(m, &cfg),
+        ("domain", Some(m))   => domain::run(m, &cfg),
+        ("droplets", Some(m)) => droplets::run(m, &cfg),
+        ("droplet", Some(m))  => droplet::run(m, &cfg),
+        ("image", Some(m))    => image::run(m, &cfg),
+        ("ssh-keys", Some(m)) => ssh_keys::run(m, &cfg),
+        ("list", Some(m))     => list::run(m, &cfg),
         _                     => println!("No command was provided\n\n{}\n\n\
                                            For more information try --help",m.usage())
     }
