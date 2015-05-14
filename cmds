@@ -1,0 +1,61 @@
+	docli account
+	docli account actions 
+	docli account actions retrieve <id>
+	docli domains
+	docli domains create <name> <ip>
+	docli domains retrieve <name>
+	docli domains delete <name>
+	docli domain <name> 
+	docli domain <name> create-record <type> [name] [data] [priority:int] [port:int] [weight:int]
+	docli domain <name> retrieve-record <id>
+	docli domain <name> update-record <id> <type> [name] [data] [priority:int] [port:int] [weight:int]
+	docli domain <name> delete-record <id>
+	docli droplets
+	docli droplets list-all-neighbors
+	docli droplets list-upgrades
+	docli droplets create <name> <region> <size> <image> [ssh_keys] [--backups] [--ipv6] [--private-networking] [user_data]
+
+	docli droplet <id> retrieve
+	docli droplet <id> list-kernels
+	docli droplet <id> list-snapshots
+	docli droplet <id> list-backups
+	docli droplet <id> list-actions
+	docli droplet <id> delete
+	docli droplet <id> list-neighbors	
+	docli droplet <id> disable-backups
+	docli droplet <id> reboot
+	docli droplet <id> power-cycle
+	docli droplet <id> shutdown
+	docli droplet <id> power-off
+	docli droplet <id> power-on
+	docli droplet <id> restore <image>
+	docli droplet <id> password-reset
+	docli droplet <id> resize [--disk] <size>
+	docli droplet <id> rebuild <image>
+	docli droplet <id> rename <new_name>
+	docli droplet <id> change-kernel <kernel:int>	
+	docli droplet <id> enable-ipv6
+	docli droplet <id> enable-private-networking 
+	docli droplet <id> snapshot
+	docli droplet <id> retrieve-action <action_id>
+	docli droplet <id> upgrade
+	docli images
+	docli images --distrobutions
+	docli images --applications
+	docli images --private
+docli image <id> list-actions
+docli image <id> retrieve (id can be slug too)
+docli image <id> update
+docli image <id> delete
+docli image <id> transfer <region>
+docli image <id> convert
+docli image <id> retrieve-action <id>
+docli ssh-keys
+docli ssh-keys create <name> <public_key>
+docli ssh-keys retrieve-key <key_id> <finger_print>
+docli ssh-keys update <id>|<finger_print> <name>
+docli ssh-keys destroy <id>|<finger_print>
+docli regions
+docli sizes
+
+
