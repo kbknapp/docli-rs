@@ -18,20 +18,6 @@ arg_enum!{
     }
 }
 
-impl fmt::Display for DomainRecType {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            DomainRecType::A     => write!(f, "A"),
-            DomainRecType::AAAA  => write!(f, "AAAA"),
-            DomainRecType::CNAME => write!(f, "CNAME"),
-            DomainRecType::MX    => write!(f, "MX"),
-            DomainRecType::NS    => write!(f, "NS"),
-            DomainRecType::SRV   => write!(f, "SRV"),
-            DomainRecType::TXT   => write!(f, "TXT")
-        }
-    }
-}
-
 #[derive(Debug)]
 struct DomainRec {
     rec_type: DomainRecType,

@@ -1,12 +1,13 @@
-docli account retrieve-action <id>
+docli account show-action <id>
+docli account show
 
 docli domains create <name> <ip>
-docli domains retrieve <name>
+docli domains show-domain <name>
 docli domains delete <name>
 
-docli domain <name> 
+docli domain <name> show
 docli domain <name> create-record <type> [name] [data] [priority:int] [port:int] [weight:int]
-docli domain <name> retrieve-record <id>
+docli domain <name> show-record <id>
 docli domain <name> update-record <id> <type> [name] [data] [priority:int] [port:int] [weight:int]
 docli domain <name> delete-record <id>
 
@@ -14,7 +15,7 @@ docli droplets list-all-neighbors
 docli droplets list-upgrades
 docli droplets create <name> <region> <size> <image> [ssh_keys] [--backups] [--ipv6] [--private-networking] [user_data]
 
-docli droplet <id> retrieve
+docli droplet <id> show
 docli droplet <id> list-kernels
 docli droplet <id> list-snapshots
 docli droplet <id> list-backups
@@ -40,15 +41,15 @@ docli droplet <id> retrieve-action <action_id>
 docli droplet <id> upgrade
 
 docli image <id> list-actions
-docli image <id> retrieve (id can be slug too)
+docli image <id> show (id can be slug too)
 docli image <id> update
 docli image <id> delete
 docli image <id> transfer <region>
 docli image <id> convert
-docli image <id> retrieve-action <id>
+docli image <id> show-action <id>
 
 docli ssh-keys create <name> <public_key>
-docli ssh-keys retrieve-key <key_id> <finger_print>
+docli ssh-keys show-key <key_id> <finger_print>
 docli ssh-keys update <id>|<finger_print> <name>
 docli ssh-keys destroy <id>|<finger_print>
 
@@ -58,7 +59,6 @@ docli list images
 docli list ssh-keys
 docli list droplets
 docli list domains
-docli list account
 docli list account-actions
 
 

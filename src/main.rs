@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate clap;
 
-use clap::{App, ArgGroup, ArgMatches, SubCommand};
+use clap::{App, Arg, ArgGroup, ArgMatches, SubCommand};
 
 mod cli;
 mod config;
@@ -10,14 +10,35 @@ use config::Config;
 use cli::errors::CliError;
 use cli::{list, account, domain, domains, droplet, droplets, image, ssh_keys};
 
+macro_rules! parse_args {
+    () => {
+    }
+}
 
-fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
+fn get_auth_token(m: &ArgMatches) -> String {
+    let tok = if let Some(auth_tok) = m.value_of("token") {
+            auth_tok.to_owned()
+    } else {
+        std::env::vars().filter(|&(ref k, _)| k == "DO_AUTH_TOKEN")
+                        .map(|(_, v)| v.clone() )
+                        .next().unwrap_or("".to_owned())
+    };
+    if tok.len() != 64 {
+        println!("No DigitalOcean Auth Token found.\n\n\
+        Use `docli --token <token>` or set the DO_AUTH_TOKEN environment variable and try again");
+        std::process::exit(1);
+    }
+    tok
+}
+
+fn main() {
+    let dns_types = domain::DomainRecType::variants();
     let dns_args = "-n --name [name]         'The name to use'
                     -d --data [data]         'The user data'
                     -p --priority [priority] 'The priority to set'
                     -P --port [port]         'The port to use'
                     -w --weight [weight]     'The weight value'";
-    App::new("docli")
+    let m = App::new("docli")
         .version(&format!("v{}", crate_version!()))
         .about("A utility for managing DigitalOcean infrastructure")
         .author("Kevin K. <kbknapp@gmail.com>")
@@ -73,23 +94,23 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
             .arg_from_usage("<name> 'The domain name to use'")
             .subcommand(SubCommand::new("create-record")
                 .about("Creates a new DNS record for a domain")
-                .arg_from_usage("<type> 'The type of record to create (i.e. A, AAAA, CNAME, \
-                                         MX, NS, SRV, TXT)'")
+                .arg(Arg::from_usage("<type> 'The type of record to create'")
+                    .possible_values(dns_types.iter()))
                 .args_from_usage(dns_args))
             .subcommand(SubCommand::new("show-record")
                 .about("Gets information on a specific DNS record")
                 .arg_from_usage("<id>   'The domain ID to retrieve info on'"))
             .subcommand(SubCommand::new("update-record")
                 .about("Updates a DNS record")
-                .arg_from_usage("<type> 'The type of record to create (i.e. A, AAAA, CNAME, \
-                                         MX, NS, SRV, TXT)'")
+                .arg(Arg::from_usage("<type> 'The type of record to create'")
+                    .possible_values(dns_types.iter()))
                 .args_from_usage(dns_args))
             .subcommand(SubCommand::new("delete-record")
                 .about("Deletes a DNS record")
                 .arg_from_usage("<id>   'The domain ID to delete'")))
         .subcommand(SubCommand::new("droplets")
             .about("Commands for managing droplets")
-            .subcommand(SubCommand::new("list-all-neighbors")
+            .subcommand(SubCommand::new("list-neighbors")
                 .about("Displays all droplets running on the same physical hardware"))
             .subcommand(SubCommand::new("list-upgrades")
                 .about("Displays all droplets with pending upgrades"))
@@ -97,9 +118,9 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                 .about("Creates a new droplet")
                 .args_from_usage("<name>                      'The name of the droplet'
                                   -r --region <region>        'The region of the droplet'
-                                  -z --size <size>            'The size of the droplet'
+                                  -s --size <size>            'The size of the droplet'
                                   -i --image <image>          'The image to use'
-                                  -s --ssh-keys [ssh_keys]... 'Any ssh keys to add'
+                                  -k --ssh-keys [keys]... 'Any ssh keys to add'
                                   --backups                   'Allow backups'
                                   --ipv6                      'Use IPv6'
                                   --private-networking        'Use private networking'
@@ -163,7 +184,7 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
             .subcommand(SubCommand::new("upgrade")
                 .about("Performs pending upgrades")))
         .subcommand(SubCommand::new("image")
-            .about("Gets or sets information on a particular image")
+            .about("Commands for managing images")
             .arg_from_usage("<id> 'The image ID to use'")
             .subcommand(SubCommand::new("list-actions")
                 .about("Lists all previous and current actions for an image"))
@@ -184,7 +205,7 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                 .about("Displays a particular action of an image")
                 .arg_from_usage("<action_id> 'The action ID to display'")))
         .subcommand(SubCommand::new("ssh-keys")
-            .about("Gets or sets information on SSH keys")
+            .about("Commands for managing SSH keys")
             .subcommand(SubCommand::new("create")
                 .about("Creatse a new SSH key")
                 .arg_from_usage("<name>       'The name of the SSH key'
@@ -210,27 +231,7 @@ fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
                     .add_all(vec!["key_id",
                                   "finger_print"])
                     .required(true))))
-        .get_matches()
-}
-
-fn get_auth_token(m: &ArgMatches) -> String {
-    let tok = if let Some(auth_tok) = m.value_of("token") {
-            auth_tok.to_owned()
-    } else {
-        std::env::vars().filter(|&(ref k, _)| k == "DO_AUTH_TOKEN")
-                        .map(|(_, v)| v.clone() )
-                        .next().unwrap_or("".to_owned())
-    };
-    if tok.len() != 64 {
-        println!("No DigitalOcean Auth Token found.\n\n\
-        Use `docli --token <token>` or set the DO_AUTH_TOKEN environment variable and try again");
-        std::process::exit(1);
-    }
-    tok
-}
-
-fn main() {
-    let m = parse_args();
+        .get_matches();
 
     let cfg = Config {
         debug: m.is_present("debug"),
