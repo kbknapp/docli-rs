@@ -10,25 +10,13 @@ use config::Config;
 use cli::errors::CliError;
 use cli::{list, account, domain, domains, droplet, droplets, image, ssh_keys};
 
-arg_enum!{
-    #[derive(Debug)]
-    enum DomainRec {
-        A,
-        AAAA,
-        CNAME,
-        MX,
-        NS,
-        SRV,
-        TXT
-    }
-}
 
 fn parse_args<'a, 'b>() -> ArgMatches<'a, 'b> {
-    let dns_args = "[name]     'The name to use'
-                    [data]     'The user data'
-                    [priority] 'The priority to set'
-                    [port]     'The port to use'
-                    [weight]   'The weight value'";
+    let dns_args = "-n --name [name]         'The name to use'
+                    -d --data [data]         'The user data'
+                    -p --priority [priority] 'The priority to set'
+                    -P --port [port]         'The port to use'
+                    -w --weight [weight]     'The weight value'";
     App::new("docli")
         .version(&format!("v{}", crate_version!()))
         .about("A utility for managing DigitalOcean infrastructure")
