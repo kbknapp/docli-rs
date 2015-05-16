@@ -7,10 +7,10 @@ pub fn run(m: &ArgMatches, cfg: &Config) -> CliResult {
     match m.subcommand() {
         ("show-action", Some(m)) => {
             // PLACEHOLDER
-            println!("Retrieving action id: {}", m.value_of("action_id").unwrap());
+            println!("Retrieving action id: {}", m.value_of("id").unwrap());
             Ok(())
         },
-        ("show", Some(m))        => {
+        ("show", _)              => {
             // PLACEHOLDER
             println!("Retrieving acount info");
             Ok(())

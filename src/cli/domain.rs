@@ -55,7 +55,7 @@ pub fn run(pm: &ArgMatches, cfg: &Config) -> CliResult {
                 rec);
             Ok(())
         },
-        ("show", Some(m)) => {
+        ("show", _) => {
             let name = pm.value_of("name").unwrap();
             println!("Showing domain: {}", name);
             Ok(())

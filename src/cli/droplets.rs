@@ -7,11 +7,11 @@ use cli::droplet::DropletConfig;
 
 pub fn run(m: &ArgMatches, cfg: &Config) -> CliResult {
     match m.subcommand() {
-        ("list-neighbors", Some(m)) => {
+        ("list-neighbors", _)       => {
             println!("Listing droplet neighbors");
             Ok(())
         },
-        ("list-upgrades", Some(m))  => {
+        ("list-upgrades", _)        => {
             println!("Listing droplet upgrades");
             Ok(())
         },

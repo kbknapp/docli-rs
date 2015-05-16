@@ -76,7 +76,7 @@ fn main() {
                 .about("Display account information"))
             .subcommand(SubCommand::new("show-action")
                 .about("Gets information about a particular account action")
-                .arg_from_usage("<action_id> 'The action id to retrieve")))
+                .arg_from_usage("<id> 'The action ID to display")))
         .subcommand(SubCommand::new("domains")
             .about("Commands for managing domains")
             .subcommand(SubCommand::new("create")
