@@ -3,5 +3,7 @@ name = "docli"
 version = "0.1.0"
 authors = ["Kevin K <kbknapp@gmail.com>"]
 
-[dependencies]
-clap = "*"
+[dependencies.clap]
+version = "*"
+default-features = false
+features = ["suggestions"]
