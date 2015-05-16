@@ -29,19 +29,19 @@ docli droplet <id> shutdown
 docli droplet <id> power-off
 docli droplet <id> power-on
 docli droplet <id> restore <image>
-docli droplet <id> password-reset
+docli droplet <id> reset-password
 docli droplet <id> resize [--disk] <size>
 docli droplet <id> rebuild <image>
-docli droplet <id> rename <new_name>
+docli droplet <id> rename <name>
 docli droplet <id> change-kernel <kernel:int>
 docli droplet <id> enable-ipv6
 docli droplet <id> enable-private-networking 
 docli droplet <id> snapshot
-docli droplet <id> retrieve-action <action_id>
+docli droplet <id> show-action <action_id>
 docli droplet <id> upgrade
 
 docli image <id> list-actions
-docli image <id> show (id can be slug too)
+docli image <id> show [--slug]
 docli image <id> update
 docli image <id> delete
 docli image <id> transfer <region>
