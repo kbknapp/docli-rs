@@ -1,5 +1,6 @@
 #[macro_use]
 extern crate clap;
+extern crate libdo;
 
 use clap::{App, Arg, ArgGroup, ArgMatches, SubCommand};
 
