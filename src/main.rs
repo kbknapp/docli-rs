@@ -188,7 +188,7 @@ fn main() {
             .arg_from_usage("<id> 'The image ID to use'")
             .subcommand(SubCommand::new("list-actions")
                 .about("Lists all previous and current actions for an image"))
-            .subcommand(SubCommand::new("retrieve")
+            .subcommand(SubCommand::new("show")
                 .about("Displays a particular image")
                 .arg_from_usage("--slug 'The <id> provided to \'docli image\' is a slug and \
                                          NOT an image ID'"))
@@ -201,9 +201,9 @@ fn main() {
                 .arg_from_usage("<region> 'The region to transfer to'"))
             .subcommand(SubCommand::new("convert")
                 .about("Converts a an image (i.e. from a snapshot to a backup)"))
-            .subcommand(SubCommand::new("retrieve-action")
+            .subcommand(SubCommand::new("show-action")
                 .about("Displays a particular action of an image")
-                .arg_from_usage("<action_id> 'The action ID to display'")))
+                .arg_from_usage("<id> 'The action ID to display'")))
         .subcommand(SubCommand::new("ssh-keys")
             .about("Commands for managing SSH keys")
             .subcommand(SubCommand::new("create")
@@ -212,23 +212,23 @@ fn main() {
                                  <public_key> 'The public key of the SSH key'"))
             .subcommand(SubCommand::new("show-key")
                 .about("Displays information on a particular key")
-                .args_from_usage("<key_id>       'The key ID of the key to display'
+                .args_from_usage("<id>           'The key ID of the key to display'
                                   <finger_print> 'The fingerprint of the key to display'"))
             .subcommand(SubCommand::new("update")
                 .about("Updates a particular SSH key")
                 .args_from_usage("<name>         'The new name to use'
-                                  <key_id>       'The key ID to update'
+                                  <id>           'The key ID to update'
                                   <finger_print> 'The fingerprint of the key to update'")
                 .arg_group(ArgGroup::with_name("sshkeys")
-                    .add_all(vec!["key_id",
+                    .add_all(vec!["id",
                                   "finger_print"])
                     .required(true)))
             .subcommand(SubCommand::new("destroy")
                 .about("Destroys a particular SSH key")
-                .args_from_usage("<key_id>       'The key ID to update'
+                .args_from_usage("<id>           'The key ID to update'
                                   <finger_print> 'The fingerprint of the key to update'")
                 .arg_group(ArgGroup::with_name("sshkeys")
-                    .add_all(vec!["key_id",
+                    .add_all(vec!["id",
                                   "finger_print"])
                     .required(true))))
         .get_matches();
