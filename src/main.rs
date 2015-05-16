@@ -208,8 +208,8 @@ fn main() {
             .about("Commands for managing SSH keys")
             .subcommand(SubCommand::new("create")
                 .about("Creatse a new SSH key")
-                .arg_from_usage("<name>       'The name of the SSH key'
-                                 <public_key> 'The public key of the SSH key'"))
+                .args_from_usage("<name>       'The name of the SSH key'
+                                  <public_key> 'The public key of the SSH key'"))
             .subcommand(SubCommand::new("show-key")
                 .about("Displays information on a particular key")
                 .args_from_usage("<id>           'The key ID of the key to display'
@@ -217,16 +217,16 @@ fn main() {
             .subcommand(SubCommand::new("update")
                 .about("Updates a particular SSH key")
                 .args_from_usage("<name>         'The new name to use'
-                                  <id>           'The key ID to update'
-                                  <finger_print> 'The fingerprint of the key to update'")
+                                  -i --id [id]                     'The key ID to update'
+                                  -f --finger-print [finger_print] 'The fingerprint of the key to update'")
                 .arg_group(ArgGroup::with_name("sshkeys")
                     .add_all(vec!["id",
                                   "finger_print"])
                     .required(true)))
             .subcommand(SubCommand::new("destroy")
                 .about("Destroys a particular SSH key")
-                .args_from_usage("<id>           'The key ID to update'
-                                  <finger_print> 'The fingerprint of the key to update'")
+                .args_from_usage("-i --id [id]                     'The key ID to destroy'
+                                  -f --finger-print [finger_print] 'The fingerprint of the key to destroy'")
                 .arg_group(ArgGroup::with_name("sshkeys")
                     .add_all(vec!["id",
                                   "finger_print"])
