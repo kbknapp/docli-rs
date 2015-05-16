@@ -42,70 +42,85 @@ impl DropletConfig {
 }
 
 pub fn run(m: &ArgMatches, cfg: &Config) -> CliResult {
-    let id = m.value_of("id").unwrap();
     match m.subcommand() {
-        ("show", _)                      => {
+        ("show", Some(m))                      => {
+            let id = m.value_of("id").unwrap();
             println!("Showing droplet with id: {}", id);
             Ok(())
         },
-        ("list-kernels", _)              => {
+        ("list-kernels", Some(m))              => {
+            let id = m.value_of("id").unwrap();
             println!("Listing kernels for droplet with id: {}", id);
             Ok(())
         },
-        ("list-snapshots", _)            => {
+        ("list-snapshots", Some(m))            => {
+            let id = m.value_of("id").unwrap();
             println!("Listing snapshots for droplet with id: {}", id);
             Ok(())
         },
-        ("list-backups", _)              => {
+        ("list-backups", Some(m))              => {
+            let id = m.value_of("id").unwrap();
             println!("Listing backups for droplet with id: {}", id);
             Ok(())
         },
-        ("list-actions", _)              => {
+        ("list-actions", Some(m))              => {
+            let id = m.value_of("id").unwrap();
             println!("Listing actions for droplet with id: {}", id);
             Ok(())
         },
-        ("delete", _)                    => {
+        ("delete", Some(m))                    => {
+            let id = m.value_of("id").unwrap();
             println!("Deleting droplet with id: {}", id);
             Ok(())
         },
-        ("list-neighbors", _)            => {
+        ("list-neighbors", Some(m))            => {
+            let id = m.value_of("id").unwrap();
             println!("Listing neighbords for droplet with id: {}", id);
             Ok(())
         },
-        ("disable-backups", _)           => {
+        ("disable-backups", Some(m))           => {
+            let id = m.value_of("id").unwrap();
             println!("Disabling backups for droplet with id: {}", id);
             Ok(())
         },
-        ("reboot", _)                    => {
+        ("reboot", Some(m))                    => {
+            let id = m.value_of("id").unwrap();
             println!("Rebooting droplet with id: {}", id);
             Ok(())
         },
-        ("power-cycle", _)               => {
+        ("power-cycle", Some(m))               => {
+            let id = m.value_of("id").unwrap();
             println!("Power cycling droplet with id: {}", id);
             Ok(())
         },
-        ("shutdown", _)                  => {
+        ("shutdown", Some(m))                  => {
+            let id = m.value_of("id").unwrap();
             println!("Shutting down droplet with id: {}", id);
             Ok(())
         },
-        ("power-off", _)                 => {
+        ("power-off", Some(m))                 => {
+            let id = m.value_of("id").unwrap();
             println!("Powering off droplet with id: {}", id);
             Ok(())
         },
-        ("power-on", _)                  => {
+        ("power-on", Some(m))                  => {
+            let id = m.value_of("id").unwrap();
             println!("Powering on droplet with id: {}", id);
             Ok(())
         },
         ("restore", Some(m))             => {
+            let id = m.value_of("id").unwrap();
             let img = m.value_of("image").unwrap();
             println!("Restoring '{}' to droplet with id: {}", img, id);
             Ok(())
         },
-        ("reset-password", _)            => {
+        ("reset-password", Some(m))            => {
+            let id = m.value_of("id").unwrap();
             println!("Resetting the password for droplet with id: {}", id);
             Ok(())
         },
         ("resize", Some(m))              => {
+            let id = m.value_of("id").unwrap();
             let disk = m.is_present("disk");
             let size = m.value_of("size").unwrap();
             println!("Resizing droplet{} to {} with id: {}",
@@ -115,38 +130,46 @@ pub fn run(m: &ArgMatches, cfg: &Config) -> CliResult {
             Ok(())
         },
         ("rebuild", Some(m))             => {
+            let id = m.value_of("id").unwrap();
             let img = m.value_of("image").unwrap();
             println!("Rebuilding '{}' on droplet with id: {}", img, id);
             Ok(())
         },
         ("rename", Some(m))              => {
+            let id = m.value_of("id").unwrap();
             let name = m.value_of("name").unwrap();
             println!("Renaming droplet ('{}') to {}", id, name);
             Ok(())
         },
         ("change-kernel", Some(m))       => {
-            let kernel = m.value_of("id").unwrap();
+            let id = m.value_of("id").unwrap();
+            let kernel = m.value_of("kernel_id").unwrap();
             println!("Changing droplet's ('{}') kernel to {}", id, kernel);
             Ok(())
         },
-        ("enable-ipv6", _)               => {
+        ("enable-ipv6", Some(m))               => {
+            let id = m.value_of("id").unwrap();
             println!("Enabling IPv6 for droplet with id: {}", id);
             Ok(())
         },
-        ("enable-private-networking", _) => {
+        ("enable-private-networking", Some(m)) => {
+            let id = m.value_of("id").unwrap();
             println!("Enabling private networking for droplet with id: {}", id);
             Ok(())
         },
-        ("snapshot", _)                  => {
+        ("snapshot", Some(m))                  => {
+            let id = m.value_of("id").unwrap();
             println!("Taking a snapshot of droplet with id: {}", id);
             Ok(())
         },
         ("show-action", Some(m))         => {
-            let a_id = m.value_of("id").unwrap();
+            let id = m.value_of("id").unwrap();
+            let a_id = m.value_of("action_id").unwrap();
             println!("Showing action '{}' for droplet with id: {}", a_id, id);
             Ok(())
         },
-        ("upgrade", _)                   => {
+        ("upgrade", Some(m))                   => {
+            let id = m.value_of("id").unwrap();
             println!("Upgradding droplet with id: {}", id);
             Ok(())
         },

@@ -5,7 +5,7 @@ use cli::errors::{CliError, CliResult};
 
 arg_enum!{
     #[derive(Debug)]
-    pub enum DomainRecType {
+    pub enum DnsRecType {
         A,
         AAAA,
         CNAME,
@@ -17,8 +17,8 @@ arg_enum!{
 }
 
 #[derive(Debug)]
-struct DomainRec {
-    rec_type: DomainRecType,
+struct DnsRec{
+    rec_type: DnsRecType,
     name: Option<String>,
     priority: Option<u32>,
     port: Option<u32>,
@@ -26,15 +26,15 @@ struct DomainRec {
     weight: Option<u32>,
 }
 
-impl DomainRec {
-    fn from_matches(m: &ArgMatches) -> DomainRec {
+impl DnsRec {
+    fn from_matches(m: &ArgMatches) -> DnsRec {
         let pri = value_t!(m.value_of("priority"), u32);
         let port = value_t!(m.value_of("port"), u32);
         let weight = value_t!(m.value_of("weight"), u32);
         let data = m.value_of("data");
         let name = m.value_of("name");
-        DomainRec {
-            rec_type: value_t_or_exit!(m.value_of("type"), DomainRecType),
+        DnsRec {
+            rec_type: value_t_or_exit!(m.value_of("type"), DnsRecType),
             name: if name.is_none() {None} else {Some(name.unwrap().to_owned())},
             data: if data.is_none() {None} else {Some(data.unwrap().to_owned())},
             priority: if pri.is_err() {None} else {Some(pri.unwrap())},
@@ -47,34 +47,34 @@ impl DomainRec {
 pub fn run(pm: &ArgMatches, cfg: &Config) -> CliResult {
     match pm.subcommand() {
         ("create-record", Some(m))      => {
-            let rec = DomainRec::from_matches(&m);
-            println!("Creating a record on domain '{}':\n\t{:?}",
-                pm.value_of("name").unwrap(),
+            let rec = DnsRec::from_matches(&m);
+            println!("Creating a DNS record on domain '{}':\n\t{:?}",
+                m.value_of("domain").unwrap(),
                 rec);
             Ok(())
         },
-        ("show", _) => {
-            let name = pm.value_of("name").unwrap();
-            println!("Showing domain: {}", name);
+        ("list-records", Some(m)) => {
+            let name = m.value_of("domain").unwrap();
+            println!("Showing all DNS records for domain: {}", name);
             Ok(())
         },
         ("update-record", Some(m)) => {
-            let rec = DomainRec::from_matches(&m);
-            println!("Updating record on domain '{}':\n\t{:?}",
-                pm.value_of("name").unwrap(),
+            let rec = DnsRec::from_matches(&m);
+            println!("Updating DNS record on domain '{}':\n\t{:?}",
+                m.value_of("domain").unwrap(),
                 rec);
             Ok(())
         },
         ("show-record", Some(m)) => {
-            let name = pm.value_of("name").unwrap();
+            let name = m.value_of("domain").unwrap();
             let rec_id = m.value_of("id").unwrap();
-            println!("Showing domain record '{}' on domain: {}", rec_id, name);
+            println!("Showing DNS record '{}' on domain: {}", rec_id, name);
             Ok(())
         },
         ("delete-record", Some(m))      => {
-            let name = pm.value_of("name").unwrap();
+            let name = m.value_of("domain").unwrap();
             let rec_id = m.value_of("id").unwrap();
-            println!("Deleting domain record '{}' on domain: {}", rec_id, name);
+            println!("Deleting DNS record '{}' on domain: {}", rec_id, name);
             Ok(())
         },
         _                        => Err(CliError::NoCommand)

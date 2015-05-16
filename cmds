@@ -5,48 +5,48 @@ docli domains create <name> <ip>
 docli domains show-domain <name>
 docli domains delete <name>
 
-docli domain <name> show
-docli domain <name> create-record <type> [name] [data] [priority:int] [port:int] [weight:int]
-docli domain <name> show-record <id>
-docli domain <name> update-record <id> <type> [name] [data] [priority:int] [port:int] [weight:int]
-docli domain <name> delete-record <id>
+docli dns list-records <name>
+docli dns create-record <name> <type> [rec_name] [data] [priority:int] [port:int] [weight:int]
+docli dns show-record <name> <id>
+docli dns update-record <name> <id> <type> [rec_name] [data] [priority:int] [port:int] [weight:int]
+docli dns delete-record <name> <id>
 
 docli droplets list-all-neighbors
 docli droplets list-upgrades
 docli droplets create <name> <region> <size> <image> [ssh_keys] [--backups] [--ipv6] [--private-networking] [user_data]
 
-docli droplet <id> show
-docli droplet <id> list-kernels
-docli droplet <id> list-snapshots
-docli droplet <id> list-backups
-docli droplet <id> list-actions
-docli droplet <id> delete
-docli droplet <id> list-neighbors
-docli droplet <id> disable-backups
-docli droplet <id> reboot
-docli droplet <id> power-cycle
-docli droplet <id> shutdown
-docli droplet <id> power-off
-docli droplet <id> power-on
-docli droplet <id> restore <image>
-docli droplet <id> reset-password
-docli droplet <id> resize [--disk] <size>
-docli droplet <id> rebuild <image>
-docli droplet <id> rename <name>
-docli droplet <id> change-kernel <kernel:int>
-docli droplet <id> enable-ipv6
-docli droplet <id> enable-private-networking 
-docli droplet <id> snapshot
-docli droplet <id> show-action <action_id>
-docli droplet <id> upgrade
+docli droplet show <id>
+docli droplet list-kernels <id>
+docli droplet list-snapshots <id>
+docli droplet list-backups <id>
+docli droplet list-actions <id>
+docli droplet delete <id>
+docli droplet list-neighbors <id>
+docli droplet disable-backups <id>
+docli droplet reboot <id>
+docli droplet power-cycle <id>
+docli droplet shutdown <id>
+docli droplet power-off <id>
+docli droplet power-on <id>
+docli droplet restore <id> <image>
+docli droplet reset-password <id>
+docli droplet resize <id> [--disk] <size>
+docli droplet rebuild <id> <image>
+docli droplet rename <id> <name>
+docli droplet change-kernel <id> <kernel:int>
+docli droplet enable-ipv6 <id>
+docli droplet enable-private-networking <id> 
+docli droplet snapshot <id>
+docli droplet show-action <id> <action_id>
+docli droplet upgrade <id>
 
-docli image <id> list-actions
-docli image <id> show [--slug]
-docli image <id> update
-docli image <id> delete
-docli image <id> transfer <region>
-docli image <id> convert
-docli image <id> show-action <id>
+docli image list-actions <id>
+docli image show <id> [--slug]
+docli image update <id>
+docli image delete <id>
+docli image transfer <id> <region>
+docli image convert <id>
+docli image show-action <id> <action_id>
 
 docli ssh-keys create <name> <public_key>
 docli ssh-keys show-key <key_id> <finger_print>

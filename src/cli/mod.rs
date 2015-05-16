@@ -3,7 +3,7 @@ pub mod ssh_keys;
 pub mod image;
 pub mod droplet;
 pub mod droplets;
-pub mod domain;
+pub mod dns;
 pub mod domains;
 pub mod account;
 pub mod errors;
