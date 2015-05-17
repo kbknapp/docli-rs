@@ -7,19 +7,15 @@ license = "MIT"
 repository = "https://github.com/kbknapp/docli-rs.git"
 documentation = "http://kbknapp.github.io/docli-rs"
 readme = "README.md"
-
 keywords = ["do", "cli", "digitalocean", "digital", "ocean"]
 
+
+[dependencies]
+clap = "*"
 
 [dependencies.libdo]
 git = "https://github.com/kbknapp/libdo-rs"
 
-# clap includes "suggestions" and "color" default features but we don't use colored error messages
-# so we remove the "color" feature, but want to keep "suggestions"
-[dependencies.clap]
-version = "*"
-default-features = false
-features = ["suggestions"]
 
 # for building with nightly and unstable features
 unstable=[]

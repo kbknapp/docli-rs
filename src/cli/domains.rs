@@ -2,9 +2,9 @@
 use clap::ArgMatches;
 
 use config::Config;
-use cli::errors::{CliResult, CliError};
+use cli::list;
 
-pub fn run(m: &ArgMatches, cfg: &Config) -> CliResult {
+pub fn run(m: &ArgMatches, cfg: &Config) {
     match m.subcommand() {
         ("create", Some(m))      => {
             // unwrap is safe because args are required
@@ -12,18 +12,16 @@ pub fn run(m: &ArgMatches, cfg: &Config) -> CliResult {
             // TODO: Validate IP
             let ip   = m.value_of("ip").unwrap();
             println!("Creating domain '{}' with IP: {}", name, ip);
-            Ok(())
         },
         ("show-domain", Some(m)) => {
             let name = m.value_of("name").unwrap();
             println!("Showing domain: {}", name);
-            Ok(())
         },
         ("delete", Some(m))      => {
             let name = m.value_of("name").unwrap();
             println!("Deleting domain: {}", name);
-            Ok(())
         },
-        _                        => Err(CliError::NoCommand)
+        ("", None)               => list::run(m, cfg),
+        _ => unreachable!()
     }
 }

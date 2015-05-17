@@ -2,16 +2,28 @@
 name = "docli"
 version = "0.1.0"
 dependencies = [
- "clap 0.8.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "clap 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libdo 0.1.0 (git+https://github.com/kbknapp/libdo-rs)",
 ]
 
 [[package]]
+name = "ansi_term"
+version = "0.5.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
 name = "clap"
-version = "0.8.5"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
+ "ansi_term 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "strsim 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
+
+[[package]]
+name = "libdo"
+version = "0.1.0"
+source = "git+https://github.com/kbknapp/libdo-rs#7cf62d3e9fd988e0aee9ca47d9e26c08780ccb1e"
 
 [[package]]
 name = "strsim"

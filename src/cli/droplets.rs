@@ -2,24 +2,22 @@
 use clap::ArgMatches;
 
 use config::Config;
-use cli::errors::{CliError, CliResult};
 use cli::droplet::DropletConfig;
+use cli::list;
 
-pub fn run(m: &ArgMatches, cfg: &Config) -> CliResult {
+pub fn run(m: &ArgMatches, cfg: &Config) {
     match m.subcommand() {
         ("list-neighbors", _)       => {
             println!("Listing droplet neighbors");
-            Ok(())
         },
         ("list-upgrades", _)        => {
             println!("Listing droplet upgrades");
-            Ok(())
         },
         ("create", Some(m))         => {
             let droplet_cfg = DropletConfig::from_matches(&m);
             println!("Creating droplet:\n\t{:?}", droplet_cfg);
-            Ok(())
         },
-        _                           => Err(CliError::NoCommand)
+        ("", None)                  => list::run(m, cfg),
+        _                           => unreachable!()
     }
 }

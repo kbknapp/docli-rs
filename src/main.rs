@@ -8,7 +8,6 @@ mod cli;
 mod config;
 
 use config::Config;
-use cli::errors::CliError;
 use cli::{list, account, dns, domains, droplet, droplets, image, ssh_keys};
 
 macro_rules! parse_args {
@@ -43,12 +42,14 @@ fn main() {
         .version(&format!("v{}", crate_version!()))
         .about("A utility for managing DigitalOcean infrastructure")
         .author("Kevin K. <kbknapp@gmail.com>")
+        .error_on_no_subcommand(true)
         .args_from_usage("-d --debug         'Displays JSON being sent to server'
                           -n --nosend        'Does NOT execute network send of JSON'
                           -t --token [token] 'Digital Ocean Auth Token (Defaults to contents \
                                               of DO_AUTH_TOKEN env var if omitted)'")
         .subcommand(SubCommand::new("list")
             .about("Commands for displaying available information")
+            .error_on_no_subcommand(true)
             .subcommand(SubCommand::new("regions")
                 .about("Displays available regions"))
             .subcommand(SubCommand::new("sizes")
@@ -73,8 +74,6 @@ fn main() {
                 .about("Displays all current and previous account actions")))
         .subcommand(SubCommand::new("account")
             .about("Commands related to a single account")
-            .subcommand(SubCommand::new("show")
-                .about("Display account information"))
             .subcommand(SubCommand::new("show-action")
                 .about("Gets information about a particular account action")
                 .arg_from_usage("<id> 'The action ID to display")))
@@ -92,28 +91,25 @@ fn main() {
                 .arg_from_usage("<name> 'The domain to delete'")))
         .subcommand(SubCommand::new("dns")
             .about("Commands for managing DNS records on a specific domain")
+            .error_on_no_subcommand(true)
+            .arg_from_usage("<domain> 'The domain name of this record'")
             .subcommand(SubCommand::new("create-record")
                 .about("Creates a new DNS record for a domain")
-                .arg_from_usage("<domain> 'The domain name of this record'")
                 .arg(Arg::from_usage("<type> 'The type of DNS record to create'")
                     .possible_values(dns_types.iter()))
                 .args_from_usage(dns_args))
             .subcommand(SubCommand::new("list-records")
-                .about("Lists all DNS records on a specific domain")
-                .arg_from_usage("<domain> 'The domain name of this record'"))
+                .about("Lists all DNS records on a specific domain"))
             .subcommand(SubCommand::new("show-record")
                 .about("Displays information on a specific DNS record")
-                .arg_from_usage("<domain> 'The domain name of this record'")
                 .arg_from_usage("<id>   'The DNS record ID to retrieve info on'"))
             .subcommand(SubCommand::new("update-record")
                 .about("Updates a DNS record")
-                .arg_from_usage("<domain> 'The domain name of this record'")
                 .arg(Arg::from_usage("<type> 'The type of DNS record to create'")
                     .possible_values(dns_types.iter()))
                 .args_from_usage(dns_args))
             .subcommand(SubCommand::new("delete-record")
                 .about("Deletes a DNS record")
-                .arg_from_usage("<name> 'The domain name of this record'")
                 .arg_from_usage("<id>   'The DSN record ID to delete'")))
         .subcommand(SubCommand::new("droplets")
             .about("Commands for managing droplets")
@@ -127,119 +123,85 @@ fn main() {
                                   -r --region <region>        'The region of the droplet'
                                   -s --size <size>            'The size of the droplet'
                                   -i --image <image>          'The image to use'
-                                  -k --ssh-keys [keys]... 'Any ssh keys to add'
+                                  -k --ssh-keys [keys]...     'Any ssh keys to add'
                                   --backups                   'Allow backups'
                                   --ipv6                      'Use IPv6'
                                   --private-networking        'Use private networking'
                                   -u --user-data [data]       'User data'")))
         .subcommand(SubCommand::new("droplet")
             .about("Commands for managing a single droplet")
-            .subcommand(SubCommand::new("show")
-                .arg_from_usage("<id> 'The droplet ID to use'")
-                .about("Display the information on the droplet"))
+            .arg_from_usage("<id> 'The droplet ID to use'")
             .subcommand(SubCommand::new("list-kernels")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Display all available kernels"))
             .subcommand(SubCommand::new("list-snapshots")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Display all snapshots"))
             .subcommand(SubCommand::new("list-backups")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Display all backups"))
             .subcommand(SubCommand::new("list-actions")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Display all current and previous actions"))
             .subcommand(SubCommand::new("list-neighbors")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Display all droplets running on the same physical hardware"))
             .subcommand(SubCommand::new("delete")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Deletes a droplet"))
             .subcommand(SubCommand::new("disable-backups")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Disables backups for a droplet"))
             .subcommand(SubCommand::new("reboot")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Reboots a droplet"))
             .subcommand(SubCommand::new("power-cycle")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Performs a power cycle on a droplet"))
             .subcommand(SubCommand::new("shutdown")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Shutsdown a droplet"))
             .subcommand(SubCommand::new("power-off")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Powers a droplet off"))
             .subcommand(SubCommand::new("power-on")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Turns on a droplet"))
             .subcommand(SubCommand::new("restore")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Restores a droplet from an image")
                 .arg_from_usage("<image> 'The image to restore to'"))
             .subcommand(SubCommand::new("reset-password")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Resets the root password for a droplet"))
             .subcommand(SubCommand::new("resize")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Resizes a droplet")
                 .args_from_usage("--disk 'Resizes the disk'
                                   <size> 'The new size to use'"))
             .subcommand(SubCommand::new("rebuild")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Rebuilds a droplet from an image")
                 .arg_from_usage("<image> 'The image to use'"))
             .subcommand(SubCommand::new("rename")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Renames a droplet")
                 .arg_from_usage("<name> 'The new name of the droplet'"))
             .subcommand(SubCommand::new("change-kernel")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Changes the kernel of a droplet")
                 .arg_from_usage("<kernel_id> 'The kernel ID to use'"))
             .subcommand(SubCommand::new("enable-ipv6")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Enables IPv6 addresses"))
             .subcommand(SubCommand::new("enable-private-networking")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Enables private networking"))
             .subcommand(SubCommand::new("snapshot")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Creates a snapshot of a droplet"))
             .subcommand(SubCommand::new("show-action")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Displays a specific action for a droplet")
                 .arg_from_usage("<action_id> 'The action ID to display'"))
             .subcommand(SubCommand::new("upgrade")
-                .arg_from_usage("<id> 'The droplet ID to use'")
                 .about("Performs pending upgrades")))
         .subcommand(SubCommand::new("image")
             .about("Commands for managing images")
+            .arg_from_usage("<id> 'The image ID to use'")
+            .arg_from_usage("--slug 'The <id> is a slug and NOT an image ID'"))
             .subcommand(SubCommand::new("list-actions")
-                .arg_from_usage("<id> 'The image ID to use'")
                 .about("Lists all previous and current actions for an image"))
-            .subcommand(SubCommand::new("show")
-                .about("Displays a particular image")
-                .arg_from_usage("<id> 'The image ID to use'")
-                .arg_from_usage("--slug 'The <id> provided to \'docli image\' is a slug and \
-                                         NOT an image ID'"))
             .subcommand(SubCommand::new("update")
-                .arg_from_usage("<id> 'The image ID to use'")
                 .about("Performs pending updates"))
             .subcommand(SubCommand::new("delete")
-                .arg_from_usage("<id> 'The image ID to use'")
                 .about("Deletes an image"))
             .subcommand(SubCommand::new("transfer")
                 .about("Transfers an image to a new region")
-                .arg_from_usage("<id> 'The image ID to use'")
                 .arg_from_usage("<region> 'The region to transfer to'"))
             .subcommand(SubCommand::new("convert")
-                .arg_from_usage("<id> 'The image ID to use'")
                 .about("Converts a an image (i.e. from a snapshot to a backup)"))
             .subcommand(SubCommand::new("show-action")
                 .about("Displays a particular action of an image")
-                .arg_from_usage("<id> 'The image ID to use'")
-                .arg_from_usage("<action_id> 'The action ID to display'")))
+                .arg_from_usage("<action_id> 'The action ID to display'"))
         .subcommand(SubCommand::new("ssh-keys")
             .about("Commands for managing SSH keys")
             .subcommand(SubCommand::new("create")
@@ -275,7 +237,7 @@ fn main() {
         auth: get_auth_token(&m)
     };
 
-    let res = match m.subcommand() {
+    match m.subcommand() {
         ("account", Some(m))  => account::run(m, &cfg),
         ("domains", Some(m))  => domains::run(m, &cfg),
         ("dns", Some(m))      => dns::run(m, &cfg),
@@ -284,14 +246,6 @@ fn main() {
         ("image", Some(m))    => image::run(m, &cfg),
         ("ssh-keys", Some(m)) => ssh_keys::run(m, &cfg),
         ("list", Some(m))     => list::run(m, &cfg),
-        _                     => Err(CliError::NoCommand)
-    };
-
-    match res {
-        Err(CliError::NoCommand) => {
-            println!("No command was provided\n\nFor more information try --help");
-            std::process::exit(1);
-        },
-        Ok(_)                    => ()
+        _                     => ()
     }
 }

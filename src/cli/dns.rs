@@ -1,7 +1,6 @@
 use clap::ArgMatches;
 
 use config::Config;
-use cli::errors::{CliError, CliResult};
 
 arg_enum!{
     #[derive(Debug)]
@@ -44,39 +43,32 @@ impl DnsRec {
     }
 }
 
-pub fn run(pm: &ArgMatches, cfg: &Config) -> CliResult {
+pub fn run(pm: &ArgMatches, cfg: &Config) {
+    let domain = pm.value_of("domain").unwrap();
     match pm.subcommand() {
-        ("create-record", Some(m))      => {
+        ("create-record", Some(m)) => {
             let rec = DnsRec::from_matches(&m);
             println!("Creating a DNS record on domain '{}':\n\t{:?}",
-                m.value_of("domain").unwrap(),
+                domain,
                 rec);
-            Ok(())
         },
-        ("list-records", Some(m)) => {
-            let name = m.value_of("domain").unwrap();
-            println!("Showing all DNS records for domain: {}", name);
-            Ok(())
+        ("list-records", _)  => {
+            println!("Showing all DNS records for domain: {}", domain);
         },
         ("update-record", Some(m)) => {
             let rec = DnsRec::from_matches(&m);
             println!("Updating DNS record on domain '{}':\n\t{:?}",
-                m.value_of("domain").unwrap(),
+                domain,
                 rec);
-            Ok(())
         },
-        ("show-record", Some(m)) => {
-            let name = m.value_of("domain").unwrap();
+        ("show-record", Some(m))  => {
             let rec_id = m.value_of("id").unwrap();
-            println!("Showing DNS record '{}' on domain: {}", rec_id, name);
-            Ok(())
+            println!("Showing DNS record '{}' on domain: {}", rec_id, domain);
         },
-        ("delete-record", Some(m))      => {
-            let name = m.value_of("domain").unwrap();
+        ("delete-record", Some(m)) => {
             let rec_id = m.value_of("id").unwrap();
-            println!("Deleting DNS record '{}' on domain: {}", rec_id, name);
-            Ok(())
+            println!("Deleting DNS record '{}' on domain: {}", rec_id, domain);
         },
-        _                        => Err(CliError::NoCommand)
+        _                          => unreachable!()
     }
 }
