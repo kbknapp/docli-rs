@@ -10,9 +10,10 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
         ("list-actions", _) => {
             if cfg.debug { println!("Displaying all account actions\n") }
             if cfg.debug {
-                println!("Sending request:\n\t{}\n", domgr.account().actions()
-                                                                  .to_string()
-                                                                  .replace("\n", "\n\t"));
+                println!("Sending request:\n\t{}\n", domgr.account()
+                                                          .actions()
+                                                          .to_string()
+                                                          .replace("\n", "\n\t"));
             }
             if cfg.no_send { return }
             match domgr.account().actions().retrieve() {
