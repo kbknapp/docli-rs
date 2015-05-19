@@ -4,18 +4,41 @@ use config::Config;
 use libdo::DoManager;
 
 pub fn run(m: &ArgMatches, cfg: &Config) {
+    let domgr = DoManager::with_token(&cfg.auth[..]);
+    if cfg.debug { println!("Displaying account with token:\n\t{}\n", &cfg.auth[..]) }
     match m.subcommand() {
         ("list-actions", _) => {
-            // PLACEHOLDER
-            println!("Listing all account actions");
+            if cfg.debug { println!("Displaying all account actions\n") }
+            if cfg.debug {
+                println!("Sending request:\n\t{}\n", domgr.account.actions()
+                                                                  .to_string()
+                                                                  .replace("\n", "\n\t"));
+            }
+            if cfg.no_send { return }
+            match domgr.account.retrieve_actions() {
+                Ok(v) => {
+                    for act in v {
+                        println!("{}", act)
+                    }
+                },
+                Err(e) => println!("{}", e)
+            }
         },
         ("action", Some(m)) => {
-            // PLACEHOLDER
-            println!("Retrieving action id: {}", m.value_of("id").unwrap());
+            let id = m.value_of("id").unwrap();
+            if cfg.debug { println!("Displaying action with ID: {}\n", id) }
+            if cfg.debug {
+                println!("Sending request:\n\t{}\n", domgr.account.action(id)
+                                                                  .to_string()
+                                                                  .replace("\n", "\n\t"));
+            }
+            if cfg.no_send { return }
+            match domgr.account.retrieve_action(id) {
+                Ok(s) => println!("{}", s),
+                Err(e) => println!("{}", e)
+            }
         },
         ("", None)               => {
-            if cfg.debug { println!("Displaying account with token:\n\t{}\n", &cfg.auth[..])}
-            let domgr = DoManager::with_token(&cfg.auth[..]);
             if cfg.debug { println!("Sending request:\n\t{}\n", domgr.account.to_string().replace("\n", "\n\t")); }
             if cfg.no_send { return }
             match domgr.account.retrieve() {
