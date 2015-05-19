@@ -10,12 +10,14 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             println!("Retrieving action id: {}", m.value_of("id").unwrap());
         },
         ("", None)               => {
-            if cfg.debug { println!("Displaying account with token:\n\t{}", &cfg.auth[..])}
+            if cfg.debug { println!("Displaying account with token:\n\t{}\n", &cfg.auth[..])}
             let domgr = DoManager::with_token(&cfg.auth[..]);
-            let acct = domgr.account.request;
-            if cfg.debug { println!("Sending request: {:?}", acct); }
-            if !cfg.no_send {
-                println!("{}", domgr.account.retrieve());
+            if cfg.debug { println!("Sending request:\n\t{}\n", domgr.account.to_string().replace("\n", "\n\t")); }
+            if cfg.no_send {
+                match domgr.account.retrieve() {
+                    Ok(s) => println!("{}", s),
+                    Err(e) => println!("{}", e)
+                }
             }
         },
         _ => unreachable!()

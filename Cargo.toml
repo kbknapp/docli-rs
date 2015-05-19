@@ -14,7 +14,8 @@ keywords = ["do", "cli", "digitalocean", "digital", "ocean"]
 clap = "*"
 
 [dependencies.libdo]
-git = "https://github.com/kbknapp/libdo-rs"
+# git = "https://github.com/kbknapp/libdo-rs"
+path = "../libdo-rs"
 
 
 # for building with nightly and unstable features

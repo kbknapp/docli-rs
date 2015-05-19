@@ -233,7 +233,7 @@ fn main() {
 
     let cfg = Config {
         debug: m.is_present("debug"),
-        nosend: !m.is_present("nosend"),
+        no_send: !m.is_present("nosend"),
         auth: get_auth_token(&m)
     };
 
