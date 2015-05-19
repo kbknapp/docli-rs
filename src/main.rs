@@ -43,8 +43,9 @@ fn main() {
         .about("A utility for managing DigitalOcean infrastructure")
         .author("Kevin K. <kbknapp@gmail.com>")
         .error_on_no_subcommand(true)
-        .args_from_usage("-d --debug         'Displays JSON being sent to server'
-                          -n --nosend        'Does NOT execute network send of JSON'
+        .args_from_usage("-d --debug         'Displays the request being sent to server'
+                          -n --nosend        'Does NOT send request over the network (useful with \
+                                              --debug)'
                           -t --token [token] 'Digital Ocean Auth Token (Defaults to contents \
                                               of DO_AUTH_TOKEN env var if omitted)'")
         .subcommand(SubCommand::new("list")
@@ -74,7 +75,9 @@ fn main() {
                 .about("Displays all current and previous account actions")))
         .subcommand(SubCommand::new("account")
             .about("Commands related to a single account")
-            .subcommand(SubCommand::new("show-action")
+            .subcommand(SubCommand::new("list-actions")
+                .about("Lists all the account actions"))
+            .subcommand(SubCommand::new("action")
                 .about("Gets information about a particular account action")
                 .arg_from_usage("<id> 'The action ID to display")))
         .subcommand(SubCommand::new("domains")
@@ -233,7 +236,7 @@ fn main() {
 
     let cfg = Config {
         debug: m.is_present("debug"),
-        no_send: !m.is_present("nosend"),
+        no_send: m.is_present("nosend"),
         auth: get_auth_token(&m)
     };
 
