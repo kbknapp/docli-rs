@@ -10,12 +10,12 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
         ("list-actions", _) => {
             if cfg.debug { println!("Displaying all account actions\n") }
             if cfg.debug {
-                println!("Sending request:\n\t{}\n", domgr.account.actions()
+                println!("Sending request:\n\t{}\n", domgr.account().actions()
                                                                   .to_string()
                                                                   .replace("\n", "\n\t"));
             }
             if cfg.no_send { return }
-            match domgr.account.retrieve_actions() {
+            match domgr.account().actions().retrieve() {
                 Ok(v) => {
                     for act in v {
                         println!("{}", act)
@@ -28,20 +28,21 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             let id = m.value_of("id").unwrap();
             if cfg.debug { println!("Displaying action with ID: {}\n", id) }
             if cfg.debug {
-                println!("Sending request:\n\t{}\n", domgr.account.action(id)
-                                                                  .to_string()
-                                                                  .replace("\n", "\n\t"));
+                println!("Sending request:\n\t{}\n", domgr.account()
+                                                          .action(id)
+                                                          .to_string()
+                                                          .replace("\n", "\n\t"));
             }
             if cfg.no_send { return }
-            match domgr.account.retrieve_action(id) {
+            match domgr.account().action(id).retrieve() {
                 Ok(s) => println!("{}", s),
                 Err(e) => println!("{}", e)
             }
         },
         ("", None)               => {
-            if cfg.debug { println!("Sending request:\n\t{}\n", domgr.account.to_string().replace("\n", "\n\t")); }
+            if cfg.debug { println!("Sending request:\n\t{}\n", domgr.account().to_string().replace("\n", "\n\t")); }
             if cfg.no_send { return }
-            match domgr.account.retrieve() {
+            match domgr.account().retrieve() {
                 Ok(s) => println!("{}", s),
                 Err(e) => println!("{}", e)
             }
