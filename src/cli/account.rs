@@ -8,21 +8,32 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
     if cfg.debug { println!(":: Displaying account token...\n\t{}\n", &cfg.auth[..]) }
     match m.subcommand() {
         ("list-actions", _) => {
-            if cfg.debug { println!(":: Displaying all account actions...\n") }
             if cfg.debug {
-                println!(":: Displaying sent request...\n\t{}\n", domgr.account()
-                                                          .actions()
-                                                          .to_string()
-                                                          .replace("\n", "\n\t"));
+                println!(":: Displaying all account actions...\n");
+                println!(":: Displaying sent request...\n\t{}\n",
+                    domgr.account()
+                         .actions()
+                         .to_string()
+                         .replace("\n", "\n\t"));
             }
             if cfg.no_send { return }
+            if cfg.debug {
+                print!(":: Displaying JSON response from DigitalOcean...");
+                match domgr.account().actions().retrieve_json() {
+                    Ok(s) => println!("Success\n\t{}\n", s),
+                    Err(e) => println!("Failed\n\t{}\n", e)
+                }
+            }
+            print!(":: Displaying action information from DigitalOcean...");
             match domgr.account().actions().retrieve() {
                 Ok(v) => {
+                    println!("Success\n\t");
                     for act in v.iter() {
-                        println!("{}", act)
+                        println!(":: Displaying account action...\n\t");
+                        println!("{}\n", act);
                     }
                 },
-                Err(e) => println!("{}", e)
+                Err(e) => println!("Failed\n\t{}\n", e)
             }
         },
         ("action", Some(m)) => {
