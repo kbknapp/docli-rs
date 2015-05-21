@@ -13,10 +13,19 @@ keywords = ["do", "cli", "digitalocean", "digital", "ocean"]
 [dependencies]
 clap = "*"
 
+
 [dependencies.libdo]
 # git = "https://github.com/kbknapp/libdo-rs"
 path = "../libdo-rs"
 
 
+[features]
+default = ["color"]
+color = ["ansi_term"]
+
 # for building with nightly and unstable features
 unstable=[]
+
+[dependencies.ansi_term]
+version = "*"
+optional = true

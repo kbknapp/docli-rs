@@ -1,19 +1,17 @@
 #[macro_use]
 extern crate clap;
 extern crate libdo;
+#[cfg(feature = "color")]
+extern crate ansi_term;
 
 use clap::{App, Arg, ArgGroup, ArgMatches, SubCommand};
 
 mod cli;
 mod config;
+mod message;
 
 use config::Config;
 use cli::{list, account, dns, domains, droplet, droplets, image, ssh_keys};
-
-macro_rules! parse_args {
-    () => {
-    }
-}
 
 fn get_auth_token(m: &ArgMatches) -> String {
     let tok = if let Some(auth_tok) = m.value_of("token") {

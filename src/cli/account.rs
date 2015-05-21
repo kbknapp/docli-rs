@@ -2,84 +2,115 @@ use clap::ArgMatches;
 
 use config::Config;
 use libdo::{DoManager, Request};
+use message::CliMessage; 
 
 pub fn run(m: &ArgMatches, cfg: &Config) {
     let domgr = DoManager::with_token(&cfg.auth[..]);
-    if cfg.debug { println!(":: Displaying account token...\n\t{}\n", &cfg.auth[..]) }
+    if cfg.debug { CliMessage::Token(&cfg.auth[..]).display(); }
     match m.subcommand() {
         ("list-actions", _) => {
             if cfg.debug {
-                println!(":: Displaying all account actions...\n");
-                println!(":: Displaying sent request...\n\t{}\n",
-                    domgr.account()
+                CliMessage::Request(
+                    &domgr.account()
                          .actions()
                          .to_string()
-                         .replace("\n", "\n\t"));
+                         .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send { return }
             if cfg.debug {
-                print!(":: Displaying JSON response from DigitalOcean...");
+                CliMessage::JsonResponse.display();
                 match domgr.account().actions().retrieve_json() {
-                    Ok(s) => println!("Success\n\t{}\n", s),
-                    Err(e) => println!("Failed\n\t{}\n", e)
+                    Ok(s)  => {
+                        CliMessage::Success.display();
+                        println!("\n\t{}\n", s);
+                    },
+                    Err(e) => {
+                        CliMessage::Failure.display();
+                        println!("\n\t{}\n", e);
+                    }
                 }
             }
-            print!(":: Displaying action information from DigitalOcean...");
+            CliMessage::Actions.display();
             match domgr.account().actions().retrieve() {
                 Ok(v) => {
-                    println!("Success\n\t");
+                    CliMessage::Success.display();
                     for act in v.iter() {
-                        println!(":: Displaying account action...\n\t");
-                        println!("{}\n", act);
+                        CliMessage::Action.display();
+                        println!("\t{}", act);
                     }
                 },
-                Err(e) => println!("Failed\n\t{}\n", e)
+                Err(e) => {
+                    CliMessage::Failure.display();
+                    println!("{}\n", e);
+                }
             }
         },
         ("action", Some(m)) => {
             let id = m.value_of("id").unwrap();
             if cfg.debug {
-                println!(":: Displaying action ID...{}\n", id);
-                println!(":: Displaying sent request...\n\t{}\n",
-                    domgr.account()
+                CliMessage::Request(
+                    &domgr.account()
                          .action(id)
                          .to_string()
-                         .replace("\n", "\n\t"));
+                         .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send { return }
             if cfg.debug {
-                print!(":: Displaying JSON response from DigitalOcean...");
+                CliMessage::JsonResponse.display();
                 match domgr.account().action(id).retrieve_json() {
-                    Ok(s) => println!("Success\n\t{}\n", s),
-                    Err(e) => println!("Failed\n\t{}\n", e)
+                    Ok(s) => {
+                        CliMessage::Success.display();
+                        println!("\n\t{}\n", s);
+                    },
+                    Err(e) => {
+                        CliMessage::Failure.display();
+                        println!("\n\t{}\n", e);
+                    }
                 }
             }
-            print!(":: Displaying action information from DigitalOcean...");
+            CliMessage::ActionId(id).display();
             match domgr.account().action(id).retrieve() {
-                Ok(s) => println!("Success\n\t{}\n", s),
-                Err(e) => println!("Failed\n\t{}\n", e)
+                Ok(s) => {
+                    CliMessage::Success.display();
+                    println!("\n\t{}\n", s);
+                },
+                Err(e) => {
+                    CliMessage::Failure.display();
+                    println!("\n\t{}\n", e);
+                }
             }
         },
         ("", None)               => {
             if cfg.debug {
-                println!(":: Displaying account information...\n");
-                println!(":: Displaying sent request...\n\t{}\n",
-                    domgr.account()
+                CliMessage::Request(
+                    &domgr.account()
                          .to_string()
-                         .replace("\n", "\n\t"));
+                         .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send { return }
             if cfg.debug {
-                print!(":: Displaying JSON response from DigitalOcean...");
+                CliMessage::JsonResponse.display();
                 match domgr.account().retrieve_json() {
-                    Ok(s) => println!("Success\n\t{}\n", s),
-                    Err(e) => println!("Failed\n\t{}\n", e)
+                    Ok(s) => {
+                        CliMessage::Success.display();
+                        println!("\n\t{}\n", s);
+                    },
+                    Err(e) => {
+                        CliMessage::Failure.display();
+                        println!("\n\t{}\n", e);
+                    }
                 }
             }
-            print!(":: Displaying account information from DigitalOcean...");
+            CliMessage::Account.display();
             match domgr.account().retrieve() {
-                Ok(s) => println!("Success\n\t{}\n", s),
-                Err(e) => println!("Failed\n\t{}\n", e)
+                Ok(s) => {
+                    CliMessage::Success.display();
+                    println!("\n\t{}\n", s);
+                },
+                Err(e) => {
+                    CliMessage::Failure.display();
+                    println!("\n\t{}\n", e);
+                }
             }
         },
         _ => unreachable!()
