@@ -1,7 +1,7 @@
 Complete:
 =========
 docli account show-action <id>
-docli account (shows the account)
+docli account 
 
 docli list regions
 docli list sizes
@@ -44,24 +44,15 @@ docli droplet <id> snapshot
 docli droplet <id> show-action <action_id>
 docli droplet <id> upgrade
 
-
-Incomplete:
-==============
-docli dns <domain> list-records
-docli dns <domain> create-record <type> [rec_name] [data] [priority:int] [port:int] [weight:int]
-docli dns <domain> show-record <id>
-docli dns <domain> update-record <id> <type> [rec_name] [data] [priority:int] [port:int] [weight:int]
-docli dns <domain> delete-record <id>
-
 docli domains create <name> <ip>
 docli domains show-domain <name>
 docli domains delete <name>
-docli domains (same as docli list domains)
+docli domains 
 
 docli droplets list-all-neighbors
 docli droplets list-upgrades
+docli droplets 
 docli droplets create <name> <region> <size> <image> [ssh_keys] [--backups] [--ipv6] [--private-networking] [user_data]
-docli droplets (same as docli list droplets)
 
 docli ssh-keys create <name> <public_key>
 docli ssh-keys show-key <key_id> <finger_print>
@@ -69,3 +60,9 @@ docli ssh-keys update <id>|<finger_print> <name>
 docli ssh-keys destroy <id>|<finger_print>
 docli ssh-keys (same as docli list ssh-keys)
 
+docli dns <domain> list-records
+docli dns <domain> create-record <type> [rec_name] [data] [priority:int] [port:int] [weight:int]
+
+docli dns <domain> show-record <id>
+docli dns <domain> update-record <id> <type> [rec_name] [data] [priority:int] [port:int] [weight:int]
+docli dns <domain> delete-record <id>

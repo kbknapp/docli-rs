@@ -13,6 +13,9 @@ pub enum CliMessage<'a> {
     Images,
     SshKeys,
     Dropets,
+    AllDropletUpgrades,
+    NamelessDropet,
+    CreateDroplet(&'a DropletConfig),
     Droplet(&'a str),
     DropletKernels(&'a str),
     DropletSnapshots(&'a str),
@@ -38,6 +41,7 @@ pub enum CliMessage<'a> {
     UpgradeDroplet(&'a str),
     Kernel,
     Domains,
+    Neighbor,
     Request(&'a str),
     Success,
     Token(&'a str),
@@ -60,9 +64,9 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("Displaying account information..."));
             },
             CliMessage::Action => {
-                println!("{} {}",
+                println!("{} {}\n\t",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying account action...\n\t"));
+                    White.bold().paint("Displaying account action..."));
             },
             CliMessage::Actions => {
                 print!("{} {}", 
@@ -80,9 +84,9 @@ impl<'a> CliMessage<'a> {
                 println!("{}", Red.paint("Failed"));
             },
             CliMessage::JsonResponse => {
-                print!("{} {}", 
+                print!("{} {}\n", 
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying JSON response from DigitalOcean...\n"));
+                    White.bold().paint("Displaying JSON response from DigitalOcean..."));
             },
             CliMessage::Request(req) => {
                 println!("{} {}\n\t{}\n",
@@ -96,7 +100,7 @@ impl<'a> CliMessage<'a> {
             CliMessage::Token(tok) => {
                 println!("{} {}\n\t{}\n",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying account token...\n\t"),
+                    White.bold().paint("Displaying account token..."),
                     tok);
             },
             CliMessage::Regions => {
@@ -340,7 +344,7 @@ impl<'a> CliMessage<'a> {
             CliMessage::Kernel => {
                 print!("{} {}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying kerenl..."));
+                    White.bold().paint("Displaying kernel..."));
             },
             CliMessage::DropletAction(id, a_id) => {
                 print!("{} {} {} {} {}{}",
@@ -364,6 +368,126 @@ impl<'a> CliMessage<'a> {
                     White.bold().underline().paint(id),
                     White.bold().paint("to"),
                     White.bold().underline().paint(size),
+                    White.bold().paint("..."));
+            },
+            CliMessage::DeleteDomain(name) => {
+                print!("{} {} {}{}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Deleting domain"),
+                    White.bold().underline().paint(name),
+                    White.bold().paint("..."));
+            },
+            CliMessage::Domain(name) => {
+                print!("{} {} {}{}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying domain"),
+                    White.bold().underline().paint(name),
+                    White.bold().paint("..."));
+            },
+            CliMessage::CreateDomain(name, ip) => {
+                print!("{} {} {} {} {}{}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Creating domain"),
+                    White.bold().underline().paint(name),
+                    White.bold().paint("with IP"),
+                    White.bold().underline().paint(ip),
+                    White.bold().paint("..."));
+            },
+            CliMessage::AllDropletNeighbors => {
+                print!("{} {} {}{}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying all droplet neighbors..."));
+            },
+            CliMessage::AllDropletUpgrades => {
+                print!("{} {} {}{}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying all droplets pending upgrades..."));
+            },
+            CliMessage::Neighbor => {
+                println!("{} {}\n\t",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying droplet neighbor..."));
+            },
+            CliMessage::NamelessDroplet => {
+                println!("{} {}\n\t",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying droplet..."));
+            },
+            CliMessage::CreateDroplet(droplet) => {
+                print!("{} {}\n\t{}\n",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Creating droplet with configuration..."),
+                    droplet.to_string().replace("\n", "\n\t"));
+            },
+            CliMessage::CreateSshKey(name, pub_key) => {
+                print!("{} {} {} {}\n\t{}\n",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Creating SSH key"),
+                    White.bold().underline().paint(name),
+                    White.bold().paint("with public key..."),
+                    pub_key));
+            },
+            CliMessage::SshKey(name, finger) => {
+                print!("{} {} {} {} {}{}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying SSH key"),
+                    White.bold().underline().paint(name),
+                    White.bold().paint("with finger print"),
+                    White.bold().underline().paint(finger),
+                    White.bold().paint("..."));
+            },
+            CliMessage::UpdateSshKey(name, id) => {
+                print!("{} {} {} {} {}{}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Updating SSH key"),
+                    White.bold().underline().paint(id),
+                    White.bold().paint("with the name"),
+                    White.bold().underline().paint(name),
+                    White.bold().paint("..."));
+            },
+            CliMessage::DestroySshKey(id) => {
+                print!("{} {} {}{}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Destroying SSH key"),
+                    White.bold().underline().paint(id),
+                    White.bold().paint("..."));
+            },
+            CliMessage::CreateDns(rec) => {
+                print!("{} {}\n\t{}\n",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Creating DNS record with configuration..."),
+                    rec.to_string().replace("\n", "\n\t"));
+            },
+            CliMessage::DnsRecords => {
+                print!("{} {} {}{}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying all DNS records..."));
+            },
+            CliMessage::DnsRecord => {
+                println!("{} {}\n\t",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying DNS record..."));
+            },
+            CliMessage::UpdateDns(id, rec) => {
+                print!("{} {}\n\t{}\n",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Updating DNS record"),
+                    White.bold().underline().paint(id),
+                    White.bold().paint("with configuration..."),
+                    rec.to_string().replace("\n", "\n\t"));
+            },
+            CliMessage::ShowDns(id) => {
+                println!("{} {} {}{}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying DNS record"),
+                    White.bold().underline().paint(id),
+                    White.bold().paint("..."));
+            },
+            CliMessage::DeleteDns(id) => {
+                println!("{} {} {}{}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Deleting DNS record"),
+                    White.bold().underline().paint(id),
                     White.bold().paint("..."));
             },
         }

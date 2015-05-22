@@ -1,3 +1,5 @@
+use std::fmt;
+
 use clap::ArgMatches;
 
 use config::Config;
@@ -43,31 +45,227 @@ impl DnsRec {
     }
 }
 
+impl fmt::Display for DnsRec {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f,
+            "Record Type: {}\n\
+             Name: {}\n\
+             Data: {}\n\
+             Priority: {}\n\
+             Port: {}\n\
+             Weight: {}\n"
+             self.rec_type,
+             if let Some(n) = self.name {
+                n
+             } else {
+                "None".to_owned()
+             },
+             if let Some(d) = self.data {
+                d
+             } else {
+                "None".to_owned()
+             },
+             if let Some(p) = self.priority {
+                p
+             } else {
+                "None".to_owned()
+             },
+             if let Some(p) = self.port {
+                p
+             } else {
+                "None".to_owned()
+             },
+             if let Some(w) = self.weight {
+                w
+             } else {
+                "None".to_owned()
+             })
+        )
+    }
+}
+
 pub fn run(pm: &ArgMatches, cfg: &Config) {
     let domain = pm.value_of("domain").unwrap();
     match pm.subcommand() {
         ("create-record", Some(m)) => {
             let rec = DnsRec::from_matches(&m);
-            println!("Creating a DNS record on domain '{}':\n\t{:?}",
-                domain,
-                rec);
+            if cfg.debug {
+                CliMessage::Request(
+                    &domgr.dns()
+            // TODO: Fixme
+                          .create(rec)
+                          .to_string()
+                          .replace("\n", "\n\t")[..]).display();
+            }
+            if cfg.no_send { return }
+            if cfg.debug {
+                CliMessage::JsonResponse.display();
+                match domgr.dns().create(rec).retrieve_json() {
+                    Ok(s) => {
+                        CliMessage::Success.display();
+                        println!("\n\t{}\n", s);
+                    },
+                    Err(e) => {
+                        CliMessage::Failure.display();
+                        println!("\n\t{}\n", e);
+                    }
+                }
+            }
+            CliMessage::CreateDns(&rec).display();
+            match domgr.dns().create(rec).retrieve() {
+                Ok(s) => {
+                    CliMessage::Success.display();
+                    println!("\n\t{}\n", s);
+                },
+                Err(e) => {
+                    CliMessage::Failure.display();
+                    println!("\n\t{}\n", e);
+                }
+            }
         },
-        ("list-records", _)  => {
-            println!("Showing all DNS records for domain: {}", domain);
+        ("list-records", _)        => {
+            if cfg.debug {
+                CliMessage::Request(
+                    &domgr.dns()
+                         .records()
+                         .to_string()
+                         .replace("\n", "\n\t")[..]).display();
+            }
+            if cfg.no_send { return }
+            if cfg.debug {
+                CliMessage::JsonResponse.display();
+                match domgr.dns().records().retrieve_json() {
+                    Ok(s)  => {
+                        CliMessage::Success.display();
+                        println!("\n\t{}\n", s);
+                    },
+                    Err(e) => {
+                        CliMessage::Failure.display();
+                        println!("\n\t{}\n", e);
+                    }
+                }
+            }
+            CliMessage::DnsRecords.display();
+            match domgr.dns().records().retrieve() {
+                Ok(v) => {
+                    CliMessage::Success.display();
+                    for act in v.iter() {
+                        CliMessage::DnsRecord.display();
+                        println!("\t{}", act);
+                    }
+                },
+                Err(e) => {
+                    CliMessage::Failure.display();
+                    println!("{}\n", e);
+                }
+            }
         },
         ("update-record", Some(m)) => {
             let rec = DnsRec::from_matches(&m);
-            println!("Updating DNS record on domain '{}':\n\t{:?}",
-                domain,
-                rec);
+            let id = m.value_of("id").unwrap();
+            if cfg.debug {
+                CliMessage::Request(
+                    &domgr.dns()
+            // TODO: Fixme
+                          .update(id, rec)
+                          .to_string()
+                          .replace("\n", "\n\t")[..]).display();
+            }
+            if cfg.no_send { return }
+            if cfg.debug {
+                CliMessage::JsonResponse.display();
+                match domgr.dns().update(id, rec).retrieve_json() {
+                    Ok(s) => {
+                        CliMessage::Success.display();
+                        println!("\n\t{}\n", s);
+                    },
+                    Err(e) => {
+                        CliMessage::Failure.display();
+                        println!("\n\t{}\n", e);
+                    }
+                }
+            }
+            CliMessage::UpdateDns(id, &rec).display();
+            match domgr.dns().update(id, rec).retrieve() {
+                Ok(s) => {
+                    CliMessage::Success.display();
+                    println!("\n\t{}\n", s);
+                },
+                Err(e) => {
+                    CliMessage::Failure.display();
+                    println!("\n\t{}\n", e);
+                }
+            }
         },
-        ("show-record", Some(m))  => {
-            let rec_id = m.value_of("id").unwrap();
-            println!("Showing DNS record '{}' on domain: {}", rec_id, domain);
+        ("show-record", Some(m))   => {
+            let id = m.value_of("id").unwrap();
+            if cfg.debug {
+                CliMessage::Request(
+                    &domgr.dns()
+                          .show(id)
+                          .to_string()
+                          .replace("\n", "\n\t")[..]).display();
+            }
+            if cfg.no_send { return }
+            if cfg.debug {
+                CliMessage::JsonResponse.display();
+                match domgr.dns().show(id).retrieve_json() {
+                    Ok(s) => {
+                        CliMessage::Success.display();
+                        println!("\n\t{}\n", s);
+                    },
+                    Err(e) => {
+                        CliMessage::Failure.display();
+                        println!("\n\t{}\n", e);
+                    }
+                }
+            }
+            CliMessage::ShowDns(id).display();
+            match domgr.dns().show(id).retrieve() {
+                Ok(s) => {
+                    CliMessage::Success.display();
+                    println!("\n\t{}\n", s);
+                },
+                Err(e) => {
+                    CliMessage::Failure.display();
+                    println!("\n\t{}\n", e);
+                }
+            }
         },
         ("delete-record", Some(m)) => {
-            let rec_id = m.value_of("id").unwrap();
-            println!("Deleting DNS record '{}' on domain: {}", rec_id, domain);
+            let id = m.value_of("id").unwrap();
+            if cfg.debug {
+                CliMessage::Request(
+                    &domgr.dns()
+                          .delete(id)
+                          .to_string()
+                          .replace("\n", "\n\t")[..]).display();
+            }
+            if cfg.no_send { return }
+            if cfg.debug {
+                CliMessage::JsonResponse.display();
+                match domgr.dns().delete(id).retrieve_json() {
+                    Ok(s) => {
+                        CliMessage::Success.display();
+                        println!("\n\t{}\n", s);
+                    },
+                    Err(e) => {
+                        CliMessage::Failure.display();
+                        println!("\n\t{}\n", e);
+                    }
+                }
+            }
+            CliMessage::DeleteDns(id).display();
+            match domgr.dns().delete(id).retrieve() {
+                Ok(s) => {
+                    CliMessage::Success.display();
+                    println!("\n\t{}\n", s);
+                },
+                Err(e) => {
+                    CliMessage::Failure.display();
+                    println!("\n\t{}\n", e);
+                }
+            }
         },
         _                          => unreachable!()
     }

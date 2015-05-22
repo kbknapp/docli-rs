@@ -1,4 +1,6 @@
 
+use std::fmt;
+
 use clap::ArgMatches;
 
 use config::Config;
@@ -37,6 +39,39 @@ impl DropletConfig {
                 None
             }
         }
+    }
+}
+
+impl fmt::Display for DropletConfig {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f,
+            "Name: {}\n\
+             Region: {}\n\
+             Size: {}\n\
+             Image: {}\n\
+             SSH Keys: {}\n\
+             Backups Enabled: {}\n\
+             IPv6 Enabled: {}\n\
+             Private Networking Enabled: {}\n\
+             User Data: {}\n",
+             self.name,
+             self.region,
+             self.size,
+             self.image,
+             if let Some(v) = self.ssh_keys {
+                v.iter().fold(String::new(), |acc, s| s + &format!(" {},", s)[..])
+             } else {
+                "None".to_owned()
+             },
+             self.backups,
+             self.ipv6,
+             self.private_net,
+             if let Some(d) = self.data {
+                d
+             } else {
+                "None".to_owned()
+             })
+        )
     }
 }
 
@@ -225,7 +260,6 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("delete", _)                    => {
-            println!("Deleting droplet with id: {}", id);
             if cfg.debug {
                 CliMessage::Request(
                     &domgr.droplet(id)
