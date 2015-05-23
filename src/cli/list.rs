@@ -1,14 +1,17 @@
 
 use clap::ArgMatches;
 
+use libdo::{DoManager, Request};
+
 use config::Config;
 use message::CliMessage;
 
 pub fn run(m: &ArgMatches, cfg: &Config) {
     if m.is_present("debug") { cfg.debug = true; }
     if m.is_present("nosend") { cfg.no_send = true; }
+    let domgr = DoManager::with_token(&cfg.auth[..]);
     match m.subcommand() {
-        ("regions", _)         => {
+        ("regions", Some(m))         => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.regions()
@@ -44,7 +47,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("sizes", _)           => {
+        ("sizes", Some(m))           => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.sizes()
@@ -80,7 +83,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("images", _)          => {
+        ("images", Some(m))          => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.images()
@@ -116,7 +119,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("ssh-keys", _)        => {
+        ("ssh-keys", Some(m))        => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.ssh_keys()
@@ -152,7 +155,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("droplets", _)        => {
+        ("droplets", Some(m))        => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.dropletes()
@@ -188,7 +191,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("domains", _)         => {
+        ("domains", Some(m))         => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.domains()
@@ -224,7 +227,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("account-actions", _) => {
+        ("account-actions", Some(m)) => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.account()

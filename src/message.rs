@@ -1,6 +1,9 @@
 #[cfg(feature = "color")]
 use ansi_term::Colour::{Red, Green, Blue, White};
 
+use cli::droplet::DropletConfig;
+use cli::dns::DnsRec;
+
 pub enum CliMessage<'a> {
     Account,
     Action,
@@ -14,12 +17,11 @@ pub enum CliMessage<'a> {
     SshKeys,
     Dropets,
     AllDropletUpgrades,
-    NamelessDropet,
     CreateDroplet(&'a DropletConfig),
     Droplet(&'a str),
     DropletKernels(&'a str),
     DropletSnapshots(&'a str),
-    DropletBackups(&' str),
+    DropletBackups(&'a str),
     DropletActions(&'a str),
     DeleteDroplet(&'a str),
     DropletNeighbors(&'a str),
@@ -52,6 +54,22 @@ pub enum CliMessage<'a> {
     ConvertImage(&'a str),
     TransferImage(&'a str, &'a str),
     ImageAction(&'a str, &'a str),
+    DeleteDomain(&'a str),
+    Domain(&'a str),
+    CreateDomain(&'a str, &'a str),
+    AllDropletNeighbors,
+    NamelessDroplet,
+    DestroySshKey(&'a str),
+    CreateDnsRec(&'a str),
+    DnsRecords,
+    DnsRecord,
+    UpdateDns(&'a str, &'a DnsRec),
+    ShowDns(&'a str),
+    DeleteDns(&'a str),
+    CreateSshKey(&'a str, &'a str),
+    SshKey(&'a str, &'a str),
+    UpdateSshKey(&'a str, &'a str),
+    CreateDns(&'a DnsRec),
 }
 
 impl<'a> CliMessage<'a> {
@@ -288,12 +306,12 @@ impl<'a> CliMessage<'a> {
             },
             CliMessage::RebuildDroplet(id, img) => {
                 print!("{} {} {} {} {}{}",
-                    Blue.bold().paint("::"));
+                    Blue.bold().paint("::"),
                     White.bold().paint("Rebuilding droplet"),
                     White.bold().underline().paint(id),
                     White.bold().paint("with"),
                     White.bold().underline().paint(img),
-                    White.bold().paint("..."));
+                    White.bold().paint("...") );
             },
             CliMessage::RenameDroplet(id, name) => {
                 print!("{} {} {} {} {}{}",
@@ -356,7 +374,7 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("..."));
             },
             CliMessage::ResizeDroplet(id, size, disk) => {
-                print!("{} {}{}{} {} {}{}",
+                print!("{} {}{}{} {} {} {}{}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Resizing"),
                     if disk {
@@ -394,12 +412,12 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("..."));
             },
             CliMessage::AllDropletNeighbors => {
-                print!("{} {} {}{}",
+                print!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying all droplet neighbors..."));
             },
             CliMessage::AllDropletUpgrades => {
-                print!("{} {} {}{}",
+                print!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying all droplets pending upgrades..."));
             },
@@ -425,7 +443,7 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("Creating SSH key"),
                     White.bold().underline().paint(name),
                     White.bold().paint("with public key..."),
-                    pub_key));
+                    pub_key);
             },
             CliMessage::SshKey(name, finger) => {
                 print!("{} {} {} {} {}{}",
@@ -459,7 +477,7 @@ impl<'a> CliMessage<'a> {
                     rec.to_string().replace("\n", "\n\t"));
             },
             CliMessage::DnsRecords => {
-                print!("{} {} {}{}",
+                print!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying all DNS records..."));
             },
@@ -469,7 +487,7 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("Displaying DNS record..."));
             },
             CliMessage::UpdateDns(id, rec) => {
-                print!("{} {}\n\t{}\n",
+                print!("{} {} {} {}\n\t{}\n",
                     Blue.bold().paint("::"),
                     White.bold().paint("Updating DNS record"),
                     White.bold().underline().paint(id),

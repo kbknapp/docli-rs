@@ -3,7 +3,7 @@ name = "docli"
 version = "0.1.0"
 dependencies = [
  "ansi_term 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "clap 0.9.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "clap 0.10.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "libdo 0.1.0",
 ]
 
@@ -14,7 +14,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "aster"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
@@ -24,7 +24,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "clap"
-version = "0.9.2"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "ansi_term 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -181,7 +181,7 @@ name = "quasi_codegen"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "aster 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "aster 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -218,7 +218,7 @@ name = "serde_codegen"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "aster 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "aster 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "quasi 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "quasi_macros 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]

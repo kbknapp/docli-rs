@@ -2,7 +2,10 @@ use std::fmt;
 
 use clap::ArgMatches;
 
+use libdo::{DoManager, Request};
+
 use config::Config;
+use message::CliMessage; 
 
 arg_enum!{
     #[derive(Debug)]
@@ -53,7 +56,7 @@ impl fmt::Display for DnsRec {
              Data: {}\n\
              Priority: {}\n\
              Port: {}\n\
-             Weight: {}\n"
+             Weight: {}\n",
              self.rec_type,
              if let Some(n) = self.name {
                 n
@@ -79,7 +82,7 @@ impl fmt::Display for DnsRec {
                 w
              } else {
                 "None".to_owned()
-             })
+             }
         )
     }
 }
@@ -87,6 +90,7 @@ impl fmt::Display for DnsRec {
 pub fn run(pm: &ArgMatches, cfg: &Config) {
     if pm.is_present("debug") { cfg.debug = true; }
     if pm.is_present("nosend") { cfg.no_send = true; }
+    let domgr = DoManager::with_token(&cfg.auth[..]);
     let domain = pm.value_of("domain").unwrap();
     match pm.subcommand() {
         ("create-record", Some(m)) => {
@@ -125,8 +129,8 @@ pub fn run(pm: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("list-records", _)        => {
-            if cfg.debug || m.is_present("debug") {
+        ("list-records", Some(m))        => {
+            if cfg.debug {
                 CliMessage::Request(
                     &domgr.dns()
                          .records()

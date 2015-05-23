@@ -3,7 +3,10 @@ use std::fmt;
 
 use clap::ArgMatches;
 
+use libdo::{DoManager, Request};
+
 use config::Config;
+use message::CliMessage; 
 
 #[derive(Debug)]
 pub struct DropletConfig {
@@ -70,7 +73,7 @@ impl fmt::Display for DropletConfig {
                 d
              } else {
                 "None".to_owned()
-             })
+             }
         )
     }
 }
@@ -79,8 +82,9 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
     if m.is_present("debug") { cfg.debug = true; }
     if m.is_present("nosend") { cfg.no_send = true; }
     let id = m.value_of("id").unwrap();
+    let domgr = DoManager::with_token(&cfg.auth[..]);
     match m.subcommand() {
-        ("", _)                      => {
+        ("", Some(m))                      => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -113,7 +117,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("list-kernels", _)              => {
+        ("list-kernels", Some(m))              => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -150,7 +154,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("list-snapshots", _)            => {
+        ("list-snapshots", Some(m))            => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -187,7 +191,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("list-backups", _)              => {
+        ("list-backups", Some(m))              => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -224,7 +228,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("list-actions", _)              => {
+        ("list-actions", Some(m))              => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -261,7 +265,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("delete", _)                    => {
+        ("delete", Some(m))                    => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -295,7 +299,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("list-neighbors", _)            => {
+        ("list-neighbors", Some(m))            => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -332,7 +336,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("disable-backups", _)           => {
+        ("disable-backups", Some(m))           => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -366,7 +370,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("reboot", _)                    => {
+        ("reboot", Some(m))                    => {
             println!("Rebooting droplet with id: {}", id);
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
@@ -401,7 +405,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("power-cycle", _)               => {
+        ("power-cycle", Some(m))               => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -435,7 +439,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("shutdown", _)                  => {
+        ("shutdown", Some(m))                  => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -469,7 +473,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("power-off", _)                 => {
+        ("power-off", Some(m))                 => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -503,7 +507,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("power-on", _)                  => {
+        ("power-on", Some(m))                  => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -572,7 +576,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("reset-password", _)            => {
+        ("reset-password", Some(m))            => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -747,7 +751,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("enable-ipv6", _)               => {
+        ("enable-ipv6", Some(m))               => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -781,7 +785,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("enable-private-networking", _) => {
+        ("enable-private-networking", Some(m)) => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -815,7 +819,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("snapshot", _)                  => {
+        ("snapshot", Some(m))                  => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -884,7 +888,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("upgrade", _)                   => {
+        ("upgrade", Some(m))                   => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet(id)

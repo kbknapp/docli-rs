@@ -1,14 +1,18 @@
 
 use clap::ArgMatches;
 
+use libdo::{DoManager, Request};
+
 use config::Config;
+use message::CliMessage; 
 
 pub fn run(m: &ArgMatches, cfg: &Config) {
     if m.is_present("debug") { cfg.debug = true; }
     if m.is_present("nosend") { cfg.no_send = true; }
     let id = m.value_of("id").unwrap();
+    let domgr = DoManager::with_token(&cfg.auth[..]);
     match m.subcommand() {
-        ("list-actions", _)      => {
+        ("list-actions", Some(m))      => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.image(id, false)
@@ -42,7 +46,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("", _)                  => {
+        ("", Some(m))                  => {
             let slug = m.is_present("slug");
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
@@ -76,7 +80,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("update", _)            => {
+        ("update", Some(m))            => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.image(id, false)
@@ -110,7 +114,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("delete", _)            => {
+        ("delete", Some(m))            => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.image(id, false)
@@ -179,7 +183,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("convert", _)           => {
+        ("convert", Some(m))           => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.image(id, false)

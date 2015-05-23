@@ -10,8 +10,8 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
     let domgr = DoManager::with_token(&cfg.auth[..]);
     if cfg.debug || m.is_present("debug") { CliMessage::Token(&cfg.auth[..]).display(); }
     match m.subcommand() {
-        ("list-actions", _) => {
-            if cfg.debug || m.is_present("debug") {
+        ("list-actions", Some(m)) => {
+            if cfg.debug {
                 CliMessage::Request(
                     &domgr.account()
                          .actions()
@@ -82,8 +82,8 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("", None)               => {
-            if cfg.debug || m.is_present("debug") {
+        ("", Some(m))               => {
+            if cfg.debug {
                 CliMessage::Request(
                     &domgr.account()
                          .to_string()

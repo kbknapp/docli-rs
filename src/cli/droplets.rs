@@ -1,15 +1,18 @@
 
 use clap::ArgMatches;
 
+use libdo::{DoManager, Request};
+
 use config::Config;
 use cli::droplet::DropletConfig;
-use cli::list;
+use message::CliMessage; 
 
 pub fn run(m: &ArgMatches, cfg: &Config) {
     if m.is_present("debug") { cfg.debug = true; }
     if m.is_present("nosend") { cfg.no_send = true; }
+    let domgr = DoManager::with_token(&cfg.auth[..]);
     match m.subcommand() {
-        ("list-neighbors", _) => {
+        ("list-neighbors", Some(m)) => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplets()
@@ -46,7 +49,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("list-upgrades", _)  => {
+        ("list-upgrades", Some(m))  => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplets()
@@ -119,7 +122,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                 }
             }
         },
-        ("", _)               => {
+        ("", Some(m))               => {
             if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.dropletes()
