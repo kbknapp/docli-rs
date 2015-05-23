@@ -85,11 +85,13 @@ impl fmt::Display for DnsRec {
 }
 
 pub fn run(pm: &ArgMatches, cfg: &Config) {
+    if pm.is_present("debug") { cfg.debug = true; }
+    if pm.is_present("nosend") { cfg.no_send = true; }
     let domain = pm.value_of("domain").unwrap();
     match pm.subcommand() {
         ("create-record", Some(m)) => {
             let rec = DnsRec::from_matches(&m);
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.dns()
             // TODO: Fixme
@@ -97,8 +99,8 @@ pub fn run(pm: &ArgMatches, cfg: &Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.dns().create(rec).retrieve_json() {
                     Ok(s) => {
@@ -124,15 +126,15 @@ pub fn run(pm: &ArgMatches, cfg: &Config) {
             }
         },
         ("list-records", _)        => {
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.dns()
                          .records()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.dns().records().retrieve_json() {
                     Ok(s)  => {
@@ -163,7 +165,7 @@ pub fn run(pm: &ArgMatches, cfg: &Config) {
         ("update-record", Some(m)) => {
             let rec = DnsRec::from_matches(&m);
             let id = m.value_of("id").unwrap();
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.dns()
             // TODO: Fixme
@@ -171,8 +173,8 @@ pub fn run(pm: &ArgMatches, cfg: &Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.dns().update(id, rec).retrieve_json() {
                     Ok(s) => {
@@ -199,15 +201,15 @@ pub fn run(pm: &ArgMatches, cfg: &Config) {
         },
         ("show-record", Some(m))   => {
             let id = m.value_of("id").unwrap();
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.dns()
                           .show(id)
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.dns().show(id).retrieve_json() {
                     Ok(s) => {
@@ -234,15 +236,15 @@ pub fn run(pm: &ArgMatches, cfg: &Config) {
         },
         ("delete-record", Some(m)) => {
             let id = m.value_of("id").unwrap();
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.dns()
                           .delete(id)
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.dns().delete(id).retrieve_json() {
                     Ok(s) => {

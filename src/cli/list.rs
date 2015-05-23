@@ -5,16 +5,18 @@ use config::Config;
 use message::CliMessage;
 
 pub fn run(m: &ArgMatches, cfg: &Config) {
+    if m.is_present("debug") { cfg.debug = true; }
+    if m.is_present("nosend") { cfg.no_send = true; }
     match m.subcommand() {
         ("regions", _)         => {
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.regions()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.regions().retrieve_json() {
                     Ok(s)  => {
@@ -43,14 +45,14 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("sizes", _)           => {
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.sizes()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.sizes().retrieve_json() {
                     Ok(s)  => {
@@ -79,14 +81,14 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("images", _)          => {
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.images()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.images().retrieve_json() {
                     Ok(s)  => {
@@ -115,14 +117,14 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("ssh-keys", _)        => {
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.ssh_keys()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.ssh_keys().retrieve_json() {
                     Ok(s)  => {
@@ -151,14 +153,14 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("droplets", _)        => {
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.dropletes()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplets().retrieve_json() {
                     Ok(s)  => {
@@ -187,14 +189,14 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("domains", _)         => {
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.domains()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.domains().retrieve_json() {
                     Ok(s)  => {
@@ -223,15 +225,15 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("account-actions", _) => {
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.account()
                          .actions()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.account().actions().retrieve_json() {
                     Ok(s)  => {

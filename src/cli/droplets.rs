@@ -6,17 +6,19 @@ use cli::droplet::DropletConfig;
 use cli::list;
 
 pub fn run(m: &ArgMatches, cfg: &Config) {
+    if m.is_present("debug") { cfg.debug = true; }
+    if m.is_present("nosend") { cfg.no_send = true; }
     match m.subcommand() {
         ("list-neighbors", _) => {
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplets()
                          .neighbors()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplets().neighbors().retrieve_json() {
                     Ok(s)  => {
@@ -45,15 +47,15 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("list-upgrades", _)  => {
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplets()
                          .upgrades()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplets().upgrades().retrieve_json() {
                     Ok(s)  => {
@@ -83,7 +85,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
         },
         ("create", Some(m))   => {
             let droplet_cfg = DropletConfig::from_matches(&m);
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.droplet()
             // TODO: Fixme
@@ -91,8 +93,8 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet().create(droplet_cfg).retrieve_json() {
                     Ok(s) => {
@@ -118,14 +120,14 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("", _)               => {
-            if cfg.debug {
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::Request(
                     &domgr.dropletes()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
-            if cfg.debug {
+            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.debug || m.is_present("debug") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplets().retrieve_json() {
                     Ok(s)  => {
