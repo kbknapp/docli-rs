@@ -14,9 +14,9 @@ keywords = ["do", "cli", "digitalocean", "digital", "ocean"]
 clap = "*"
 
 
-[dependencies.libdo]
-# git = "https://github.com/kbknapp/libdo-rs"
-path = "../libdo-rs"
+[dependencies.doapi]
+# git = "https://github.com/kbknapp/doapi-rs"
+path = "../doapi-rs"
 
 
 [features]
