@@ -1,7 +1,7 @@
 
 use clap::ArgMatches;
 
-use libdo::{DoManager, Request};
+use doapi::{DoManager, DoRequest};
 
 use config::Config;
 use message::CliMessage; 

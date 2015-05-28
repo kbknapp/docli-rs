@@ -1,6 +1,6 @@
 #[macro_use]
 extern crate clap;
-extern crate libdo;
+extern crate doapi;
 #[cfg(feature = "color")]
 extern crate ansi_term;
 
@@ -43,10 +43,10 @@ fn main() {
         .subcommand_required(true)
         .args_from_usage("-t --token [token] 'Digital Ocean Auth Token (Defaults to contents \
                                               of DO_AUTH_TOKEN env var if omitted)'")
-        .arg(Arg::from_usage("-d --debug         'Displays the request being sent to server'")
+        .arg(Arg::from_usage("-v --verbose...   'Displays the request being sent to server'")
             .global(true))
         .arg(Arg::from_usage("-n --nosend        'Does NOT send request over the network (useful \
-                                                  with --debug)'")
+                                                  with --verbose)'")
             .global(true))
         .subcommand(SubCommand::with_name("list")
             .about("Commands for displaying available information")
@@ -189,8 +189,7 @@ fn main() {
                 .about("Performs pending upgrades")))
         .subcommand(SubCommand::with_name("image")
             .about("Commands for managing images")
-            .arg_from_usage("<id> 'The image ID to use'")
-            .arg_from_usage("--slug 'The <id> is a slug and NOT an image ID'"))
+            .arg_from_usage("<id> 'The image ID or slug to use (not all commands support using a slug)'"))
             .subcommand(SubCommand::with_name("list-actions")
                 .about("Lists all previous and current actions for an image"))
             .subcommand(SubCommand::with_name("update")

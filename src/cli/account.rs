@@ -1,7 +1,7 @@
 use clap::ArgMatches;
 
 use config::Config;
-use libdo::{DoManager, Request};
+use doapi::{DoManager, DoRequest};
 use message::CliMessage; 
 
 pub fn run(m: &ArgMatches, cfg: &Config) {
