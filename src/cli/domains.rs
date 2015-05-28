@@ -7,7 +7,7 @@ use config::Config;
 use message::CliMessage;
 
 pub fn run(m: &ArgMatches, cfg: &Config) {
-    if m.is_present("debug") { cfg.debug = true; }
+    if m.is_present("verbose") { cfg.verbose = true; }
     if m.is_present("nosend") { cfg.no_send = true; }
     let domgr = DoManager::with_token(&cfg.auth[..]);
     match m.subcommand() {
@@ -15,7 +15,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             let name = m.value_of("name").unwrap();
             // TODO: Validate IP
             let ip   = m.value_of("ip").unwrap();
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.domains()
                           .create(name, ip)
@@ -23,7 +23,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.domains().create(name, ip).retrieve_json() {
                     Ok(s) => {
@@ -50,7 +50,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
         },
         ("show-domain", Some(m)) => {
             let name = m.value_of("name").unwrap();
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.domains()
                           .show(name)
@@ -58,7 +58,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.domains().show(name).retrieve_json() {
                     Ok(s) => {
@@ -85,7 +85,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
         },
         ("delete", Some(m))      => {
             let name = m.value_of("name").unwrap();
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.domains()
                           .delete(name)
@@ -93,7 +93,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.domains().delete(name).retrieve_json() {
                     Ok(s) => {
@@ -119,14 +119,14 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("", Some(m))               => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.domains()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.domains().retrieve_json() {
                     Ok(s)  => {

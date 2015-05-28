@@ -5,13 +5,13 @@ use doapi::{DoManager, DoRequest};
 use message::CliMessage; 
 
 pub fn run(m: &ArgMatches, cfg: &Config) {
-    if m.is_present("debug") { cfg.debug = true; }
+    if m.is_present("verbose") { cfg.verbose = true; }
     if m.is_present("nosend") { cfg.no_send = true; }
     let domgr = DoManager::with_token(&cfg.auth[..]);
-    if cfg.debug || m.is_present("debug") { CliMessage::Token(&cfg.auth[..]).display(); }
+    if cfg.verbose || m.is_present("verbose") { CliMessage::Token(&cfg.auth[..]).display(); }
     match m.subcommand() {
         ("list-actions", Some(m)) => {
-            if cfg.debug {
+            if cfg.verbose {
                 CliMessage::Request(
                     &domgr.account()
                          .actions()
@@ -19,7 +19,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                          .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.account().actions().retrieve_json() {
                     Ok(s)  => {
@@ -49,7 +49,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
         },
         ("action", Some(m)) => {
             let id = m.value_of("id").unwrap();
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.account()
                          .action(id)
@@ -57,7 +57,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                          .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.account().action(id).retrieve_json() {
                     Ok(s) => {
@@ -83,14 +83,14 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("", Some(m))               => {
-            if cfg.debug {
+            if cfg.verbose {
                 CliMessage::Request(
                     &domgr.account()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.account().retrieve_json() {
                     Ok(s) => {

@@ -1,5 +1,5 @@
 pub struct Config {
-    pub debug: bool,
+    pub verbose: bool,
     pub no_send: bool,
     pub auth: String
 }

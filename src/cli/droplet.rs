@@ -8,7 +8,6 @@ use doapi::{DoManager, DoRequest};
 use config::Config;
 use message::CliMessage; 
 
-#[derive(Debug)]
 pub struct DropletConfig {
     name: String,
     region: String,
@@ -79,20 +78,20 @@ impl fmt::Display for DropletConfig {
 }
 
 pub fn run(m: &ArgMatches, cfg: &Config) {
-    if m.is_present("debug") { cfg.debug = true; }
+    if m.is_present("verbose") { cfg.verbose = true; }
     if m.is_present("nosend") { cfg.no_send = true; }
     let id = m.value_of("id").unwrap();
     let domgr = DoManager::with_token(&cfg.auth[..]);
     match m.subcommand() {
         ("", Some(m))                      => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).retrieve_json() {
                     Ok(s) => {
@@ -118,7 +117,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("list-kernels", Some(m))              => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                          .kernels()
@@ -126,7 +125,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                          .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).kernels().retrieve_json() {
                     Ok(s)  => {
@@ -155,7 +154,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("list-snapshots", Some(m))            => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                          .snapshots()
@@ -163,7 +162,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                          .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).snapshots().retrieve_json() {
                     Ok(s)  => {
@@ -192,7 +191,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("list-backups", Some(m))              => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                          .backups()
@@ -200,7 +199,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                          .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).backups().retrieve_json() {
                     Ok(s)  => {
@@ -229,7 +228,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("list-actions", Some(m))              => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                          .actions()
@@ -237,7 +236,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                          .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).actions().retrieve_json() {
                     Ok(s)  => {
@@ -266,7 +265,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("delete", Some(m))                    => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .delete()
@@ -274,7 +273,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).delete().retrieve_json() {
                     Ok(s) => {
@@ -300,7 +299,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("list-neighbors", Some(m))            => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                          .neighbors()
@@ -308,7 +307,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                          .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).neighbors().retrieve_json() {
                     Ok(s)  => {
@@ -337,7 +336,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("disable-backups", Some(m))           => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .disable_backups()
@@ -345,7 +344,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).disable_backups().retrieve_json() {
                     Ok(s) => {
@@ -372,7 +371,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
         },
         ("reboot", Some(m))                    => {
             println!("Rebooting droplet with id: {}", id);
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .reboot()
@@ -380,7 +379,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).reboot().retrieve_json() {
                     Ok(s) => {
@@ -406,7 +405,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("power-cycle", Some(m))               => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .power_cycle()
@@ -414,7 +413,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).power_cycle().retrieve_json() {
                     Ok(s) => {
@@ -440,7 +439,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("shutdown", Some(m))                  => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .shutdown()
@@ -448,7 +447,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).shutdown().retrieve_json() {
                     Ok(s) => {
@@ -474,7 +473,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("power-off", Some(m))                 => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .power_off()
@@ -482,7 +481,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).power_off().retrieve_json() {
                     Ok(s) => {
@@ -508,7 +507,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("power-on", Some(m))                  => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .power_on()
@@ -516,7 +515,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).power_on().retrieve_json() {
                     Ok(s) => {
@@ -543,7 +542,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
         },
         ("restore", Some(m))             => {
             let img = m.value_of("image").unwrap();
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .restore(img)
@@ -551,7 +550,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).restore(img).retrieve_json() {
                     Ok(s) => {
@@ -577,7 +576,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("reset-password", Some(m))            => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .reset_password()
@@ -585,7 +584,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).reset_password().retrieve_json() {
                     Ok(s) => {
@@ -613,7 +612,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
         ("resize", Some(m))              => {
             let disk = m.is_present("disk");
             let size = m.value_of("size").unwrap();
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .resize(size, disk)
@@ -621,7 +620,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).resize(size, disk).retrieve_json() {
                     Ok(s) => {
@@ -648,7 +647,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
         },
         ("rebuild", Some(m))             => {
             let img = m.value_of("image").unwrap();
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .rebuild(img)
@@ -656,7 +655,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).rebuild(img).retrieve_json() {
                     Ok(s) => {
@@ -683,7 +682,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
         },
         ("rename", Some(m))              => {
             let name = m.value_of("name").unwrap();
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .rename(name)
@@ -691,7 +690,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).rename(name).retrieve_json() {
                     Ok(s) => {
@@ -718,7 +717,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
         },
         ("change-kernel", Some(m))       => {
             let kernel = m.value_of("kernel_id").unwrap();
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .change_kernel(kernel)
@@ -726,7 +725,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).change_kernel(kernel).retrieve_json() {
                     Ok(s) => {
@@ -752,7 +751,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("enable-ipv6", Some(m))               => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .enable_ipv6()
@@ -760,7 +759,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).enable_ipv6().retrieve_json() {
                     Ok(s) => {
@@ -786,7 +785,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("enable-private-networking", Some(m)) => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .enable_private_networking()
@@ -794,7 +793,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).enable_private_networking().retrieve_json() {
                     Ok(s) => {
@@ -820,7 +819,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("snapshot", Some(m))                  => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .snapshot()
@@ -828,7 +827,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).snapshot().retrieve_json() {
                     Ok(s) => {
@@ -855,7 +854,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
         },
         ("show-action", Some(m))         => {
             let a_id = m.value_of("action_id").unwrap();
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .action(a_id)
@@ -863,7 +862,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).action(a_id).retrieve_json() {
                     Ok(s) => {
@@ -889,7 +888,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             }
         },
         ("upgrade", Some(m))                   => {
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .upgrade()
@@ -897,7 +896,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.debug || m.is_present("debug") {
+            if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).upgrade().retrieve_json() {
                     Ok(s) => {

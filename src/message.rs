@@ -61,8 +61,12 @@ pub enum CliMessage<'a> {
     NamelessDroplet,
     DestroySshKey(&'a str),
     CreateDnsRec(&'a str),
+    Snapshot,
+    Backup,
     DnsRecords,
+    ResetPassword(&'a str),
     DnsRecord,
+    Droplets,
     UpdateDns(&'a str, &'a DnsRec),
     ShowDns(&'a str),
     DeleteDns(&'a str),
@@ -86,6 +90,21 @@ impl<'a> CliMessage<'a> {
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying account action..."));
             },
+            CliMessage::Backup => {
+                println!("{} {}\n\t",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying droplet backup..."));
+            },
+            CliMessage::Snapshot => {
+                println!("{} {}\n\t",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying droplet snapshot..."));
+            },
+            CliMessage::Snapshot => {
+                println!("{} {}\n\t",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying all droplets..."));
+            },
             CliMessage::Actions => {
                 print!("{} {}", 
                     Blue.bold().paint("::"),
@@ -95,6 +114,13 @@ impl<'a> CliMessage<'a> {
                 print!("{} {} {}{}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying account action ID"),
+                    White.bold().underline().paint(id),
+                    White.bold().paint("..."));
+            },
+            CliMessage::ResetPassword(id) => {
+                print!("{} {} {}{}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Requesting password reset for droplet ID"),
                     White.bold().underline().paint(id),
                     White.bold().paint("..."));
             },
@@ -380,7 +406,7 @@ impl<'a> CliMessage<'a> {
                     if disk {
                         White.bold().paint(" the disk for ")
                     } else {
-                        " "
+                        White.paint(" ")
                     },
                     White.bold().paint("droplet"),
                     White.bold().underline().paint(id),

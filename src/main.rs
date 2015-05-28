@@ -234,7 +234,7 @@ fn main() {
         .get_matches();
 
     let cfg = Config {
-        debug: m.is_present("debug"),
+        verbose: m.is_present("verbose"),
         no_send: m.is_present("nosend"),
         auth: get_auth_token(&m)
     };
