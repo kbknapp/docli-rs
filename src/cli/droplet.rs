@@ -61,7 +61,7 @@ impl fmt::Display for DropletConfig {
              self.size,
              self.image,
              if let Some(v) = self.ssh_keys {
-                v.iter().fold(String::new(), |acc, s| s + &format!(" {},", s)[..])
+                v.iter().fold(String::new(), |acc, s| acc + &format!(" {},", s)[..])
              } else {
                 "None".to_owned()
              },
