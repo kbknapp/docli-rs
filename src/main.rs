@@ -5,6 +5,7 @@ extern crate doapi;
 extern crate ansi_term;
 
 use clap::{App, Arg, ArgGroup, ArgMatches, SubCommand};
+use doapi::DnsRecType;
 
 mod cli;
 mod config;
@@ -30,7 +31,7 @@ fn get_auth_token(m: &ArgMatches) -> String {
 }
 
 fn main() {
-    let dns_types = dns::DnsRecType::variants();
+    let dns_types = DnsRecType::variants();
     let dns_args = "-n --name [name]         'The name to use'
                     -d --data [data]         'The user data'
                     -p --priority [priority] 'The priority to set'
@@ -43,7 +44,7 @@ fn main() {
         .subcommand_required(true)
         .args_from_usage("-t --token [token] 'Digital Ocean Auth Token (Defaults to contents \
                                               of DO_AUTH_TOKEN env var if omitted)'")
-        .arg(Arg::from_usage("-v --verbose...   'Displays the request being sent to server'")
+        .arg(Arg::from_usage("-v --verbose   'Displays the request being sent to server'")
             .global(true))
         .arg(Arg::from_usage("-n --nosend        'Does NOT send request over the network (useful \
                                                   with --verbose)'")
@@ -233,21 +234,21 @@ fn main() {
                     .required(true))))
         .get_matches();
 
-    let cfg = Config {
+    let mut cfg = Config {
         verbose: m.is_present("verbose"),
         no_send: m.is_present("nosend"),
         auth: get_auth_token(&m)
     };
 
     match m.subcommand() {
-        ("account", Some(m))  => account::run(m, &cfg),
-        ("domains", Some(m))  => domains::run(m, &cfg),
-        ("dns", Some(m))      => dns::run(m, &cfg),
-        ("droplets", Some(m)) => droplets::run(m, &cfg),
-        ("droplet", Some(m))  => droplet::run(m, &cfg),
-        ("image", Some(m))    => image::run(m, &cfg),
-        ("ssh-keys", Some(m)) => ssh_keys::run(m, &cfg),
-        ("list", Some(m))     => list::run(m, &cfg),
+        ("account", Some(m))  => account::run(m, &mut cfg),
+        ("domains", Some(m))  => domains::run(m, &mut cfg),
+        ("dns", Some(m))      => dns::run(m, &mut cfg),
+        ("droplets", Some(m)) => droplets::run(m, &mut cfg),
+        ("droplet", Some(m))  => droplet::run(m, &mut cfg),
+        ("image", Some(m))    => image::run(m, &mut cfg),
+        ("ssh-keys", Some(m)) => ssh_keys::run(m, &mut cfg),
+        ("list", Some(m))     => list::run(m, &mut cfg),
         _                     => ()
     }
 }

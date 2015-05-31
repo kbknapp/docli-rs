@@ -4,7 +4,7 @@ use config::Config;
 use doapi::{DoManager, DoRequest};
 use message::CliMessage; 
 
-pub fn run(m: &ArgMatches, cfg: &Config) {
+pub fn run(m: &ArgMatches, cfg: &mut Config) {
     if m.is_present("verbose") { cfg.verbose = true; }
     if m.is_present("nosend") { cfg.no_send = true; }
     let domgr = DoManager::with_token(&cfg.auth[..]);

@@ -1,8 +1,7 @@
 #[cfg(feature = "color")]
 use ansi_term::Colour::{Red, Green, Blue, White};
 
-use cli::droplet::DropletConfig;
-use cli::dns::DnsRec;
+use doapi::{DnsRecord, Droplet};
 
 pub enum CliMessage<'a> {
     Account,
@@ -17,7 +16,7 @@ pub enum CliMessage<'a> {
     SshKeys,
     Dropets,
     AllDropletUpgrades,
-    CreateDroplet(&'a DropletConfig),
+    CreateDroplet(&'a Droplet),
     Droplet(&'a str),
     DropletKernels(&'a str),
     DropletSnapshots(&'a str),
@@ -67,13 +66,13 @@ pub enum CliMessage<'a> {
     ResetPassword(&'a str),
     DnsRecord,
     Droplets,
-    UpdateDns(&'a str, &'a DnsRec),
+    UpdateDns(&'a str, &'a DnsRecord),
     ShowDns(&'a str),
     DeleteDns(&'a str),
     CreateSshKey(&'a str, &'a str),
     SshKey(&'a str, &'a str),
     UpdateSshKey(&'a str, &'a str),
-    CreateDns(&'a DnsRec),
+    CreateDns(&'a DnsRecord),
 }
 
 impl<'a> CliMessage<'a> {
@@ -100,10 +99,12 @@ impl<'a> CliMessage<'a> {
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying droplet snapshot..."));
             },
-            CliMessage::Snapshot => {
-                println!("{} {}\n\t",
+            CliMessage::DropletSnapshots(id) => {
+                println!("{} {} {}{}\n\t",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all droplets..."));
+                    White.bold().paint("Displaying all snapshots for droplet"),
+                    White.bold().underline().paint(id),
+                    White.bold().paint("..."));
             },
             CliMessage::Actions => {
                 print!("{} {}", 
@@ -243,13 +244,6 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("Displaying all droplet"),
                     White.bold().underline().paint(id),
                     White.bold().paint("kernels..."));
-            },
-            CliMessage::DropletSnapshots(id) => {
-                print!("{} {} {}{}",
-                    Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all droplet"),
-                    White.bold().underline().paint(id),
-                    White.bold().paint("snapshots..."));
             },
             CliMessage::DropletBackups(id) => {
                 print!("{} {} {}{}",
@@ -507,6 +501,11 @@ impl<'a> CliMessage<'a> {
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying all DNS records..."));
             },
+            CliMessage::Droplets => {
+                print!("{} {}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying all droplets..."));
+            },
             CliMessage::DnsRecord => {
                 println!("{} {}\n\t",
                     Blue.bold().paint("::"),
@@ -533,6 +532,12 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("Deleting DNS record"),
                     White.bold().underline().paint(id),
                     White.bold().paint("..."));
+            },
+            CliMessage::CreateDnsRec(rec) => {
+                print!("{} {}\n\t{}\n",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Creating DNS record with the following configuration..."),
+                    rec.to_string().replace("\n", "\n\t"));
             },
         }
     }

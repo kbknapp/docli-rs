@@ -8,76 +8,7 @@ use doapi::{DoManager, DoRequest};
 use config::Config;
 use message::CliMessage; 
 
-pub struct DropletConfig {
-    name: String,
-    region: String,
-    size: String,
-    image: String,
-    ssh_keys: Option<Vec<String>>,
-    backups: bool,
-    ipv6: bool,
-    private_net: bool,
-    data: Option<String>
-}
-
-impl DropletConfig {
-    pub fn from_matches(m: &ArgMatches) -> DropletConfig {
-        DropletConfig {
-            name: m.value_of("name").unwrap().to_owned(),
-            region: m.value_of("region").unwrap().to_owned(),
-            size: m.value_of("size").unwrap().to_owned(),
-            image: m.value_of("image").unwrap().to_owned(),
-            ssh_keys: if let Some(v) = m.values_of("keys") {
-                Some(v.iter().map(|&k| k.to_owned()).collect::<Vec<_>>())
-            } else {
-                None
-            },
-            backups: m.is_present("backups"),
-            ipv6: m.is_present("ipv6"),
-            private_net: m.is_present("private-networking"),
-            data: if let Some(d) = m.value_of("data") {
-                Some(d.to_owned())
-            } else {
-                None
-            }
-        }
-    }
-}
-
-impl fmt::Display for DropletConfig {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f,
-            "Name: {}\n\
-             Region: {}\n\
-             Size: {}\n\
-             Image: {}\n\
-             SSH Keys: {}\n\
-             Backups Enabled: {}\n\
-             IPv6 Enabled: {}\n\
-             Private Networking Enabled: {}\n\
-             User Data: {}\n",
-             self.name,
-             self.region,
-             self.size,
-             self.image,
-             if let Some(v) = self.ssh_keys {
-                v.iter().fold(String::new(), |acc, s| acc + &format!(" {},", s)[..])
-             } else {
-                "None".to_owned()
-             },
-             self.backups,
-             self.ipv6,
-             self.private_net,
-             if let Some(d) = self.data {
-                d
-             } else {
-                "None".to_owned()
-             }
-        )
-    }
-}
-
-pub fn run(m: &ArgMatches, cfg: &Config) {
+pub fn run(m: &ArgMatches, cfg: &mut Config) {
     if m.is_present("verbose") { cfg.verbose = true; }
     if m.is_present("nosend") { cfg.no_send = true; }
     let id = m.value_of("id").unwrap();
@@ -142,7 +73,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             match domgr.droplet(id).kernels().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for act in v.iter() {
+                    for act in v {
                         CliMessage::Kernel.display();
                         println!("\t{}", act);
                     }
@@ -179,7 +110,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             match domgr.droplet(id).snapshots().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for act in v.iter() {
+                    for act in v {
                         CliMessage::Snapshot.display();
                         println!("\t{}", act);
                     }
@@ -216,7 +147,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             match domgr.droplet(id).backups().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for act in v.iter() {
+                    for act in v {
                         CliMessage::Backup.display();
                         println!("\t{}", act);
                     }
@@ -253,7 +184,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             match domgr.droplet(id).actions().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for act in v.iter() {
+                    for act in v {
                         CliMessage::Action.display();
                         println!("\t{}", act);
                     }
@@ -324,7 +255,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             match domgr.droplet(id).neighbors().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for act in v.iter() {
+                    for act in v {
                         CliMessage::Neighbor.display();
                         println!("\t{}", act);
                     }

@@ -2,109 +2,48 @@ use std::fmt;
 
 use clap::ArgMatches;
 
-use doapi::{DoManager, DoRequest};
+use doapi::{DoManager, DoRequest, DnsRecord, DnsRecType};
 
 use config::Config;
 use message::CliMessage; 
 
-arg_enum!{
-    pub enum DnsRecType {
-        A,
-        AAAA,
-        CNAME,
-        MX,
-        NS,
-        SRV,
-        TXT
+fn dns_record_from_matches(m: &ArgMatches) -> DnsRecord {
+    let pri = value_t!(m.value_of("priority"), u32);
+    let port = value_t!(m.value_of("port"), u32);
+    let weight = value_t!(m.value_of("weight"), u32);
+    let data = m.value_of("data");
+    let name = m.value_of("name");
+    DnsRecord {
+        rec_type: value_t_or_exit!(m.value_of("type"), DnsRecType),
+        name: if name.is_none() {None} else {Some(name.unwrap().to_owned())},
+        data: if data.is_none() {None} else {Some(data.unwrap().to_owned())},
+        priority: if pri.is_err() {None} else {Some(pri.unwrap())},
+        port: if port.is_err() {None} else {Some(port.unwrap())},
+        weight: if weight.is_err() {None} else {Some(weight.unwrap())},
     }
 }
 
-struct DnsRec{
-    rec_type: DnsRecType,
-    name: Option<String>,
-    priority: Option<u32>,
-    port: Option<u32>,
-    data: Option<String>,
-    weight: Option<u32>,
-}
 
-impl DnsRec {
-    fn from_matches(m: &ArgMatches) -> DnsRec {
-        let pri = value_t!(m.value_of("priority"), u32);
-        let port = value_t!(m.value_of("port"), u32);
-        let weight = value_t!(m.value_of("weight"), u32);
-        let data = m.value_of("data");
-        let name = m.value_of("name");
-        DnsRec {
-            rec_type: value_t_or_exit!(m.value_of("type"), DnsRecType),
-            name: if name.is_none() {None} else {Some(name.unwrap().to_owned())},
-            data: if data.is_none() {None} else {Some(data.unwrap().to_owned())},
-            priority: if pri.is_err() {None} else {Some(pri.unwrap())},
-            port: if port.is_err() {None} else {Some(port.unwrap())},
-            weight: if weight.is_err() {None} else {Some(weight.unwrap())},
-        }
-    }
-}
-
-impl fmt::Display for DnsRec {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f,
-            "Record Type: {}\n\
-             Name: {}\n\
-             Data: {}\n\
-             Priority: {}\n\
-             Port: {}\n\
-             Weight: {}\n",
-             self.rec_type,
-             if let Some(n) = self.name {
-                n
-             } else {
-                "None".to_owned()
-             },
-             if let Some(d) = self.data {
-                d
-             } else {
-                "None".to_owned()
-             },
-             if let Some(p) = self.priority {
-                p.to_string()
-             } else {
-                "None".to_owned()
-             },
-             if let Some(p) = self.port {
-                p.to_string()
-             } else {
-                "None".to_owned()
-             },
-             if let Some(w) = self.weight {
-                w.to_string()
-             } else {
-                "None".to_owned()
-             }
-        )
-    }
-}
-
-pub fn run(pm: &ArgMatches, cfg: &Config) {
+pub fn run(pm: &ArgMatches, cfg: &mut Config) {
     if pm.is_present("verbose") { cfg.verbose = true; }
     if pm.is_present("nosend") { cfg.no_send = true; }
     let domgr = DoManager::with_token(&cfg.auth[..]);
     let domain = pm.value_of("domain").unwrap();
     match pm.subcommand() {
         ("create-record", Some(m)) => {
-            let rec = DnsRec::from_matches(&m);
+            let rec = dns_record_from_matches(&m);
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.dns()
             // TODO: Fixme
-                          .create(rec)
+                          .create(&rec)
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
-                match domgr.dns().create(rec).retrieve_json() {
+                match domgr.dns().create(&rec).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
@@ -116,7 +55,7 @@ pub fn run(pm: &ArgMatches, cfg: &Config) {
                 }
             }
             CliMessage::CreateDns(&rec).display();
-            match domgr.dns().create(rec).retrieve() {
+            match domgr.dns().create(&rec).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", s);
@@ -165,20 +104,20 @@ pub fn run(pm: &ArgMatches, cfg: &Config) {
             }
         },
         ("update-record", Some(m)) => {
-            let rec = DnsRec::from_matches(&m);
+            let rec = dns_record_from_matches(&m);
             let id = m.value_of("id").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.dns()
             // TODO: Fixme
-                          .update(id, rec)
+                          .update(id, &rec)
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
-                match domgr.dns().update(id, rec).retrieve_json() {
+                match domgr.dns().update(id, &rec).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
@@ -190,7 +129,7 @@ pub fn run(pm: &ArgMatches, cfg: &Config) {
                 }
             }
             CliMessage::UpdateDns(id, &rec).display();
-            match domgr.dns().update(id, rec).retrieve() {
+            match domgr.dns().update(id, &rec).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", s);

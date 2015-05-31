@@ -6,7 +6,7 @@ use doapi::{DoManager, DoRequest};
 use config::Config;
 use message::CliMessage;
 
-pub fn run(m: &ArgMatches, cfg: &Config) {
+pub fn run(m: &ArgMatches, cfg: &mut Config) {
     if m.is_present("verbose") { cfg.verbose = true; }
     if m.is_present("nosend") { cfg.no_send = true; }
     let domgr = DoManager::with_token(&cfg.auth[..]);
@@ -36,7 +36,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             match domgr.regions().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for reg in v.iter() {
+                    for reg in v {
                         CliMessage::Regions.display();
                         println!("\t{}", reg);
                     }
@@ -72,7 +72,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             match domgr.sizes().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for siz in v.iter() {
+                    for siz in v {
                         CliMessage::Sizes.display();
                         println!("\t{}", siz);
                     }
@@ -108,7 +108,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             match domgr.images().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for img in v.iter() {
+                    for img in v {
                         CliMessage::Images.display();
                         println!("\t{}", img);
                     }
@@ -144,7 +144,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             match domgr.ssh_keys().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for k in v.iter() {
+                    for k in v {
                         CliMessage::SshKeys.display();
                         println!("\t{}", k);
                     }
@@ -180,7 +180,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             match domgr.droplets().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for d in v.iter() {
+                    for d in v {
                         CliMessage::Droplets.display();
                         println!("\t{}", d);
                     }
@@ -216,7 +216,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             match domgr.domains().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for d in v.iter() {
+                    for d in v {
                         CliMessage::Domains.display();
                         println!("\t{}", d);
                     }
@@ -253,7 +253,7 @@ pub fn run(m: &ArgMatches, cfg: &Config) {
             match domgr.account().actions().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for act in v.iter() {
+                    for act in v {
                         CliMessage::Action.display();
                         println!("\t{}", act);
                     }
