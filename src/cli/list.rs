@@ -37,7 +37,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(v) => {
                     CliMessage::Success.display();
                     for reg in v {
-                        CliMessage::Regions.display();
+                        CliMessage::Region.display();
                         println!("\t{}", reg);
                     }
                 },
@@ -73,7 +73,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(v) => {
                     CliMessage::Success.display();
                     for siz in v {
-                        CliMessage::Sizes.display();
+                        CliMessage::Size.display();
                         println!("\t{}", siz);
                     }
                 },
@@ -109,7 +109,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(v) => {
                     CliMessage::Success.display();
                     for img in v {
-                        CliMessage::Images.display();
+                        CliMessage::ImageList.display();
                         println!("\t{}", img);
                     }
                 },

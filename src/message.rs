@@ -11,8 +11,11 @@ pub enum CliMessage<'a> {
     Failure,
     JsonResponse,
     Regions,
+    Region,
     Sizes,
+    Size,
     Images,
+    ImageList,
     SshKeys,
     AllDropletUpgrades,
     CreateDroplet(&'a Droplet),
@@ -152,15 +155,30 @@ impl<'a> CliMessage<'a> {
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying all regions..."));
             },
+            CliMessage::Region => {
+                println!("{} {}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying region..."));
+            },
             CliMessage::Sizes => {
                 print!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying all sizes..."));
             },
+            CliMessage::Size => {
+                println!("{} {}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying droplet size..."));
+            },
             CliMessage::Images => {
                 print!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying all images..."));
+            },
+            CliMessage::ImageList => {
+                println!("{} {}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying image..."));
             },
             CliMessage::SshKeys => {
                 print!("{} {}",
