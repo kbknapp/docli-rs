@@ -3,7 +3,7 @@ name = "docli"
 version = "0.1.0"
 dependencies = [
  "ansi_term 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "clap 0.10.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "clap 0.10.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "doapi 0.1.0",
 ]
 
@@ -23,7 +23,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "clap"
-version = "0.10.2"
+version = "0.10.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "ansi_term 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)",

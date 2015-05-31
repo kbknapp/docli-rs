@@ -82,7 +82,8 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("", Some(m))               => {
+        _ => {
+            // No subcommand
             if cfg.verbose {
                 CliMessage::Request(
                     &domgr.account()
@@ -114,7 +115,6 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        _ => unreachable!()
+        }
     }
 }
