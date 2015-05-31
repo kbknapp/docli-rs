@@ -107,7 +107,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("create", Some(m))   => {
+        ("create", Some(m))         => {
             let droplet_cfg = droplet_from_matches(&m);
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -143,15 +143,15 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("", Some(m))               => {
-            if cfg.verbose || m.is_present("verbose") {
+        _                           => {
+            if cfg.verbose {
                 CliMessage::Request(
                     &domgr.droplets()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.verbose || m.is_present("verbose") {
+            if cfg.no_send { return }
+            if cfg.verbose {
                 CliMessage::JsonResponse.display();
                 match domgr.droplets().retrieve_json() {
                     Ok(s)  => {
@@ -178,7 +178,6 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     println!("{}\n", e);
                 }
             }
-        },
-        _                     => unreachable!()
+        }
     }
 }

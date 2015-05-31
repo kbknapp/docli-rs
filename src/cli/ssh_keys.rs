@@ -163,15 +163,15 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("", Some(m)) => {
-            if cfg.verbose || m.is_present("verbose") {
+        _                     => {
+            if cfg.verbose {
                 CliMessage::Request(
                     &domgr.ssh_keys()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.verbose || m.is_present("verbose") {
+            if cfg.no_send { return }
+            if cfg.verbose {
                 CliMessage::JsonResponse.display();
                 match domgr.ssh_keys().retrieve_json() {
                     Ok(s)  => {
@@ -198,7 +198,6 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     println!("{}\n", e);
                 }
             }
-        },
-        _          => unreachable!()
+        }
     }
 }

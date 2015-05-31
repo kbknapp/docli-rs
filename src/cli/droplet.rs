@@ -1,6 +1,3 @@
-
-use std::fmt;
-
 use clap::ArgMatches;
 
 use doapi::{DoManager, DoRequest};
@@ -14,39 +11,6 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
     let id = m.value_of("id").unwrap();
     let domgr = DoManager::with_token(&cfg.auth[..]);
     match m.subcommand() {
-        ("", Some(m))                      => {
-            if cfg.verbose || m.is_present("verbose") {
-                CliMessage::Request(
-                    &domgr.droplet(id)
-                          .to_string()
-                          .replace("\n", "\n\t")[..]).display();
-            }
-            if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.verbose || m.is_present("verbose") {
-                CliMessage::JsonResponse.display();
-                match domgr.droplet(id).retrieve_json() {
-                    Ok(s) => {
-                        CliMessage::Success.display();
-                        println!("\n\t{}\n", s);
-                    },
-                    Err(e) => {
-                        CliMessage::Failure.display();
-                        println!("\n\t{}\n", e);
-                    }
-                }
-            }
-            CliMessage::Droplet(id).display();
-            match domgr.droplet(id).retrieve() {
-                Ok(s) => {
-                    CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
-                },
-                Err(e) => {
-                    CliMessage::Failure.display();
-                    println!("\n\t{}\n", e);
-                }
-            }
-        },
         ("list-kernels", Some(m))              => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -471,7 +435,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("restore", Some(m))             => {
+        ("restore", Some(m))                   => {
             let img = m.value_of("image").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -540,7 +504,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("resize", Some(m))              => {
+        ("resize", Some(m))                    => {
             let disk = m.is_present("disk");
             let size = m.value_of("size").unwrap();
             if cfg.verbose || m.is_present("verbose") {
@@ -576,7 +540,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("rebuild", Some(m))             => {
+        ("rebuild", Some(m))                   => {
             let img = m.value_of("image").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -611,7 +575,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("rename", Some(m))              => {
+        ("rename", Some(m))                    => {
             let name = m.value_of("name").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -646,7 +610,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("change-kernel", Some(m))       => {
+        ("change-kernel", Some(m))             => {
             let kernel = m.value_of("kernel_id").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -783,7 +747,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("show-action", Some(m))         => {
+        ("show-action", Some(m))               => {
             let a_id = m.value_of("action_id").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -852,6 +816,38 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        _                                => unreachable!()
+        _                                      => {
+            if cfg.verbose {
+                CliMessage::Request(
+                    &domgr.droplet(id)
+                          .to_string()
+                          .replace("\n", "\n\t")[..]).display();
+            }
+            if cfg.no_send { return }
+            if cfg.verbose {
+                CliMessage::JsonResponse.display();
+                match domgr.droplet(id).retrieve_json() {
+                    Ok(s) => {
+                        CliMessage::Success.display();
+                        println!("\n\t{}\n", s);
+                    },
+                    Err(e) => {
+                        CliMessage::Failure.display();
+                        println!("\n\t{}\n", e);
+                    }
+                }
+            }
+            CliMessage::Droplet(id).display();
+            match domgr.droplet(id).retrieve() {
+                Ok(s) => {
+                    CliMessage::Success.display();
+                    println!("\n\t{}\n", s);
+                },
+                Err(e) => {
+                    CliMessage::Failure.display();
+                    println!("\n\t{}\n", e);
+                }
+            }
+        }
     }
 }

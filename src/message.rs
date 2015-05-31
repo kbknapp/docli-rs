@@ -14,7 +14,6 @@ pub enum CliMessage<'a> {
     Sizes,
     Images,
     SshKeys,
-    Dropets,
     AllDropletUpgrades,
     CreateDroplet(&'a Droplet),
     Droplet(&'a str),
@@ -129,7 +128,7 @@ impl<'a> CliMessage<'a> {
                 println!("{}", Red.paint("Failed"));
             },
             CliMessage::JsonResponse => {
-                print!("{} {}\n", 
+                print!("{} {}", 
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying JSON response from DigitalOcean..."));
             },
@@ -167,11 +166,6 @@ impl<'a> CliMessage<'a> {
                 print!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying all SSH keys..."));
-            },
-            CliMessage::Dropets => {
-                print!("{} {}",
-                    Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all droplets..."));
             },
             CliMessage::Domains => {
                 print!("{} {}",
@@ -562,7 +556,7 @@ impl<'a> CliMessage<'a> {
                 println!("Failed");
             },
             CliMessage::JsonResponse => {
-                print!(" Displaying JSON response from DigitalOcean...\n");
+                print!(" Displaying JSON response from DigitalOcean...");
             },
             CliMessage::Request(req) => {
                 println!(" Displaying sent request...\n\t{}\n", req);

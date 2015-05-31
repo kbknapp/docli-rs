@@ -1,5 +1,3 @@
-use std::fmt;
-
 use clap::ArgMatches;
 
 use doapi::{DoManager, DoRequest, DnsRecord, DnsRecType};

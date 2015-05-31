@@ -90,8 +90,8 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
-            if cfg.verbose || m.is_present("verbose") {
+            if cfg.no_send { return }
+            if cfg.verbose {
                 CliMessage::JsonResponse.display();
                 match domgr.account().retrieve_json() {
                     Ok(s) => {
