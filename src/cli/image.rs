@@ -4,7 +4,7 @@ use clap::ArgMatches;
 use doapi::{DoManager, DoRequest};
 
 use config::Config;
-use message::CliMessage; 
+use message::CliMessage;
 
 pub fn run(m: &ArgMatches, cfg: &mut Config) {
     if m.is_present("verbose") { cfg.verbose = true; }
@@ -247,7 +247,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.image(id).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\t{}", &img.to_string()[..].replace("$", ""));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
