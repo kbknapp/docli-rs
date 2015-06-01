@@ -42,6 +42,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                         CliMessage::Action.display();
                         println!("\t{}", act);
                     }
+                    if s.is_empty() { println!("\tNo actions to dipslay"); }
                 },
                 Err(e) => {
                     CliMessage::Failure.display();

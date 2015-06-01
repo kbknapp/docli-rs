@@ -57,7 +57,7 @@ fn main() {
             .subcommand(SubCommand::with_name("sizes")
                 .about("Displays available droplet sizes"))
             .subcommand(SubCommand::with_name("images")
-                .args_from_usage("--distrobutions   'Displays all distrobution images'
+                .args_from_usage("--distributions   'Displays all distrobution images'
                                   --applications    'Displays all application images'
                                   --private         'Displays all private user images'
                                   --available       'Displays all available images (Default)'")
@@ -190,13 +190,15 @@ fn main() {
                 .about("Performs pending upgrades")))
         .subcommand(SubCommand::with_name("image")
             .about("Commands for managing images")
-            .arg_from_usage("<id> 'The image ID or slug to use (not all commands support using a slug)'"))
+            .arg_from_usage("<id> 'The image ID or slug to use (not all commands support using a slug)'")
             .subcommand(SubCommand::with_name("list-actions")
                 .about("Lists all previous and current actions for an image"))
             .subcommand(SubCommand::with_name("update")
                 .about("Performs pending updates"))
             .subcommand(SubCommand::with_name("delete")
                 .about("Deletes an image"))
+            .subcommand(SubCommand::with_name("show")
+                .about("Displays details about an image"))
             .subcommand(SubCommand::with_name("transfer")
                 .about("Transfers an image to a new region")
                 .arg_from_usage("<region> 'The region to transfer to'"))
@@ -204,7 +206,7 @@ fn main() {
                 .about("Converts a an image (i.e. from a snapshot to a backup)"))
             .subcommand(SubCommand::with_name("show-action")
                 .about("Displays a particular action of an image")
-                .arg_from_usage("<action_id> 'The action ID to display'"))
+                .arg_from_usage("<action_id> 'The action ID to display'")))
         .subcommand(SubCommand::with_name("ssh-keys")
             .about("Commands for managing SSH keys")
             .subcommand(SubCommand::with_name("create")

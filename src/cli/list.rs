@@ -84,16 +84,27 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("images", Some(m))          => {
+            let request = if m.is_present("applications") {
+                domgr.images().applications()
+            } else if m.is_present("distributions") {
+                domgr.images().distributions()
+            } else if m.is_present("private") {
+                domgr.images().private()
+            } else if m.is_present("available") {
+                domgr.images().available()
+            } else {
+                domgr.images()
+            };
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
-                    &domgr.images()
-                         .to_string()
-                         .replace("\n", "\n\t")[..]).display();
+                    &request.to_string()
+                        .replace("\n", "\n\t")[..]
+                ).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
-                match domgr.images().retrieve_json() {
+                match request.retrieve_json() {
                     Ok(s)  => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
@@ -105,12 +116,12 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
             CliMessage::Images.display();
-            match domgr.images().retrieve() {
+            match request.retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for img in v {
+                    for img in v.iter() {
                         CliMessage::ImageList.display();
-                        println!("\t{}", img);
+                        println!("\t{}", &img.to_string()[..].replace("$", ""));
                     }
                 },
                 Err(e) => {
