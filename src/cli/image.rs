@@ -50,18 +50,19 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("update", Some(m))            => {
+        ("rename", Some(m))            => {
+            let name = m.value_of("name").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.image(id)
-                          .update()
+                          .update(name)
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
-                match domgr.image(id).update().retrieve_json() {
+                match domgr.image(id).update(name).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
@@ -72,8 +73,8 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     }
                 }
             }
-            CliMessage::UpdateImage(id).display();
-            match domgr.image(id).update().retrieve() {
+            CliMessage::UpdateImage(id, name).display();
+            match domgr.image(id).update(name).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", s);
