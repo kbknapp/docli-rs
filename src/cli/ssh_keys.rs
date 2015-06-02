@@ -48,19 +48,21 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("show-key", Some(m)) => {
-            let id = m.value_of("id").unwrap();
-            let finger = m.value_of("finger_print").unwrap();
+            let id = if m.is_present("id") {
+                m.value_of("id").unwrap()
+            } else {
+                m.value_of("finger_print").unwrap()
+            };
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
-                    &domgr.ssh_keys()
-                          .show(id, finger)
+                    &domgr.ssh_key(id)
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
-                match domgr.ssh_keys().show(id, finger).retrieve_json() {
+                match domgr.ssh_key(id).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
@@ -71,8 +73,8 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     }
                 }
             }
-            CliMessage::SshKey(id, finger).display();
-            match domgr.ssh_keys().show(id, finger).retrieve() {
+            CliMessage::SshKey(id).display();
+            match domgr.ssh_key(id).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", s);
@@ -84,7 +86,6 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("update", Some(m))   => {
-            let finger = m.is_present("finger_print");
             let id = if m.is_present("id") {
                 m.value_of("id").unwrap()
             } else {
@@ -93,15 +94,15 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             let name = m.value_of("name").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
-                    &domgr.ssh_keys()
-                          .update(name, id)
+                    &domgr.ssh_key(id)
+                          .update(name)
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
-                match domgr.ssh_keys().update(name, id).retrieve_json() {
+                match domgr.ssh_key(id).update(name).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
@@ -113,7 +114,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
             CliMessage::UpdateSshKey(name, id).display();
-            match domgr.ssh_keys().update(name, id).retrieve() {
+            match domgr.ssh_key(id).update(name).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", s);
@@ -132,15 +133,15 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             };
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
-                    &domgr.ssh_keys()
-                          .destroy(id)
+                    &domgr.ssh_key(id)
+                          .destroy()
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
-                match domgr.ssh_keys().destroy(id).retrieve_json() {
+                match domgr.ssh_key(id).destroy().retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
@@ -152,7 +153,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
             CliMessage::DestroySshKey(id).display();
-            match domgr.ssh_keys().destroy(id).retrieve() {
+            match domgr.ssh_key(id).destroy().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", s);

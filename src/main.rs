@@ -216,8 +216,11 @@ fn main() {
                                   <public_key> 'The public key of the SSH key'"))
             .subcommand(SubCommand::with_name("show-key")
                 .about("Displays information on a particular key")
-                .args_from_usage("<id>           'The key ID of the key to display'
-                                  <finger_print> 'The fingerprint of the key to display'"))
+                .args_from_usage("[id]           'The key ID of the key to display'
+                                  [finger_print] 'The fingerprint of the key to display'"))
+                .arg_group(ArgGroup::with_name("key_id")
+                        .add_all(vec!["id", "finger_print"])
+                        .required(true))
             .subcommand(SubCommand::with_name("update")
                 .about("Updates a particular SSH key")
                 .args_from_usage("<name>         'The new name to use'

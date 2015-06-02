@@ -20,7 +20,7 @@ fn droplet_from_matches(m: &ArgMatches) -> Droplet {
         backups: m.is_present("backups"),
         ipv6: m.is_present("ipv6"),
         private_net: m.is_present("private-networking"),
-        data: if let Some(d) = m.value_of("data") {
+        user_data: if let Some(d) = m.value_of("data") {
             Some(d.to_owned())
         } else {
             None

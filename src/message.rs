@@ -72,7 +72,7 @@ pub enum CliMessage<'a> {
     ShowDns(&'a str),
     DeleteDns(&'a str),
     CreateSshKey(&'a str, &'a str),
-    SshKey(&'a str, &'a str),
+    SshKey(&'a str),
     UpdateSshKey(&'a str, &'a str),
     CreateDns(&'a DnsRecord),
 }
@@ -479,13 +479,11 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("with public key..."),
                     pub_key);
             },
-            CliMessage::SshKey(name, finger) => {
-                print!("{} {} {} {} {}{}",
+            CliMessage::SshKey(name) => {
+                print!("{} {} {}{}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying SSH key"),
                     White.bold().underline().paint(name),
-                    White.bold().paint("with finger print"),
-                    White.bold().underline().paint(finger),
                     White.bold().paint("..."));
             },
             CliMessage::UpdateSshKey(name, id) => {

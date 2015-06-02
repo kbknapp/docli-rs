@@ -58,7 +58,7 @@ docli ssh-keys create <name> <public_key>
 docli ssh-keys show-key <key_id> <finger_print>
 docli ssh-keys update <id>|<finger_print> <name>
 docli ssh-keys destroy <id>|<finger_print>
-docli ssh-keys (same as docli list ssh-keys)
+docli ssh-keys
 
 docli dns <domain> list-records
 docli dns <domain> create-record <type> [rec_name] [data] [priority:int] [port:int] [weight:int]
