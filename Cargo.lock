@@ -15,7 +15,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "aster"
 version = "0.3.1"
-source = "git+https://github.com/Byron/rust-aster#ad31a2123799ec0b124d7a31a67fe2cf9e893428"
 
 [[package]]
 name = "bitflags"
@@ -180,7 +179,7 @@ version = "0.3.0"
 name = "quasi_codegen"
 version = "0.3.1"
 dependencies = [
- "aster 0.3.1 (git+https://github.com/Byron/rust-aster)",
+ "aster 0.3.1",
 ]
 
 [[package]]
@@ -227,7 +226,7 @@ dependencies = [
 name = "serde_macros"
 version = "0.3.2"
 dependencies = [
- "aster 0.3.1 (git+https://github.com/Byron/rust-aster)",
+ "aster 0.3.1",
  "quasi 0.3.0",
  "quasi_macros 0.3.1",
 ]

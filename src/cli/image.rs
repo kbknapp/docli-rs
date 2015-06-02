@@ -246,7 +246,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
             CliMessage::Image(id).display();
             match domgr.image(id).retrieve() {
-                Ok(s) => {
+                Ok(img) => {
                     CliMessage::Success.display();
                     println!("\t{}", &img.to_string()[..].replace("$", ""));
                 },

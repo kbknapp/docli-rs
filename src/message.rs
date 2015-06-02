@@ -50,7 +50,7 @@ pub enum CliMessage<'a> {
     Token(&'a str),
     ImageActions(&'a str),
     Image(&'a str),
-    UpdateImage(&'a str),
+    UpdateImage(&'a str, &'a str),
     DeleteImage(&'a str),
     ConvertImage(&'a str),
     TransferImage(&'a str, &'a str),
@@ -204,11 +204,13 @@ impl<'a> CliMessage<'a> {
                     White.bold().underline().paint(id),
                     White.bold().paint("..."));
             },
-            CliMessage::UpdateImage(id) => {
-                print!("{} {} {}{}",
+            CliMessage::UpdateImage(id, name) => {
+                print!("{} {} {} {} {}{}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Updating image"),
                     White.bold().underline().paint(id),
+                    White.bold().paint("to name"),
+                    White.bold().underline().paint(name),
                     White.bold().paint("..."));
             },
             CliMessage::DeleteImage(id) => {
