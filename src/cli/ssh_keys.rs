@@ -4,7 +4,8 @@ use clap::ArgMatches;
 use doapi::{DoManager, DoRequest};
 
 use config::Config;
-use message::CliMessage; 
+use message::CliMessage;
+use cli;
 
 pub fn run(m: &ArgMatches, cfg: &mut Config) {
     if m.is_present("verbose") { cfg.verbose = true; }
@@ -85,7 +86,10 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("update", Some(m))   => {
+        ("rename", Some(m))   => {
+            if !m.is_present("noconfirm") || !cli::confirm() {
+                return
+            }
             let id = if m.is_present("id") {
                 m.value_of("id").unwrap()
             } else {
@@ -126,6 +130,9 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("destroy", Some(m))  => {
+            if !m.is_present("noconfirm") || !cli::confirm() {
+                return
+            }
             let id = if m.is_present("id") {
                 m.value_of("id").unwrap()
             } else {

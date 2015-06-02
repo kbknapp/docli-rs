@@ -5,6 +5,7 @@ use doapi::{DoManager, DoRequest};
 
 use config::Config;
 use message::CliMessage;
+use cli;
 
 pub fn run(m: &ArgMatches, cfg: &mut Config) {
     if m.is_present("verbose") { cfg.verbose = true; }
@@ -52,15 +53,14 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             let name = m.value_of("name").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
-                    &domgr.domains()
-                          .show(name)
+                    &domgr.domain(name)
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
-                match domgr.domains().show(name).retrieve_json() {
+                match domgr.domain(name).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
@@ -72,7 +72,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
             CliMessage::Domain(name).display();
-            match domgr.domains().show(name).retrieve() {
+            match domgr.domain(name).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", s);
@@ -84,18 +84,21 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("delete", Some(m))      => {
+            if !m.is_present("noconfirm") || !cli::confirm() {
+                return
+            }
             let name = m.value_of("name").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
-                    &domgr.domains()
-                          .delete(name)
+                    &domgr.domain(name)
+                          .delete()
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
-                match domgr.domains().delete(name).retrieve_json() {
+                match domgr.domain(name).delete().retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
@@ -107,7 +110,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
             CliMessage::DeleteDomain(name).display();
-            match domgr.domains().delete(name).retrieve() {
+            match domgr.domain(name).delete().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", s);

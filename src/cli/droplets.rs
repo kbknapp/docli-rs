@@ -4,7 +4,7 @@ use clap::ArgMatches;
 use doapi::{Droplet, DoManager, DoRequest};
 
 use config::Config;
-use message::CliMessage; 
+use message::CliMessage;
 
 fn droplet_from_matches(m: &ArgMatches) -> Droplet {
     Droplet {

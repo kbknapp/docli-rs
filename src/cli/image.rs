@@ -5,6 +5,7 @@ use doapi::{DoManager, DoRequest};
 
 use config::Config;
 use message::CliMessage;
+use cli;
 
 pub fn run(m: &ArgMatches, cfg: &mut Config) {
     if m.is_present("verbose") { cfg.verbose = true; }
@@ -51,6 +52,9 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("rename", Some(m))            => {
+            if !m.is_present("noconfirm") || !cli::confirm() {
+                return
+            }
             let name = m.value_of("name").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -86,6 +90,9 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("delete", Some(m))            => {
+            if !m.is_present("noconfirm") || !cli::confirm() {
+                return
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.image(id)
@@ -120,6 +127,9 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("transfer", Some(m))          => {
+            if !m.is_present("noconfirm") || !cli::confirm() {
+                return
+            }
             let reg = m.value_of("region").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(

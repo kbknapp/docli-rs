@@ -2,7 +2,7 @@ use clap::ArgMatches;
 
 use config::Config;
 use doapi::{DoManager, DoRequest};
-use message::CliMessage; 
+use message::CliMessage;
 
 pub fn run(m: &ArgMatches, cfg: &mut Config) {
     if m.is_present("verbose") { cfg.verbose = true; }
@@ -111,7 +111,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     println!("\n\t{}\n", s);
                     match domgr.account().retrieve_header() {
                         Ok(h)  => println!("\t{}\n",&h.to_string()[..].replace("\n", "\n\t")),
-                        Err(_) => println!("\tUnable to retrieve response header information\n"), 
+                        Err(_) => println!("\tUnable to retrieve response header information\n"),
                     }
                 },
                 Err(e) => {

@@ -3,7 +3,8 @@ use clap::ArgMatches;
 use doapi::{DoManager, DoRequest, DnsRecord, DnsRecType};
 
 use config::Config;
-use message::CliMessage; 
+use message::CliMessage;
+use cli;
 
 fn dns_record_from_matches(m: &ArgMatches) -> DnsRecord {
     let pri = value_t!(m.value_of("priority"), u64);
@@ -102,6 +103,9 @@ pub fn run(pm: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("update-record", Some(m)) => {
+            if !m.is_present("noconfirm") || !cli::confirm() {
+                return
+            }
             let rec = dns_record_from_matches(&m);
             let id = m.value_of("id").unwrap();
             if cfg.verbose || m.is_present("verbose") {
@@ -174,6 +178,9 @@ pub fn run(pm: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("delete-record", Some(m)) => {
+            if !m.is_present("noconfirm") || !cli::confirm() {
+                return
+            }
             let id = m.value_of("id").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(

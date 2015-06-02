@@ -1,5 +1,5 @@
 #[cfg(feature = "color")]
-use ansi_term::Colour::{Red, Green, Blue, White};
+use ansi_term::Colour::{Red, Green, Blue, White, Yellow};
 
 use doapi::{DnsRecord, Droplet};
 
@@ -18,6 +18,7 @@ pub enum CliMessage<'a> {
     ImageList,
     SshKeys,
     AllDropletUpgrades,
+    Confirm,
     CreateDroplet(&'a Droplet),
     Droplet(&'a str),
     DropletKernels(&'a str),
@@ -82,7 +83,7 @@ impl<'a> CliMessage<'a> {
     pub fn display(&self) {
         match *self {
             CliMessage::Account => {
-                print!("{} {}", 
+                print!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying account information..."));
             },
@@ -109,7 +110,7 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("..."));
             },
             CliMessage::Actions => {
-                print!("{} {}", 
+                print!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying all account actions..."));
             },
@@ -131,7 +132,7 @@ impl<'a> CliMessage<'a> {
                 println!("{}", Red.paint("Failed"));
             },
             CliMessage::JsonResponse => {
-                print!("{} {}", 
+                print!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying JSON response from DigitalOcean..."));
             },
@@ -550,6 +551,13 @@ impl<'a> CliMessage<'a> {
                     Blue.bold().paint("::"),
                     White.bold().paint("Creating DNS record with the following configuration..."),
                     rec.to_string().replace("\n", "\n\t"));
+            },
+            CliMessage::Confirm => {
+                print!("{} {} {}\n\n{}[Y/n]: ",
+                    Blue.bold().paint("::"),
+                    Yellow.bold().paint("Warning"),
+                    White.bold().paint("The action you are about to perform modifies existing data..."),
+                    White.bold().paint("Are you sure you want to continue?"));
             },
         }
     }
