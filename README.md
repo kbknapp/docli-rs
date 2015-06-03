@@ -7,38 +7,6 @@ A command-line utility for managing DigitalOcean infrastructure via the [Digital
 ## Disclaimer
 This library is in alpha - it may do anything up to, and including, eating your laundry. You can check the request being sent to DigitalOcean without sending via the `--nosend --verbose` flags
 
-## Installation
-
-### Linux / OSX
-
-If you are on Arch linux, you can install from the AUR via the `docli-git` (requires a nightly Rust compiler) or `docli-bin` package. Otherwise you can try one of the pre-compiled binaries:
-
-#### Linux x86_64
-
-Assuming you're familiar `$PATH`, download the tar.gz, unzip, and copy to somewhere in your `$PATH`
-
-```sh
-$ wget http://wod.twentyfives.net/bin/docli/docli-v0.1.0-alpha_linux-x64.tar.gz
-$ tar xvf docli-v0.1.0-alpha_linux-x64.tar.gz
-$ cp docli ~/.bin
-```
-In the example `~/.bin` is in `$PATH`
-
-#### OSX x86_64
-
-Assuming you're familiar `$PATH`, download the tar.gz, unzip, and copy to somewhere in your `$PATH`
-
-```sh
-$ wget http://wod.twentyfives.net/bin/docli/docli-v0.1.0-alpha_osx-x64.tar.gz
-$ tar xvf docli-v0.1.0-alpha_osx-x64.tar.gz
-$ cp docli ~/.bin
-```
-In the example `~/.bin` is in `$PATH`
-
-### Windows
-
-I have not tried compiling on Windows yet. Feel free to clone the repository and attempt to compile with a nightly Rust compiler
-
 ## Compile from source
 
 If you'd rather compile from source (takes about 2 minutes on a decent machine) use the following (Assuming you already have a nightly Rust compiler):
