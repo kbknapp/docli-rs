@@ -71,7 +71,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     }
                 }
             }
-            CliMessage::DropletKernels(id).display();
+            CliMessage::DropletSnapshots(id).display();
             match domgr.droplet(id).snapshots().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
@@ -752,7 +752,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     }
                 }
             }
-            CliMessage::SnapshotDroplet(id).display();
+            CliMessage::SnapshotDroplet(id, name).display();
             match domgr.droplet(id).snapshot(name).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();

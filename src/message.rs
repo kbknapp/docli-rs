@@ -22,11 +22,11 @@ pub enum CliMessage<'a> {
     CreateDroplet(&'a Droplet),
     Droplet(&'a str),
     DropletKernels(&'a str),
-    DropletSnapshots(&'a str),
     DropletBackups(&'a str),
     DropletActions(&'a str),
     DeleteDroplet(&'a str),
     DropletNeighbors(&'a str),
+    DropletSnapshots(&'a str),
     DisableBackups(&'a str),
     RebootDroplet(&'a str),
     PowerCycleDroplet(&'a str),
@@ -40,7 +40,7 @@ pub enum CliMessage<'a> {
     ChangeKernel(&'a str, &'a str),
     EnableIpv6(&'a str),
     EnablePrivateNetworking(&'a str),
-    SnapshotDroplet(&'a str),
+    SnapshotDroplet(&'a str, &'a str),
     DropletAction(&'a str, &'a str),
     UpgradeDroplet(&'a str),
     Kernel,
@@ -62,7 +62,6 @@ pub enum CliMessage<'a> {
     AllDropletNeighbors,
     NamelessDroplet,
     DestroySshKey(&'a str),
-    CreateDnsRec(&'a str),
     Snapshot,
     Backup,
     DnsRecords,
@@ -79,7 +78,6 @@ pub enum CliMessage<'a> {
 }
 
 impl<'a> CliMessage<'a> {
-    #[cfg(feature="color")]
     pub fn display(&self) {
         match *self {
             CliMessage::Account => {
@@ -380,11 +378,13 @@ impl<'a> CliMessage<'a> {
                     White.bold().underline().paint(id),
                     White.bold().paint("..."));
             },
-            CliMessage::SnapshotDroplet(id) => {
-                print!("{} {} {}{}",
+            CliMessage::SnapshotDroplet(id, name) => {
+                print!("{} {} {} {} {}{}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Taking a snapshot of droplet"),
                     White.bold().underline().paint(id),
+                    White.bold().paint("with name"),
+                    White.bold().underline().paint(name),
                     White.bold().paint("..."));
             },
             CliMessage::UpgradeDroplet(id) => {
@@ -546,12 +546,6 @@ impl<'a> CliMessage<'a> {
                     White.bold().underline().paint(id),
                     White.bold().paint("..."));
             },
-            CliMessage::CreateDnsRec(rec) => {
-                print!("{} {}\n\t{}\n",
-                    Blue.bold().paint("::"),
-                    White.bold().paint("Creating DNS record with the following configuration..."),
-                    rec.to_string().replace("\n", "\n\t"));
-            },
             CliMessage::Confirm => {
                 print!("{} {} {}\n\n{}[Y/n]: ",
                     Blue.bold().paint("::"),
@@ -561,77 +555,40 @@ impl<'a> CliMessage<'a> {
             },
         }
     }
+}
 
-    #[cfg(not(feature="color"))]
-    pub fn display(&self) {
-        print!("::");
-        match *self {
-            CliMessage::Account => {
-                print!(" Displaying account information...");
-            },
-            CliMessage::Action => {
-                println!(" Displaying account action...\n\t");
-            },
-            CliMessage::Actions => {
-                print!(" Displaying all account actions...\n");
-            },
-            CliMessage::ActionId(id) => {
-                print!(" Displaying account action ID {}...", id);
-            },
-            CliMessage::Failure => {
-                println!("Failed");
-            },
-            CliMessage::JsonResponse => {
-                print!(" Displaying JSON response from DigitalOcean...");
-            },
-            CliMessage::Request(req) => {
-                println!(" Displaying sent request...\n\t{}\n", req);
-            },
-            CliMessage::Success => {
-                println!("Success");
-            },
-            CliMessage::Token(tok) => {
-                println!(" Displaying account token...\n\t{}\n", tok);
-            },
-            CliMessage::Regions => {
-                print!(":: Displaying all regions...");
-            },
-            CliMessage::Sizes => {
-                print!("::Displaying all sizes...");
-            },
-            CliMessage::Images => {
-                print!("::Displaying all images...");
-            },
-            CliMessage::SshKeys => {
-                print!(":: Displaying all SSH keys...");
-            },
-            CliMessage::Dropets => {
-                print!(":: Displaying all droplets...");
-            },
-            CliMessage::Domains => {
-                print!(":: Displaying all domains...");
-            },
-            CliMessage::ImageActions(id) => {
-                print!(":: Displaying all actions for image {}...", id);
-            },
-            CliMessage::Image(id) => {
-                print!(":: Displaying image {}...", id);
-            },
-            CliMessage::UpdateImage(id) => {
-                print!(":: Updating image {}...", id);
-            },
-            CliMessage::DeleteImage(id) => {
-                print!(":: Deleting image {}...", id);
-            },
-            CliMessage::ConvertImage(id) => {
-                print!(":: Converting image {}...", id);
-            },
-            CliMessage::TransferImage(id, region) => {
-                print!(":: Transferring image {} to region {}...", id, region);
-            },
-            CliMessage::ImageAction(id, a_id) => {
-                print!(":: Displaying action {} for image {}...", a_id, id);
-            }
-        }
+#[cfg(not(feature = "color"))]
+struct Red;
+#[cfg(not(feature = "color"))]
+struct Green;
+#[cfg(not(feature = "color"))]
+struct Blue;
+#[cfg(not(feature = "color"))]
+struct White;
+#[cfg(not(feature = "color"))]
+struct Yellow;
+
+#[cfg(not(feature = "color"))]
+trait Paint {
+    fn bold(&self) -> &Self {
+        self
+    }
+    fn paint<'a>(&self, s: &'a str) -> &'a str {
+        s
+    }
+    fn underline(&self) -> &Self {
+        self
     }
 }
+
+
+#[cfg(not(feature = "color"))]
+impl Paint for Red {}
+#[cfg(not(feature = "color"))]
+impl Paint for Green {}
+#[cfg(not(feature = "color"))]
+impl Paint for Blue {}
+#[cfg(not(feature = "color"))]
+impl Paint for White {}
+#[cfg(not(feature = "color"))]
+impl Paint for Yellow {}
