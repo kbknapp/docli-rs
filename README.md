@@ -56,7 +56,7 @@ SUBCOMMANDS:
 In order to use the DigitalOcean v2 API (which is what `docli` uses under the covers, you must generate a Personal Authentication Token. This token can then either be passed to `docli` directly with `--token <token>` or you can set a `DO_AUTH_TOKEN` environmental variable before using `docli`. To do using Linux or OSX, open a terminal and run the following (test with `docli account` which lists your account information):
 
 ```sh
-$ export DO_AUTH_TOKEN=<PAST YOUR TOKEN HERE>
+$ export DO_AUTH_TOKEN=<PASTE YOUR TOKEN HERE>
 $ docli account
 ```
 
