@@ -1,7 +1,7 @@
 #[cfg(feature = "color")]
 use ansi_term::Colour::{Red, Green, Blue, White, Yellow};
 
-use doapi::{DnsRecord, Droplet};
+use doapi::request::{DnsRecord, Droplet};
 
 pub enum CliMessage<'a> {
     Account,

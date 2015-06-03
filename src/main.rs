@@ -5,7 +5,8 @@ extern crate doapi;
 extern crate ansi_term;
 
 use clap::{App, Arg, ArgGroup, ArgMatches, SubCommand};
-use doapi::DnsRecType;
+
+use doapi::request::DnsRecType;
 
 mod cli;
 mod config;
@@ -190,6 +191,7 @@ fn main() {
             .subcommand(SubCommand::with_name("enable-private-networking")
                 .about("Enables private networking"))
             .subcommand(SubCommand::with_name("snapshot")
+                .arg_from_usage("<name> 'What to name the new snapshot image'")
                 .about("Creates a snapshot of a droplet"))
             .subcommand(SubCommand::with_name("show-action")
                 .about("Displays a specific action for a droplet")

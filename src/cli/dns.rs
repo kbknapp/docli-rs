@@ -1,6 +1,7 @@
 use clap::ArgMatches;
 
-use doapi::{DoManager, DoRequest, DnsRecord, DnsRecType};
+use doapi::{DoManager, DoRequest};
+use doapi::request::{DnsRecord, DnsRecType};
 
 use config::Config;
 use message::CliMessage;

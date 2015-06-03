@@ -730,17 +730,18 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("snapshot", Some(m))                  => {
+            let name = m.value_of("name").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
-                          .snapshot()
+                          .snapshot(name)
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
             if cfg.no_send || m.is_present("nosend") { return }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
-                match domgr.droplet(id).snapshot().retrieve_json() {
+                match domgr.droplet(id).snapshot(name).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
@@ -752,7 +753,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
             CliMessage::SnapshotDroplet(id).display();
-            match domgr.droplet(id).snapshot().retrieve() {
+            match domgr.droplet(id).snapshot(name).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", s);

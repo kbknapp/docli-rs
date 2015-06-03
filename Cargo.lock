@@ -15,7 +15,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "aster"
 version = "0.3.1"
-source = "git+https://github.com/Byron/rust-aster#ad31a2123799ec0b124d7a31a67fe2cf9e893428"
+source = "git+https://github.com/kbknapp/rust-aster#ad31a2123799ec0b124d7a31a67fe2cf9e893428"
 
 [[package]]
 name = "bitflags"
@@ -48,8 +48,8 @@ version = "0.1.0"
 dependencies = [
  "hyper 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "regex 0.1.33 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde 0.3.2",
- "serde_macros 0.3.2",
+ "serde 0.3.2 (git+https://github.com/kbknapp/serde)",
+ "serde_macros 0.3.2 (git+https://github.com/kbknapp/serde_macros)",
 ]
 
 [[package]]
@@ -175,19 +175,22 @@ dependencies = [
 [[package]]
 name = "quasi"
 version = "0.3.0"
+source = "git+https://github.com/kbknapp/rust-quasi#bf727d3fb8cf304ad8b9a76bb6c90295b1b9c26e"
 
 [[package]]
 name = "quasi_codegen"
 version = "0.3.1"
+source = "git+https://github.com/kbknapp/rust-quasi_codegen#c4aba2fa7880194c15ec6b01e7e188932a7308c0"
 dependencies = [
- "aster 0.3.1 (git+https://github.com/Byron/rust-aster)",
+ "aster 0.3.1 (git+https://github.com/kbknapp/rust-aster)",
 ]
 
 [[package]]
 name = "quasi_macros"
 version = "0.3.1"
+source = "git+https://github.com/kbknapp/rust-quasi_macros#9c9564d36fbe518cc826603f6c11e8b1dc18835e"
 dependencies = [
- "quasi_codegen 0.3.1",
+ "quasi_codegen 0.3.1 (git+https://github.com/kbknapp/rust-quasi_codegen)",
 ]
 
 [[package]]
@@ -219,6 +222,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "serde"
 version = "0.3.2"
+source = "git+https://github.com/kbknapp/serde#ccc82e033e54999cd7eeece73e89bf0e89ced8fa"
 dependencies = [
  "num 0.1.24 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -226,10 +230,11 @@ dependencies = [
 [[package]]
 name = "serde_macros"
 version = "0.3.2"
+source = "git+https://github.com/kbknapp/serde_macros#8b1b10254b52b2b69cec6d6e40f9bb7d0323f094"
 dependencies = [
- "aster 0.3.1 (git+https://github.com/Byron/rust-aster)",
- "quasi 0.3.0",
- "quasi_macros 0.3.1",
+ "aster 0.3.1 (git+https://github.com/kbknapp/rust-aster)",
+ "quasi 0.3.0 (git+https://github.com/kbknapp/rust-quasi)",
+ "quasi_macros 0.3.1 (git+https://github.com/kbknapp/rust-quasi_macros)",
 ]
 
 [[package]]
