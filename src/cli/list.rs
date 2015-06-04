@@ -123,7 +123,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for img in v.iter() {
                         CliMessage::ImageList.display();
-                        println!("\t{}", &img.to_string()[..].replace("$", ""));
+                        println!("\t{}\n", &img.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo images to dipslay"); }
                 },
