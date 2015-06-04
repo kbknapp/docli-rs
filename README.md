@@ -10,7 +10,7 @@ This library is in alpha - it may do anything up to, and including, eating your 
 
 ### Linux / OSX
 
-If you are on Arch linux, you can install from the AUR via the `docli-git` (requires a nightly Rust compiler) or `docli-bin` package. Otherwise you can try one of the pre-compiled binaries:
+If you are on Arch linux, you can install from the AUR via the `docli-git` (requires a nightly Rust compiler). Otherwise you can try one of the pre-compiled binaries:
 
 #### Linux x86_64
 
@@ -37,6 +37,7 @@ In the example `~/.bin` is in `$PATH`
 ### Windows
 
 I have not tried compiling on Windows yet. Feel free to clone the repository and attempt to compile with a nightly Rust compiler
+
 ## Compile from source
 
 If you'd rather compile from source (takes about 2 minutes on a decent machine) use the following (Assuming you already have a nightly Rust compiler):
