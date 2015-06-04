@@ -1,1 +1,185 @@
-<meta http-equiv="refresh" content="0; url=http://kbknapp.github.io/docli-rs/docs/docli/index.html" />
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Docli-rs by kbknapp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Docli-rs</h1>
+      <h2 class="project-tagline">Command-line utility for managing DigitalOcean infrastructure</h2>
+      <a href="https://github.com/kbknapp/docli-rs" class="btn">View on GitHub</a>
+      <a href="https://github.com/kbknapp/docli-rs/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/kbknapp/docli-rs/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="docli-rs-pronounced-dockly" class="anchor" href="#docli-rs-pronounced-dockly" aria-hidden="true"><span class="octicon octicon-link"></span></a>docli-rs (pronounced "dockly")</h1>
+
+<p><a href="https://travis-ci.org/kbknapp/docli-rs"><img src="https://travis-ci.org/kbknapp/docli-rs.svg?branch=master" alt="Build Status"></a> <a href="https://github.com/kbknapp/docli-rs"><img src="https://img.shields.io/github/release/kbknapp/docli-rs.svg" alt="GitHub release"></a> <a href="https://github.com/kbknapp/docli-rs/"><img src="https://img.shields.io/github/license/kbknapp/docli-rs.svg" alt="GitHub license"></a> <a href="https://gitter.im/kbknapp/docli-rs?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/kbknapp/docli-rs"></a></p>
+
+<p>A command-line utility for managing DigitalOcean infrastructure via the <a href="https://developers.digitalocean.com/documentation/">DigitalOcean API v2</a> </p>
+
+<h2>
+<a id="disclaimer" class="anchor" href="#disclaimer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Disclaimer</h2>
+
+<p>This library is in alpha - it may do anything up to, and including, eating your laundry. You can check the request being sent to DigitalOcean without sending via the <code>--nosend --verbose</code> flags</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<h3>
+<a id="linux--osx" class="anchor" href="#linux--osx" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linux / OSX</h3>
+
+<p>If you are on Arch linux, you can install from the AUR via the <code>docli-git</code> (requires a nightly Rust compiler). Otherwise you can try one of the pre-compiled binaries:</p>
+
+<h4>
+<a id="linux-x86_64" class="anchor" href="#linux-x86_64" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linux x86_64</h4>
+
+<p>Assuming you're familiar <code>$PATH</code>, download the tar.gz, unzip, and copy to somewhere in your <code>$PATH</code></p>
+
+<div class="highlight highlight-sh"><pre>$ wget http://wod.twentyfives.net/bin/docli/docli-v0.1.0-alpha_linux-x64.tar.gz
+$ tar xvf docli-v0.1.0-alpha_linux-x64.tar.gz
+$ cp docli <span class="pl-k">~</span>/.bin</pre></div>
+
+<p>In the example <code>~/.bin</code> is in <code>$PATH</code></p>
+
+<h4>
+<a id="osx-x86_64" class="anchor" href="#osx-x86_64" aria-hidden="true"><span class="octicon octicon-link"></span></a>OSX x86_64</h4>
+
+<p>Assuming you're familiar <code>$PATH</code>, download the tar.gz, unzip, and copy to somewhere in your <code>$PATH</code></p>
+
+<div class="highlight highlight-sh"><pre>$ wget http://wod.twentyfives.net/bin/docli/docli-v0.1.0-alpha_osx-x64.tar.gz
+$ tar xvf docli-v0.1.0-alpha_osx-x64.tar.gz
+$ cp docli <span class="pl-k">~</span>/.bin</pre></div>
+
+<p>In the example <code>~/.bin</code> is in <code>$PATH</code></p>
+
+<h3>
+<a id="windows" class="anchor" href="#windows" aria-hidden="true"><span class="octicon octicon-link"></span></a>Windows</h3>
+
+<p>I have not tried compiling on Windows yet. Feel free to clone the repository and attempt to compile with a nightly Rust compiler</p>
+
+<h2>
+<a id="compile-from-source" class="anchor" href="#compile-from-source" aria-hidden="true"><span class="octicon octicon-link"></span></a>Compile from source</h2>
+
+<p>If you'd rather compile from source (takes about 2 minutes on a decent machine) use the following (Assuming you already have a nightly Rust compiler):</p>
+
+<div class="highlight highlight-sh"><pre>$ git clone https://github.com/kbknapp/docli-rs
+$ <span class="pl-c1">cd</span> docli-rs
+$ cargo build --release
+$ cp target/release/docli <span class="pl-k">~</span>/.bin</pre></div>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>You can run <code>docli</code> from the command line and various subcommands. In order to see what commands are available, run <code>docli --help</code> or <code>docli &lt;command&gt; --help</code></p>
+
+<div class="highlight highlight-sh"><pre>docli v0.1.0alpha
+Kevin K. <span class="pl-k">&lt;</span>kbknapp@gmail.com<span class="pl-k">&gt;</span>
+A utility <span class="pl-k">for</span> <span class="pl-smi">managing</span> DigitalOcean infrastructure
+
+USAGE:
+    docli [FLAGS] [OPTIONS] [SUBCOMMANDS]
+
+FLAGS:
+    -h, --help       Prints <span class="pl-c1">help</span> information
+    -n, --nosend     Does NOT send request over the network (useful with --verbose)
+        --version    Prints version information
+    -v, --verbose    Displays the request being sent to server
+
+OPTIONS:
+    -t, --token <span class="pl-k">&lt;</span>token<span class="pl-k">&gt;</span>        Digital Ocean Auth Token (Defaults to contents of DO_AUTH_TOKEN env var <span class="pl-k">if</span> omitted)
+
+SUBCOMMANDS:
+    account     Commands related to a single account
+    dns         Commands <span class="pl-k">for</span> <span class="pl-smi">managing</span> DNS records on a specific domain
+    domains     Commands <span class="pl-k">for</span> <span class="pl-smi">managing</span> domains
+    droplet     Commands <span class="pl-k">for</span> <span class="pl-smi">managing</span> a single droplet
+    droplets    Commands <span class="pl-k">for</span> <span class="pl-smi">managing</span> droplets
+    <span class="pl-c1">help</span>        Prints this message
+    image       Commands <span class="pl-k">for</span> <span class="pl-smi">managing</span> images
+    list        Commands <span class="pl-k">for</span> <span class="pl-smi">displaying</span> available information
+    ssh-keys    Commands <span class="pl-k">for</span> <span class="pl-smi">managing</span> SSH keys</pre></div>
+
+<h3>
+<a id="digitalocean-personal-auth-token" class="anchor" href="#digitalocean-personal-auth-token" aria-hidden="true"><span class="octicon octicon-link"></span></a>DigitalOcean Personal Auth Token</h3>
+
+<p>In order to use the DigitalOcean v2 API (which is what <code>docli</code> uses under the covers, you must generate a Personal Authentication Token. This token can then either be passed to <code>docli</code> directly with <code>--token &lt;token&gt;</code> or you can set a <code>DO_AUTH_TOKEN</code> environmental variable before using <code>docli</code>. To do using Linux or OSX, open a terminal and run the following (test with <code>docli account</code> which lists your account information):</p>
+
+<div class="highlight highlight-sh"><pre>$ <span class="pl-k">export</span> DO_AUTH_TOKEN=<span class="pl-k">&lt;</span>PASTE YOUR TOKEN HERE<span class="pl-k">&gt;</span>
+$ docli account</pre></div>
+
+<p>Personal Auth Token's can be Read/Write, or Read Only/Write Only. In order to process destructive API calls (i.e. ones that modify existing information) you <em>must</em> have a token with Write priviledges.</p>
+
+<p>To generate a new Personal Auth Token see the <a href="https://developers.digitalocean.com/documentation/v2/#authentication">following DigitalOcean details</a></p>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<p>Contributions are always welcome! And there is a multitude of ways in which you can help depending on what you like to do, or are good at. Anything from documentation, code cleanup, issue completion, new features, you name it, even filing issues is contributing and greatly appreciated!</p>
+
+<p><strong>NOTE:</strong> One of the best ways to help right now is to simply use the utility and report issues!</p>
+
+<ol>
+<li>Fork <code>docli</code>
+</li>
+<li>Clone your fork (<code>git clone https://github.com/$YOUR_USERNAME/docli-rs &amp;&amp; cd docli-rs</code>)</li>
+<li>Create new branch (<code>git checkout -b new-branch</code>)</li>
+<li>Make your changes, and commit (<code>git commit -am "your message"</code>)
+
+<ul>
+<li>I use a <a href="https://github.com/ajoslin/conventional-changelog/blob/master/CONVENTIONS.md">conventional</a> changelog format so I can update my changelog using <a href="https://github.com/thoughtram/clog">clog</a>
+</li>
+<li>Format your commit subject line using the following format: <code>TYPE(COMPONENT): MESSAGE</code> where <code>TYPE</code> is one of the following:
+
+<ul>
+<li>
+<code>feat</code> - A new feature</li>
+<li>
+<code>imp</code> - An improvement to an existing feature</li>
+<li>
+<code>perf</code> - A performance improvement</li>
+<li>
+<code>docs</code> - Changes to documentation only</li>
+<li>
+<code>tests</code> - Changes to the testing framework or tests only</li>
+<li>
+<code>fix</code> - A bug fix</li>
+<li>
+<code>refactor</code> - Code functionality doesn't change, but underlying structure may</li>
+<li>
+<code>style</code> - Stylistic changes only, no functionality changes</li>
+<li>
+<code>wip</code> - A work in progress commit (Should typically be <code>git rebase</code>'ed away)</li>
+<li>
+<code>chore</code> - Catch all or things that have to do with the build system, etc</li>
+</ul>
+</li>
+<li>The <code>COMPONENT</code> is optional, and may be a single file, directory, or logical component. Can be omitted if commit applies globally</li>
+</ul>
+</li>
+<li>
+<code>git rebase</code> into concise commits and remove <code>--fixup</code>s (<code>git rebase -i HEAD~NUM</code> where <code>NUM</code> is number of commits back)</li>
+<li>Push your changes back to your fork (<code>git push origin $your-branch</code>)</li>
+<li>Create a pull request! (You can also create the pull request first, and we'll merge when ready. This a good way to discuss proposed changes.)</li>
+</ol>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/kbknapp/docli-rs">Docli-rs</a> is maintained by <a href="https://github.com/kbknapp">kbknapp</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
+
