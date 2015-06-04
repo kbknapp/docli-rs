@@ -1,17 +1,16 @@
 # docli-rs (pronounced "dockly")
 
-[![Build Status](https://travis-ci.org/kbknapp/docli-rs.svg?branch=master)](https://travis-ci.org/kbknapp/docli-rs) [![Crates.io](https://img.shields.io/crates/v/docli.svg)]() [![Crates.io](https://img.shields.io/crates/l/docli.svg)]() [![Join the chat at https://gitter.im/kbknapp/docli-rs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kbknapp/docli-rs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/kbknapp/docli-rs.svg?branch=master)](https://travis-ci.org/kbknapp/docli-rs) [![GitHub release](https://img.shields.io/github/release/kbknapp/docli-rs.svg)](https://github.com/kbknapp/docli-rs) [![GitHub license](https://img.shields.io/github/license/kbknapp/docli-rs.svg)](https://github.com/kbknapp/docli-rs/) [![Join the chat at https://gitter.im/kbknapp/docli-rs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kbknapp/docli-rs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A command-line utility for managing DigitalOcean infrastructure via the [DigitalOcean API v2](https://developers.digitalocean.com/documentation/) 
 
 ## Disclaimer
 This library is in alpha - it may do anything up to, and including, eating your laundry. You can check the request being sent to DigitalOcean without sending via the `--nosend --verbose` flags
-
 ## Installation
 
 ### Linux / OSX
 
-If you are on Arch linux, you can install from the AUR via the `docli-git` (requires a nightly Rust compiler) or `docli-bin` package. Otherwise you can try one of the pre-compiled binaries:
+If you are on Arch linux, you can install from the AUR via the `docli-git` (requires a nightly Rust compiler). Otherwise you can try one of the pre-compiled binaries:
 
 #### Linux x86_64
 
@@ -88,7 +87,7 @@ SUBCOMMANDS:
 In order to use the DigitalOcean v2 API (which is what `docli` uses under the covers, you must generate a Personal Authentication Token. This token can then either be passed to `docli` directly with `--token <token>` or you can set a `DO_AUTH_TOKEN` environmental variable before using `docli`. To do using Linux or OSX, open a terminal and run the following (test with `docli account` which lists your account information):
 
 ```sh
-$ export DO_AUTH_TOKEN=<PAST YOUR TOKEN HERE>
+$ export DO_AUTH_TOKEN=<PASTE YOUR TOKEN HERE>
 $ docli account
 ```
 
