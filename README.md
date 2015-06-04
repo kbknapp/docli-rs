@@ -16,7 +16,7 @@ If you are on Arch linux, you can install from the AUR via the `docli-git` (requ
 
 Assuming you're familiar `$PATH`, download the tar.gz, unzip, and copy to somewhere in your `$PATH`
 
-```sh
+```
 $ wget http://wod.twentyfives.net/bin/docli/docli-v0.1.0-alpha_linux-x64.tar.gz
 $ tar xvf docli-v0.1.0-alpha_linux-x64.tar.gz
 $ cp docli ~/.bin
@@ -27,7 +27,7 @@ In the example `~/.bin` is in `$PATH`
 
 Assuming you're familiar `$PATH`, download the tar.gz, unzip, and copy to somewhere in your `$PATH`
 
-```sh
+```
 $ wget http://wod.twentyfives.net/bin/docli/docli-v0.1.0-alpha_osx-x64.tar.gz
 $ tar xvf docli-v0.1.0-alpha_osx-x64.tar.gz
 $ cp docli ~/.bin
@@ -42,7 +42,7 @@ I have not tried compiling on Windows yet. Feel free to clone the repository and
 
 If you'd rather compile from source (takes about 2 minutes on a decent machine) use the following (Assuming you already have a nightly Rust compiler):
 
-```sh
+```
 $ git clone https://github.com/kbknapp/docli-rs
 $ cd docli-rs
 $ cargo build --release
@@ -53,7 +53,7 @@ $ cp target/release/docli ~/.bin
 
 You can run `docli` from the command line and various subcommands. In order to see what commands are available, run `docli --help` or `docli <command> --help`
 
-```sh
+```
 docli v0.1.0alpha
 Kevin K. <kbknapp@gmail.com>
 A utility for managing DigitalOcean infrastructure
@@ -65,28 +65,28 @@ FLAGS:
     -h, --help       Prints help information
     -n, --nosend     Does NOT send request over the network (useful with --verbose)
         --version    Prints version information
-    -v, --verbose    Displays the request being sent to server
+    -v, --verbose    Displays the request being sent to server and JSON reply
 
 OPTIONS:
     -t, --token <token>        Digital Ocean Auth Token (Defaults to contents of DO_AUTH_TOKEN env var if omitted)
 
 SUBCOMMANDS:
-    account     Commands related to a single account
-    dns         Commands for managing DNS records on a specific domain
-    domains     Commands for managing domains
-    droplet     Commands for managing a single droplet
-    droplets    Commands for managing droplets
+    account     Show account information and actions
+    dns         Manage DNS records on a specific domain
+    domains     Manage domains
+    droplet     Manage a specific droplet
+    droplets    Manage droplets
     help        Prints this message
-    image       Commands for managing images
-    list        Commands for displaying available information
-    ssh-keys    Commands for managing SSH keys
+    image       Manage images
+    list        Get information from DigitalOcean about various sections
+    ssh-keys    Manage SSH keys
 ```
 
 ### DigitalOcean Personal Auth Token
 
 In order to use the DigitalOcean v2 API (which is what `docli` uses under the covers, you must generate a Personal Authentication Token. This token can then either be passed to `docli` directly with `--token <token>` or you can set a `DO_AUTH_TOKEN` environmental variable before using `docli`. To do using Linux or OSX, open a terminal and run the following (test with `docli account` which lists your account information):
 
-```sh
+```
 $ export DO_AUTH_TOKEN=<PASTE YOUR TOKEN HERE>
 $ docli account
 ```

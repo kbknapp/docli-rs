@@ -1,6 +1,6 @@
 [package]
 name = "docli"
-version = "0.1.0-alpha"
+version = "0.1.0-alpha2"
 authors = ["Kevin K <kbknapp@gmail.com>"]
 description = "A command line utility to managing DigitalOcean infrastructure"
 license = "MIT"
@@ -8,7 +8,7 @@ repository = "https://github.com/kbknapp/docli-rs.git"
 documentation = "http://kbknapp.github.io/docli-rs"
 readme = "README.md"
 keywords = ["do", "cli", "digitalocean", "digital", "ocean"]
-
+homepage = "https://kbknapp.github.io/docli-rs"
 
 [dependencies]
 clap = "*"
