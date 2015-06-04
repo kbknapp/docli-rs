@@ -159,8 +159,8 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(v) => {
                     CliMessage::Success.display();
                     for k in v.iter() {
-                        CliMessage::SshKeys.display();
-                        println!("\t{}", k);
+                        CliMessage::AnonSshKey.display();
+                        println!("\t{}\n", &k.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo SSH keys to dipslay"); }
                 },
