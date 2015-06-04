@@ -38,7 +38,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for act in v.iter() {
                         CliMessage::Action.display();
-                        println!("\t{}", act);
+                        println!("\t{}\n", &act.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo actions to dipslay"); }
                 },
