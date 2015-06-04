@@ -1,6 +1,6 @@
 # docli-rs (pronounced "dockly")
 
-[![Build Status](https://travis-ci.org/kbknapp/docli-rs.svg?branch=master)](https://travis-ci.org/kbknapp/docli-rs) [![GitHub release](https://img.shields.io/github/release/qubyte/rubidium.svg)](https://github.com/kbknapp/docli-rs) [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/kbknapp/docli-rs/) [![Join the chat at https://gitter.im/kbknapp/docli-rs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kbknapp/docli-rs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/kbknapp/docli-rs.svg?branch=master)](https://travis-ci.org/kbknapp/docli-rs) [![GitHub tag](https://img.shields.io/github/tag/strongloop/express.svg)](https://github.com/kbknapp/docli-rs) [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/kbknapp/docli-rs/) [![Join the chat at https://gitter.im/kbknapp/docli-rs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kbknapp/docli-rs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A command-line utility for managing DigitalOcean infrastructure via the [DigitalOcean API v2](https://developers.digitalocean.com/documentation/) 
 
