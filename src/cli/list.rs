@@ -38,7 +38,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for reg in v.iter() {
                         CliMessage::Region.display();
-                        println!("\t{}", reg);
+                        println!("\t{}\n", &reg.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo regions to dipslay"); }
                 },
