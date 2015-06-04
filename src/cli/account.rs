@@ -10,7 +10,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
     let domgr = DoManager::with_token(&cfg.auth[..]);
     if cfg.verbose || m.is_present("verbose") { CliMessage::Token(&cfg.auth[..]).display(); }
     match m.subcommand() {
-        ("list-actions", Some(m)) => {
+        ("actions", Some(m)) => {
             if cfg.verbose {
                 CliMessage::Request(
                     &domgr.account()
@@ -40,6 +40,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                         CliMessage::Action.display();
                         println!("\t{}", act);
                     }
+                    if v.is_empty() { println!("\tNo actions to dipslay"); }
                 },
                 Err(e) => {
                     CliMessage::Failure.display();

@@ -36,10 +36,11 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.regions().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for reg in v {
+                    for reg in v.iter() {
                         CliMessage::Region.display();
                         println!("\t{}", reg);
                     }
+                    if v.is_empty() { println!("\tNo regions to dipslay"); }
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -72,10 +73,11 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.sizes().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for siz in v {
+                    for siz in v.iter() {
                         CliMessage::Size.display();
                         println!("\t{}", siz);
                     }
+                    if v.is_empty() { println!("\tNo sizes to dipslay"); }
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -123,6 +125,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                         CliMessage::ImageList.display();
                         println!("\t{}", &img.to_string()[..].replace("$", ""));
                     }
+                    if v.is_empty() { println!("\tNo images to dipslay"); }
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -155,10 +158,11 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.ssh_keys().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for k in v {
+                    for k in v.iter() {
                         CliMessage::SshKeys.display();
                         println!("\t{}", k);
                     }
+                    if v.is_empty() { println!("\tNo SSH keys to dipslay"); }
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -191,10 +195,11 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplets().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for d in v {
-                        CliMessage::Droplets.display();
-                        println!("\t{}", d);
+                    for d in v.iter() {
+                        CliMessage::AnonDroplet.display();
+                        println!("\t{}", &d.to_string()[..].replace("\n", "\n\t"));
                     }
+                    if v.is_empty() { println!("\tNo droplets to dipslay"); }
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -227,10 +232,11 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.domains().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for d in v {
+                    for d in v.iter() {
                         CliMessage::Domains.display();
                         println!("\t{}", d);
                     }
+                    if v.is_empty() { println!("\tNo domains to dipslay"); }
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -264,10 +270,11 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.account().actions().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for act in v {
+                    for act in v.iter() {
                         CliMessage::Action.display();
                         println!("\t{}", act);
                     }
+                    if v.is_empty() { println!("\tNo account actions to dipslay"); }
                 },
                 Err(e) => {
                     CliMessage::Failure.display();

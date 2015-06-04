@@ -150,6 +150,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                         CliMessage::Domains.display();
                         println!("\t{}", d);
                     }
+                    if v.is_empty() { println!("\tNo domains to dipslay"); }
                 },
                 Err(e) => {
                     CliMessage::Failure.display();

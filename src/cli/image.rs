@@ -13,7 +13,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
     let id = m.value_of("id").unwrap();
     let domgr = DoManager::with_token(&cfg.auth[..]);
     match m.subcommand() {
-        ("list-actions", Some(m))      => {
+        ("actions", Some(m))      => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.image(id)

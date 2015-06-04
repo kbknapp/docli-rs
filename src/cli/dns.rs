@@ -66,7 +66,7 @@ pub fn run(pm: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("list-records", Some(m))        => {
+        ("records", Some(m))        => {
             if cfg.verbose {
                 CliMessage::Request(
                     &domgr.domain(domain)
@@ -96,6 +96,7 @@ pub fn run(pm: &ArgMatches, cfg: &mut Config) {
                         CliMessage::DnsRecord.display();
                         println!("\t{}", act);
                     }
+                    if v.is_empty() { println!("\tNo DNS records to dipslay"); }
                 },
                 Err(e) => {
                     CliMessage::Failure.display();

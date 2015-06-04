@@ -21,6 +21,7 @@ pub enum CliMessage<'a> {
     Confirm,
     CreateDroplet(&'a Droplet),
     Droplet(&'a str),
+    AnonDroplet,
     DropletKernels(&'a str),
     DropletBackups(&'a str),
     DropletActions(&'a str),
@@ -250,6 +251,11 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("Displaying droplet"),
                     White.bold().underline().paint(id),
                     White.bold().paint("..."));
+            },
+            CliMessage::AnonDroplet => {
+                println!("{} {}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying droplet..."));
             },
             CliMessage::DropletKernels(id) => {
                 print!("{} {} {}{}",

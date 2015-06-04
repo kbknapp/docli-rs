@@ -12,7 +12,8 @@ keywords = ["do", "cli", "digitalocean", "digital", "ocean"]
 
 [dependencies]
 clap = "*"
-doapi = {git = "https://github.com/kbknapp/doapi-rs"}
+doapi = {path = "../doapi-rs"}
+#doapi = {git = "https://github.com/kbknapp/doapi-rs"}
 
 
 [features]

@@ -4,7 +4,7 @@ version = "0.1.0-alpha"
 dependencies = [
  "ansi_term 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "clap 0.10.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "doapi 0.1.0-alpha (git+https://github.com/kbknapp/doapi-rs)",
+ "doapi 0.1.0-alpha",
 ]
 
 [[package]]
@@ -45,7 +45,6 @@ dependencies = [
 [[package]]
 name = "doapi"
 version = "0.1.0-alpha"
-source = "git+https://github.com/kbknapp/doapi-rs#ceb1ee82aff84b38c8d03e9a79d19f4d76a0b69c"
 dependencies = [
  "hyper 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "regex 0.1.33 (registry+https://github.com/rust-lang/crates.io-index)",

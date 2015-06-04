@@ -34,7 +34,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
     if m.is_present("nosend") { cfg.no_send = true; }
     let domgr = DoManager::with_token(&cfg.auth[..]);
     match m.subcommand() {
-        ("list-neighbors", Some(m)) => {
+        ("neighbors", Some(m)) => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplets()
@@ -60,10 +60,11 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplets().neighbors().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for act in v {
+                    for act in v.iter() {
                         CliMessage::Neighbor.display();
                         println!("\t{}", act);
                     }
+                    if v.is_empty() { println!("\tNo neighbors to dipslay"); }
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -71,7 +72,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("list-upgrades", Some(m))  => {
+        ("upgrades", Some(m))  => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplets()
@@ -97,10 +98,11 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplets().upgrades().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for act in v {
+                    for act in v.iter() {
                         CliMessage::NamelessDroplet.display();
                         println!("\t{}", act);
                     }
+                    if v.is_empty() { println!("\tNo upgrades to dipslay"); }
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -113,7 +115,6 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplets()
-            // TODO: Fixme
                           .create(&droplet_cfg)
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
@@ -169,10 +170,11 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplets().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for d in v {
-                        CliMessage::Droplets.display();
-                        println!("\t{}", d);
+                    for d in v.iter() {
+                        CliMessage::AnonDroplet.display();
+                        println!("\t{}", &d.to_string()[..].replace("\n", "\n\t"));
                     }
+                    if v.is_empty() { println!("\tNo droplets to dipslay"); }
                 },
                 Err(e) => {
                     CliMessage::Failure.display();

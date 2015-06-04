@@ -200,6 +200,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                         CliMessage::SshKeys.display();
                         println!("\t{}", k);
                     }
+                    if v.is_empty() { println!("\tNo SSH keys to dipslay"); }
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
