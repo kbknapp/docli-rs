@@ -6,6 +6,7 @@ A command-line utility for managing DigitalOcean infrastructure via the [Digital
 
 ## Disclaimer
 This library is in alpha - it may do anything up to, and including, eating your laundry. You can check the request being sent to DigitalOcean without sending via the `--nosend --verbose` flags
+
 ## Installation
 
 ### Linux / OSX
@@ -17,8 +18,8 @@ If you are on Arch linux, you can install from the AUR via the `docli-git` (requ
 Assuming you're familiar `$PATH`, download the tar.gz, unzip, and copy to somewhere in your `$PATH`
 
 ```
-$ wget http://wod.twentyfives.net/bin/docli/docli-v0.1.0-alpha_linux-x64.tar.gz
-$ tar xvf docli-v0.1.0-alpha_linux-x64.tar.gz
+$ wget http://wod.twentyfives.net/bin/docli/docli-v0.1.0-alpha2_linux-x64.tar.gz
+$ tar xvf docli-v0.1.0-alpha2_linux-x64.tar.gz
 $ cp docli ~/.bin
 ```
 In the example `~/.bin` is in `$PATH`
@@ -28,8 +29,8 @@ In the example `~/.bin` is in `$PATH`
 Assuming you're familiar `$PATH`, download the tar.gz, unzip, and copy to somewhere in your `$PATH`
 
 ```
-$ wget http://wod.twentyfives.net/bin/docli/docli-v0.1.0-alpha_osx-x64.tar.gz
-$ tar xvf docli-v0.1.0-alpha_osx-x64.tar.gz
+$ wget http://wod.twentyfives.net/bin/docli/docli-v0.1.0-alpha2_osx-x64.tar.gz
+$ tar xvf docli-v0.1.0-alpha2_osx-x64.tar.gz
 $ cp docli ~/.bin
 ```
 In the example `~/.bin` is in `$PATH`

@@ -1,6 +1,6 @@
 [root]
 name = "docli"
-version = "0.1.0-alpha"
+version = "0.1.0-alpha2"
 dependencies = [
  "ansi_term 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "clap 0.10.3 (registry+https://github.com/rust-lang/crates.io-index)",
