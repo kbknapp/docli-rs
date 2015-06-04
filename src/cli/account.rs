@@ -75,7 +75,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.account().action(id).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
