@@ -75,7 +75,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for siz in v.iter() {
                         CliMessage::Size.display();
-                        println!("\t{}", siz);
+                        println!("\t{}\n", &siz.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo sizes to dipslay"); }
                 },
