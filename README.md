@@ -55,7 +55,7 @@ $ cp target/release/docli ~/.bin
 You can run `docli` from the command line and various subcommands. In order to see what commands are available, run `docli --help` or `docli <command> --help`
 
 ```
-docli v0.1.0alpha
+docli v0.1.0alpha2
 Kevin K. <kbknapp@gmail.com>
 A utility for managing DigitalOcean infrastructure
 
