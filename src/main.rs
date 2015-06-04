@@ -33,8 +33,8 @@ fn get_auth_token(m: &ArgMatches) -> String {
 
 fn main() {
     let dns_types = DnsRecType::variants();
-    let dns_args = "-n --name [name]         'The name to use'
-                    -d --data [data]         'The user data'
+    let dns_args = "-n --name [name]         'Name of the DNS record'
+                    -d --data [data]         'Data for the DNS record'
                     -p --priority [priority] 'The priority to set'
                     -P --port [port]         'The port to use'
                     -w --weight [weight]     'The weight value'";
@@ -46,24 +46,24 @@ fn main() {
         .subcommand_required(true)
         .args_from_usage("-t --token [token] 'Digital Ocean Auth Token (Defaults to contents \
                                               of DO_AUTH_TOKEN env var if omitted)'")
-        .arg(Arg::from_usage("-v --verbose   'Displays the request being sent to server'")
+        .arg(Arg::from_usage("-v --verbose   'Displays the request being sent to server and JSON reply'")
             .global(true))
         .arg(Arg::from_usage("-n --nosend        'Does NOT send request over the network (useful \
                                                   with --verbose)'")
             .global(true))
         .subcommand(SubCommand::with_name("list")
-            .about("Commands for displaying available information")
+            .about("Get information from DigitalOcean about various sections")
             .subcommand_required(true)
             .subcommand(SubCommand::with_name("regions")
                 .about("Displays available regions"))
             .subcommand(SubCommand::with_name("sizes")
                 .about("Displays available droplet sizes"))
             .subcommand(SubCommand::with_name("images")
+                .about("Displays droplet images")
                 .args_from_usage("--distributions   'Displays all distrobution images'
                                   --applications    'Displays all application images'
                                   --private         'Displays all private user images'
                                   --available       'Displays all available images (Default)'")
-                .about("Displays avaiable droplet images")
                 .arg_group(ArgGroup::with_name("images").add_all(vec!["distrobutions",
                                                                       "applications",
                                                                       "private",
@@ -77,14 +77,14 @@ fn main() {
             .subcommand(SubCommand::with_name("account-actions")
                 .about("Displays all current and previous account actions")))
         .subcommand(SubCommand::with_name("account")
-            .about("Commands related to a single account")
+            .about("Show account information and actions")
             .subcommand(SubCommand::with_name("list-actions")
                 .about("Lists all the account actions"))
             .subcommand(SubCommand::with_name("action")
                 .about("Gets information about a particular account action")
                 .arg_from_usage("<id> 'The action ID to display'")))
         .subcommand(SubCommand::with_name("domains")
-            .about("Commands for managing domains")
+            .about("Manage domains")
             .subcommand(SubCommand::with_name("create")
                 .about("Creates a new domain")
                 .args_from_usage("<name> 'The name for the domain'
@@ -97,21 +97,21 @@ fn main() {
                 .arg_from_usage(noconfirm)
                 .arg_from_usage("<name> 'The domain to delete'")))
         .subcommand(SubCommand::with_name("dns")
-            .about("Commands for managing DNS records on a specific domain")
+            .about("Manage DNS records on a specific domain")
             .subcommand_required(true)
-            .arg_from_usage("<domain> 'The domain name of this record'")
+            .arg_from_usage("<domain> 'The domain name tha the record applies to'")
             .subcommand(SubCommand::with_name("create-record")
-                .about("Creates a new DNS record for a domain")
+                .about("Creates a new DNS record for the domain")
                 .arg(Arg::from_usage("<type> 'The type of DNS record to create'")
                     .possible_values(dns_types.iter()))
                 .args_from_usage(dns_args))
             .subcommand(SubCommand::with_name("list-records")
-                .about("Lists all DNS records on a specific domain"))
+                .about("Lists all DNS records on the domain"))
             .subcommand(SubCommand::with_name("show-record")
                 .about("Displays information on a specific DNS record")
                 .arg_from_usage("<id>   'The DNS record ID to retrieve info on'"))
             .subcommand(SubCommand::with_name("update-record")
-                .about("Updates a DNS record")
+                .about("Updates a DNS record on the domain")
                 .arg_from_usage(noconfirm)
                 .arg(Arg::from_usage("<type> 'The type of DNS record to create'")
                     .possible_values(dns_types.iter()))
@@ -121,7 +121,7 @@ fn main() {
                 .arg_from_usage(noconfirm)
                 .arg_from_usage("<id>   'The DSN record ID to delete'")))
         .subcommand(SubCommand::with_name("droplets")
-            .about("Commands for managing droplets")
+            .about("Manage droplets")
             .subcommand(SubCommand::with_name("list-neighbors")
                 .about("Displays all droplets running on the same physical hardware"))
             .subcommand(SubCommand::with_name("list-upgrades")
@@ -138,7 +138,7 @@ fn main() {
                                   --private-networking        'Use private networking'
                                   -u --user-data [data]       'User data'")))
         .subcommand(SubCommand::with_name("droplet")
-            .about("Commands for managing a single droplet")
+            .about("Manage a specific droplet")
             .arg_from_usage("<id> 'The droplet ID to use'")
             .subcommand(SubCommand::with_name("list-kernels")
                 .about("Display all available kernels"))
@@ -174,13 +174,14 @@ fn main() {
             .subcommand(SubCommand::with_name("resize")
                 .about("Resizes a droplet")
                 .args_from_usage("--disk 'Resizes the disk'
-                                  <size> 'The new size to use'"))
+                                  <size> 'The new size to use (i.e. 15gb)'"))
             .subcommand(SubCommand::with_name("rebuild")
                 .about("Rebuilds a droplet from an image")
                 .arg_from_usage(noconfirm)
-                .arg_from_usage("<image> 'The image to use'"))
+                .arg_from_usage("<image> 'The image ID or slug to use'"))
             .subcommand(SubCommand::with_name("rename")
-                .about("Upgrades a droplet")
+                .about("Renames a droplet")
+                .arg_from_usage("<name> 'The new name to use'")
                 .arg_from_usage(noconfirm))
             .subcommand(SubCommand::with_name("change-kernel")
                 .about("Changes the kernel of a droplet")
@@ -201,7 +202,7 @@ fn main() {
                 .arg_from_usage(noconfirm)
                 .arg_from_usage("<name> 'The new name of the droplet'")))
         .subcommand(SubCommand::with_name("image")
-            .about("Commands for managing images")
+            .about("Manage images")
             .arg_from_usage("<id> 'The image ID or slug to use (not all commands support using a slug)'")
             .subcommand(SubCommand::with_name("list-actions")
                 .about("Lists all previous and current actions for an image"))
@@ -224,22 +225,22 @@ fn main() {
                 .about("Displays a particular action of an image")
                 .arg_from_usage("<action_id> 'The action ID to display'")))
         .subcommand(SubCommand::with_name("ssh-keys")
-            .about("Commands for managing SSH keys")
+            .about("Manage SSH keys")
             .subcommand(SubCommand::with_name("create")
                 .about("Creatse a new SSH key")
                 .args_from_usage("<name>       'The name of the SSH key'
                                   <public_key> 'The public key of the SSH key'"))
             .subcommand(SubCommand::with_name("show-key")
                 .about("Displays information on a particular key")
-                .args_from_usage("[id]           'The key ID of the key to display'
-                                  [finger_print] 'The fingerprint of the key to display'"))
+                .args_from_usage("-i --id [id]                     'The key ID of the key to display'
+                                  -f --finger-print [finger_print] 'The fingerprint of the key to display'"))
                 .arg_group(ArgGroup::with_name("key_id")
                         .add_all(vec!["id", "finger_print"])
                         .required(true))
             .subcommand(SubCommand::with_name("update")
                 .about("Updates a particular SSH key")
                 .arg_from_usage(noconfirm)
-                .args_from_usage("<name>         'The new name to use'
+                .args_from_usage("<name>                           'The new name to use'
                                   -i --id [id]                     'The key ID to update'
                                   -f --finger-print [finger_print] 'The fingerprint of the key to update'")
                 .arg_group(ArgGroup::with_name("sshkeys")
