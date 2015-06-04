@@ -105,8 +105,8 @@ pub fn run(pm: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("update-record", Some(m)) => {
-            if !m.is_present("noconfirm") || !cli::confirm() {
-                return
+            if !m.is_present("noconfirm") {
+                if !cli::confirm() { return }
             }
             let rec = dns_record_from_matches(&m);
             let id = m.value_of("id").unwrap();
@@ -180,8 +180,8 @@ pub fn run(pm: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("delete-record", Some(m)) => {
-            if !m.is_present("noconfirm") || !cli::confirm() {
-                return
+            if !m.is_present("noconfirm") {
+                if !cli::confirm() { return }
             }
             let id = m.value_of("id").unwrap();
             if cfg.verbose || m.is_present("verbose") {

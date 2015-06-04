@@ -75,7 +75,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.domain(name).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -84,8 +84,8 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("delete", Some(m))      => {
-            if !m.is_present("noconfirm") || !cli::confirm() {
-                return
+            if !m.is_present("noconfirm") {
+                if !cli::confirm() { return }
             }
             let name = m.value_of("name").unwrap();
             if cfg.verbose || m.is_present("verbose") {
@@ -148,7 +148,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for d in v.iter() {
                         CliMessage::Domains.display();
-                        println!("\t{}", d);
+                        println!("\t{}\n", &d.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo domains to dipslay"); }
                 },

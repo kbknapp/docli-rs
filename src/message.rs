@@ -1,6 +1,8 @@
 #[cfg(feature = "color")]
 use ansi_term::Colour::{Red, Green, Blue, White, Yellow};
 
+use std::io::{self, Write};
+
 use doapi::request::{DnsRecord, Droplet};
 
 pub enum CliMessage<'a> {
@@ -559,11 +561,13 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("..."));
             },
             CliMessage::Confirm => {
-                print!("{} {} {}\n\n{}[Y/n]: ",
+                println!("{} {} {}",
                     Blue.bold().paint("::"),
                     Yellow.bold().paint("Warning"),
-                    White.bold().paint("The action you are about to perform modifies existing data..."),
+                    White.bold().paint("The action you are about to perform modifies existing data..."));
+                print!("{}[Y/n]: ",
                     White.bold().paint("Are you sure you want to continue?"));
+                io::stdout().flush().ok().expect("Could not flush stdout");
             },
         }
     }

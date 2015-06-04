@@ -87,8 +87,8 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("rename", Some(m))   => {
-            if !m.is_present("noconfirm") || !cli::confirm() {
-                return
+            if !m.is_present("noconfirm") {
+                if !cli::confirm() { return }
             }
             let id = if m.is_present("id") {
                 m.value_of("id").unwrap()
@@ -130,8 +130,8 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("destroy", Some(m))  => {
-            if !m.is_present("noconfirm") || !cli::confirm() {
-                return
+            if !m.is_present("noconfirm") {
+                if !cli::confirm() { return }
             }
             let id = if m.is_present("id") {
                 m.value_of("id").unwrap()
