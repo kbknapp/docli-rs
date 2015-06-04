@@ -234,7 +234,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for d in v.iter() {
                         CliMessage::Domains.display();
-                        println!("\t{}", d);
+                        println!("\t{}\n", &d.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo domains to dipslay"); }
                 },
@@ -272,7 +272,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for act in v.iter() {
                         CliMessage::Action.display();
-                        println!("\t{}", act);
+                        println!("\t{}\n", &act.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo account actions to dipslay"); }
                 },
