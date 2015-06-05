@@ -169,7 +169,7 @@ fn main() {
             .subcommand(SubCommand::with_name("restore")
                 .about("Restores a droplet from an image")
                 .arg_from_usage(noconfirm)
-                .arg_from_usage("<image> 'The image to restore to'"))
+                .arg_from_usage("<image> 'The image ID or slug to restore to'"))
             .subcommand(SubCommand::with_name("reset-password")
                 .about("Resets the root password for a droplet"))
             .subcommand(SubCommand::with_name("resize")
