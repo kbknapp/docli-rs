@@ -41,7 +41,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for act in s.iter() {
                         CliMessage::Action.display();
-                        println!("\t{}", act);
+                        println!("\t{}\n", &act.to_string()[..].replace("\n", "\n\t"));
                     }
                     if s.is_empty() { println!("\tNo actions to dipslay"); }
                 },
@@ -81,7 +81,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.image(id).update(name).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -118,7 +118,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.image(id).delete().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -156,7 +156,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.image(id).transfer(reg).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -190,7 +190,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.image(id).convert().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -198,7 +198,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("show-action", Some(m))       => {
+        ("action", Some(m))       => {
             let a_id = m.value_of("action_id").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -225,7 +225,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.image(id).action(a_id).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -258,7 +258,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.image(id).retrieve() {
                 Ok(img) => {
                     CliMessage::Success.display();
-                    println!("\t{}", &img.to_string()[..].replace("$", ""));
+                    println!("\t{}\n", &img.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
