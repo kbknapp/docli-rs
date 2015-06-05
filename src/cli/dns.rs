@@ -1,7 +1,7 @@
 use clap::ArgMatches;
 
 use doapi::{DoManager, DoRequest};
-use doapi::request::{DnsRecord, DnsRecType};
+use doapi::request::DnsRecord;
 
 use config::Config;
 use message::CliMessage;
@@ -13,8 +13,9 @@ fn dns_record_from_matches(m: &ArgMatches) -> DnsRecord {
     let weight = value_t!(m.value_of("weight"), u64);
     let data = m.value_of("data");
     let name = m.value_of("name");
+    let t = m.value_of("type");
     DnsRecord {
-        rec_type: value_t_or_exit!(m.value_of("type"), DnsRecType).to_string(),
+        rec_type: if t.is_none() {None} else {Some(t.unwrap().to_owned())},
         name: if name.is_none() {None} else {Some(name.unwrap().to_owned())},
         data: if data.is_none() {None} else {Some(data.unwrap().to_owned())},
         priority: if pri.is_err() {None} else {Some(pri.unwrap())},
@@ -58,7 +59,7 @@ pub fn run(pm: &ArgMatches, cfg: &mut Config) {
             match domgr.domain(domain).dns_records().create(&rec).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n","\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -94,7 +95,7 @@ pub fn run(pm: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for act in v.iter() {
                         CliMessage::DnsRecord.display();
-                        println!("\t{}", act);
+                        println!("\t{}\n", &act.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo DNS records to dipslay"); }
                 },
@@ -136,7 +137,7 @@ pub fn run(pm: &ArgMatches, cfg: &mut Config) {
             match domgr.domain(domain).dns_record(id).update(&rec).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -144,7 +145,7 @@ pub fn run(pm: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("show-record", Some(m))   => {
+        ("record", Some(m))   => {
             let id = m.value_of("id").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -171,7 +172,7 @@ pub fn run(pm: &ArgMatches, cfg: &mut Config) {
             match domgr.domain(domain).dns_record(id).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -210,7 +211,7 @@ pub fn run(pm: &ArgMatches, cfg: &mut Config) {
             match domgr.domain(domain).dns_record(id).delete().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();

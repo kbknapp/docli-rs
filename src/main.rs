@@ -35,8 +35,8 @@ fn main() {
     let dns_types = DnsRecType::variants();
     let dns_args = "-n --name [name]         'Name of the DNS record'
                     -d --data [data]         'Data for the DNS record'
-                    -p --priority [priority] 'The priority to set'
-                    -P --port [port]         'The port to use'
+                    -P --priority [priority] 'The priority to set'
+                    -p --port [port]         'The port to use'
                     -w --weight [weight]     'The weight value'";
     let noconfirm = "--noconfirm 'Don't confirm, just do it'";
     let m = App::new("docli")
@@ -107,13 +107,14 @@ fn main() {
                 .args_from_usage(dns_args))
             .subcommand(SubCommand::with_name("records")
                 .about("Lists all DNS records on the domain"))
-            .subcommand(SubCommand::with_name("show-record")
+            .subcommand(SubCommand::with_name("record")
                 .about("Displays information on a specific DNS record")
                 .arg_from_usage("<id>   'The DNS record ID to retrieve info on'"))
             .subcommand(SubCommand::with_name("update-record")
                 .about("Updates a DNS record on the domain")
                 .arg_from_usage(noconfirm)
-                .arg(Arg::from_usage("<type> 'The type of DNS record to create'")
+                .arg_from_usage("<id> 'The DNS record ID to update'")
+                .arg(Arg::from_usage("-t --type [type] 'The type of DNS record to update to'")
                     .possible_values(dns_types.iter()))
                 .args_from_usage(dns_args))
             .subcommand(SubCommand::with_name("delete-record")
@@ -230,7 +231,7 @@ fn main() {
                 .about("Creatse a new SSH key")
                 .args_from_usage("<name>       'The name of the SSH key'
                                   <public_key> 'The public key of the SSH key'"))
-            .subcommand(SubCommand::with_name("show-key")
+            .subcommand(SubCommand::with_name("key")
                 .about("Displays information on a particular key")
                 .args_from_usage("<id> 'The key ID or finger print of the key to display'"))
             .subcommand(SubCommand::with_name("rename")

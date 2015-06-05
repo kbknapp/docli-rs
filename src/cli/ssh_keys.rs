@@ -48,7 +48,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("show-key", Some(m)) => {
+        ("key", Some(m)) => {
             let id = m.value_of("id").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -151,7 +151,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.ssh_key(id).destroy().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
