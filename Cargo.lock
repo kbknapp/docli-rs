@@ -45,7 +45,7 @@ dependencies = [
 [[package]]
 name = "doapi"
 version = "0.1.0-alpha2"
-source = "git+https://github.com/kbknapp/doapi-rs#8ab57fca958e699869d9d82bba923301e9826f6e"
+source = "git+https://github.com/kbknapp/doapi-rs#8c9ad2277cb700ad9578dd45a31aa44e8c9ec7d5"
 dependencies = [
  "hyper 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "regex 0.1.33 (registry+https://github.com/rust-lang/crates.io-index)",
