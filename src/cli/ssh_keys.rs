@@ -49,11 +49,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("show-key", Some(m)) => {
-            let id = if m.is_present("id") {
-                m.value_of("id").unwrap()
-            } else {
-                m.value_of("finger_print").unwrap()
-            };
+            let id = m.value_of("id").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.ssh_key(id)
@@ -78,7 +74,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.ssh_key(id).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -90,11 +86,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             if !m.is_present("noconfirm") {
                 if !cli::confirm() { return }
             }
-            let id = if m.is_present("id") {
-                m.value_of("id").unwrap()
-            } else {
-                m.value_of("finger_print").unwrap()
-            };
+            let id = m.value_of("id").unwrap();
             let name = m.value_of("name").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -121,7 +113,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.ssh_key(id).update(name).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -133,11 +125,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             if !m.is_present("noconfirm") {
                 if !cli::confirm() { return }
             }
-            let id = if m.is_present("id") {
-                m.value_of("id").unwrap()
-            } else {
-                m.value_of("finger_print").unwrap()
-            };
+            let id = m.value_of("id").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.ssh_key(id)
@@ -197,8 +185,8 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(v) => {
                     CliMessage::Success.display();
                     for k in v.iter() {
-                        CliMessage::SshKeys.display();
-                        println!("\t{}", k);
+                        CliMessage::AnonSshKey.display();
+                        println!("\t{}\n", &k.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo SSH keys to dipslay"); }
                 },

@@ -1,5 +1,5 @@
 #[cfg(feature = "color")]
-use ansi_term::Colour::{Red, Green, Blue, White, Yellow};
+use ansi_term::Colour::{Red, Green, Blue, White};
 
 use std::io::{self, Write};
 
@@ -563,9 +563,9 @@ impl<'a> CliMessage<'a> {
             CliMessage::Confirm => {
                 println!("{} {} {}",
                     Blue.bold().paint("::"),
-                    Yellow.bold().paint("Warning"),
+                    Red.bold().paint("Warning"),
                     White.bold().paint("The action you are about to perform modifies existing data..."));
-                print!("{}[Y/n]: ",
+                print!("\t{}[Y/n]: ",
                     White.bold().paint("Are you sure you want to continue?"));
                 io::stdout().flush().ok().expect("Could not flush stdout");
             },
@@ -581,8 +581,6 @@ struct Green;
 struct Blue;
 #[cfg(not(feature = "color"))]
 struct White;
-#[cfg(not(feature = "color"))]
-struct Yellow;
 
 #[cfg(not(feature = "color"))]
 trait Paint {
@@ -606,5 +604,3 @@ impl Paint for Green {}
 impl Paint for Blue {}
 #[cfg(not(feature = "color"))]
 impl Paint for White {}
-#[cfg(not(feature = "color"))]
-impl Paint for Yellow {}

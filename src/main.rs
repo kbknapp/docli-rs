@@ -232,30 +232,16 @@ fn main() {
                                   <public_key> 'The public key of the SSH key'"))
             .subcommand(SubCommand::with_name("show-key")
                 .about("Displays information on a particular key")
-                .args_from_usage("-i --id [id]                     'The key ID of the key to display'
-                                  -f --finger-print [finger_print] 'The fingerprint of the key to display'"))
-                .arg_group(ArgGroup::with_name("key_id")
-                        .add_all(vec!["id", "finger_print"])
-                        .required(true))
-            .subcommand(SubCommand::with_name("update")
-                .about("Updates a particular SSH key")
+                .args_from_usage("<id> 'The key ID or finger print of the key to display'"))
+            .subcommand(SubCommand::with_name("rename")
+                .about("Renames a particular SSH key")
                 .arg_from_usage(noconfirm)
-                .args_from_usage("<name>                           'The new name to use'
-                                  -i --id [id]                     'The key ID to update'
-                                  -f --finger-print [finger_print] 'The fingerprint of the key to update'")
-                .arg_group(ArgGroup::with_name("sshkeys")
-                    .add_all(vec!["id",
-                                  "finger_print"])
-                    .required(true)))
+                .args_from_usage("<id>   'The key ID or finger print of the key to update'
+                                  <name> 'The new name to use'"))
             .subcommand(SubCommand::with_name("destroy")
                 .about("Destroys a particular SSH key")
                 .arg_from_usage(noconfirm)
-                .args_from_usage("-i --id [id]                     'The key ID to destroy'
-                                  -f --finger-print [finger_print] 'The fingerprint of the key to destroy'")
-                .arg_group(ArgGroup::with_name("sshkeys")
-                    .add_all(vec!["id",
-                                  "finger_print"])
-                    .required(true))))
+                .args_from_usage("<id> 'The key ID or finger print of the key to destroy'")))
         .get_matches();
 
     let mut cfg = Config {
