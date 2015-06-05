@@ -90,22 +90,22 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("Displaying account information..."));
             },
             CliMessage::Action => {
-                println!("{} {}\n\t",
+                println!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying account action..."));
             },
             CliMessage::Backup => {
-                println!("{} {}\n\t",
+                println!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying droplet backup..."));
             },
             CliMessage::Snapshot => {
-                println!("{} {}\n\t",
+                println!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying droplet snapshot..."));
             },
             CliMessage::DropletSnapshots(id) => {
-                println!("{} {} {}{}\n\t",
+                print!("{} {} {}{}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Retrieving all snapshots for droplet"),
                     White.bold().underline().paint(id),
@@ -404,7 +404,7 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("..."));
             },
             CliMessage::Kernel => {
-                print!("{} {}",
+                println!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying kernel..."));
             },
