@@ -11,16 +11,16 @@ This utility is in beta - it may do anything up to, and including, eating your l
 
 ### Linux / OSX
 
-If you are on Arch linux, you can install from the AUR via the `docli-git` (requires a nightly Rust compiler). Otherwise you can try one of the pre-compiled binaries:
+If you are on Arch linux, you can install from the AUR via the `docli-bin` or `docli-git` (`-git` requires a nightly Rust compiler and `git`). 
 
-#### Linux or OS X (x86_64)
+#### Linux or OS X (x86_64) Binaries
 
 Download the tar.gz, untar, and copy to somewhere in your `$PATH`
 
 ```
-$ wget http://wod.twentyfives.net/bin/docli/docli-v0.1.0-beta_linux-x64.tar.gz
-$ tar xvf docli-v0.1.0-beta_linux-x64.tar.gz
-$ cp docli ~/.bin
+$ wget http://wod.twentyfives.net/bin/docli/docli-0.1.0-beta-x86_64-linux.tar.gz
+$ tar xvf docli-0.1.0-beta-x86_64-linux.tar.gz
+$ cp docli/bin/docli ~/.bin
 ```
 In the example `~/.bin` is in `$PATH`
 
