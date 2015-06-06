@@ -5,7 +5,7 @@
 A command-line utility for managing DigitalOcean infrastructure via the [DigitalOcean API v2](https://developers.digitalocean.com/documentation/) 
 
 ## Disclaimer
-This library is in alpha - it may do anything up to, and including, eating your laundry. You can check the request being sent to DigitalOcean without sending via the `--nosend --verbose` flags
+This library is in beta - it may do anything up to, and including, eating your laundry. You can check the request being sent to DigitalOcean without actually sending by using the `docli --nosend --verbose <command>`
 
 ## Installation
 
@@ -13,35 +13,24 @@ This library is in alpha - it may do anything up to, and including, eating your 
 
 If you are on Arch linux, you can install from the AUR via the `docli-git` (requires a nightly Rust compiler). Otherwise you can try one of the pre-compiled binaries:
 
-#### Linux x86_64
+#### Linux or OS X (x86_64)
 
-Assuming you're familiar `$PATH`, download the tar.gz, unzip, and copy to somewhere in your `$PATH`
+Download the tar.gz, untar, and copy to somewhere in your `$PATH`
 
 ```
-$ wget http://wod.twentyfives.net/bin/docli/docli-v0.1.0-alpha2_linux-x64.tar.gz
-$ tar xvf docli-v0.1.0-alpha2_linux-x64.tar.gz
+$ wget http://wod.twentyfives.net/bin/docli/docli-v0.1.0-beta_linux-x64.tar.gz
+$ tar xvf docli-v0.1.0-beta_linux-x64.tar.gz
 $ cp docli ~/.bin
 ```
 In the example `~/.bin` is in `$PATH`
 
-#### OSX x86_64
+### Windows (None yet...)
 
-Assuming you're familiar `$PATH`, download the tar.gz, unzip, and copy to somewhere in your `$PATH`
-
-```
-$ wget http://wod.twentyfives.net/bin/docli/docli-v0.1.0-alpha2_osx-x64.tar.gz
-$ tar xvf docli-v0.1.0-alpha2_osx-x64.tar.gz
-$ cp docli ~/.bin
-```
-In the example `~/.bin` is in `$PATH`
-
-### Windows
-
-I have not tried compiling on Windows yet. Feel free to clone the repository and attempt to compile with a nightly Rust compiler
+I have not tried compiling on Windows [yet]. Feel free to clone the repository and attempt to compile with a nightly Rust compiler.
 
 ## Compile from source
 
-If you'd rather compile from source (takes about 2 minutes on a decent machine) use the following (Assuming you already have a nightly Rust compiler):
+If you'd rather compile from source (takes about 2 minutes on a decent machine) use the following:
 
 ```
 $ git clone https://github.com/kbknapp/docli-rs
@@ -52,7 +41,7 @@ $ cp target/release/docli ~/.bin
 
 ## Usage
 
-You can run `docli` from the command line and various subcommands. In order to see what commands are available, run `docli --help` or `docli <command> --help`
+You can run `docli` from the command line and along with various subcommands to perform actions on your DigitalOcean infrastructure. In order to see what commands are available, run `docli --help` or `docli <command> --help`
 
 ```
 docli v0.1.0alpha2
@@ -83,9 +72,9 @@ SUBCOMMANDS:
     ssh-keys    Manage SSH keys
 ```
 
-### DigitalOcean Personal Auth Token
+### DigitalOcean Personal OAuth Token
 
-In order to use the DigitalOcean v2 API (which is what `docli` uses under the covers, you must generate a Personal Authentication Token. This token can then either be passed to `docli` directly with `--token <token>` or you can set a `DO_AUTH_TOKEN` environmental variable before using `docli`. To do using Linux or OSX, open a terminal and run the following (test with `docli account` which lists your account information):
+In order to use the DigitalOcean v2 API (which is what `docli` uses under the covers, you must generate a Personal Authentication Token. This token can then either be passed to `docli` directly with `--token <token>` or you can set a `DO_AUTH_TOKEN` environmental variable before using `docli`. To do so using Linux or OSX, open a terminal and run the following (test with `docli account` which lists your account information):
 
 ```
 $ export DO_AUTH_TOKEN=<PASTE YOUR TOKEN HERE>

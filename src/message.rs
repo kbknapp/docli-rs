@@ -1,5 +1,7 @@
 #[cfg(feature = "color")]
-use ansi_term::Colour::{Red, Green, Blue, White, Yellow};
+use ansi_term::Colour::{Red, Green, Blue, White};
+
+use std::io::{self, Write};
 
 use doapi::request::{DnsRecord, Droplet};
 
@@ -7,6 +9,7 @@ pub enum CliMessage<'a> {
     Account,
     Action,
     Actions,
+    AnonSshKey,
     ActionId(&'a str),
     Failure,
     JsonResponse,
@@ -87,31 +90,31 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("Displaying account information..."));
             },
             CliMessage::Action => {
-                println!("{} {}\n\t",
+                println!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying account action..."));
             },
             CliMessage::Backup => {
-                println!("{} {}\n\t",
+                println!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying droplet backup..."));
             },
             CliMessage::Snapshot => {
-                println!("{} {}\n\t",
+                println!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying droplet snapshot..."));
             },
             CliMessage::DropletSnapshots(id) => {
-                println!("{} {} {}{}\n\t",
+                print!("{} {} {}{}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all snapshots for droplet"),
+                    White.bold().paint("Retrieving all snapshots for droplet"),
                     White.bold().underline().paint(id),
                     White.bold().paint("..."));
             },
             CliMessage::Actions => {
                 print!("{} {}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all account actions..."));
+                    White.bold().paint("Retrieving all account actions..."));
             },
             CliMessage::ActionId(id) => {
                 print!("{} {} {}{}",
@@ -153,7 +156,7 @@ impl<'a> CliMessage<'a> {
             CliMessage::Regions => {
                 print!("{} {}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all regions..."));
+                    White.bold().paint("Retrieving all regions..."));
             },
             CliMessage::Region => {
                 println!("{} {}",
@@ -163,7 +166,7 @@ impl<'a> CliMessage<'a> {
             CliMessage::Sizes => {
                 print!("{} {}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all sizes..."));
+                    White.bold().paint("Retrieving all sizes..."));
             },
             CliMessage::Size => {
                 println!("{} {}",
@@ -173,7 +176,7 @@ impl<'a> CliMessage<'a> {
             CliMessage::Images => {
                 print!("{} {}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all images..."));
+                    White.bold().paint("Retrieving all images..."));
             },
             CliMessage::ImageList => {
                 println!("{} {}",
@@ -183,17 +186,17 @@ impl<'a> CliMessage<'a> {
             CliMessage::SshKeys => {
                 print!("{} {}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all SSH keys..."));
+                    White.bold().paint("Retrieving all SSH keys..."));
             },
             CliMessage::Domains => {
                 print!("{} {}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all domains..."));
+                    White.bold().paint("Retrieving all domains..."));
             },
             CliMessage::ImageActions(id) => {
                 print!("{} {} {}{}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all actions for image ID"),
+                    White.bold().paint("Retrieving all actions for image ID"),
                     White.bold().underline().paint(id),
                     White.bold().paint("..."));
             },
@@ -260,21 +263,21 @@ impl<'a> CliMessage<'a> {
             CliMessage::DropletKernels(id) => {
                 print!("{} {} {}{}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all droplet"),
+                    White.bold().paint("Retrieving all droplet"),
                     White.bold().underline().paint(id),
                     White.bold().paint("kernels..."));
             },
             CliMessage::DropletBackups(id) => {
                 print!("{} {} {}{}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all backups for droplet"),
+                    White.bold().paint("Retrieving all backups for droplet"),
                     White.bold().underline().paint(id),
                     White.bold().paint("..."));
             },
             CliMessage::DropletActions(id) => {
                 print!("{} {} {}{}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all actions for droplet"),
+                    White.bold().paint("Retrieving all actions for droplet"),
                     White.bold().underline().paint(id),
                     White.bold().paint("..."));
             },
@@ -288,7 +291,7 @@ impl<'a> CliMessage<'a> {
             CliMessage::DropletNeighbors(id) => {
                 print!("{} {} {}{}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all neighbors for droplet"),
+                    White.bold().paint("Retrieving all neighbors for droplet"),
                     White.bold().underline().paint(id),
                     White.bold().paint("..."));
             },
@@ -401,7 +404,7 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("..."));
             },
             CliMessage::Kernel => {
-                print!("{} {}",
+                println!("{} {}",
                     Blue.bold().paint("::"),
                     White.bold().paint("Displaying kernel..."));
             },
@@ -455,12 +458,12 @@ impl<'a> CliMessage<'a> {
             CliMessage::AllDropletNeighbors => {
                 print!("{} {}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all droplet neighbors..."));
+                    White.bold().paint("Retrieving all droplet neighbors..."));
             },
             CliMessage::AllDropletUpgrades => {
                 print!("{} {}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all droplets pending upgrades..."));
+                    White.bold().paint("Retrieving all droplets pending upgrades..."));
             },
             CliMessage::Neighbor => {
                 println!("{} {}\n\t",
@@ -493,6 +496,11 @@ impl<'a> CliMessage<'a> {
                     White.bold().underline().paint(name),
                     White.bold().paint("..."));
             },
+            CliMessage::AnonSshKey => {
+                println!("{} {}",
+                    Blue.bold().paint("::"),
+                    White.bold().paint("Displaying SSH key..."));
+            },
             CliMessage::UpdateSshKey(name, id) => {
                 print!("{} {} {} {} {}{}",
                     Blue.bold().paint("::"),
@@ -518,17 +526,17 @@ impl<'a> CliMessage<'a> {
             CliMessage::DnsRecords => {
                 print!("{} {}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all DNS records..."));
+                    White.bold().paint("Retrieving all DNS records..."));
             },
             CliMessage::Droplets => {
                 print!("{} {}",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying all droplets..."));
+                    White.bold().paint("Retrieving all droplets..."));
             },
             CliMessage::DnsRecord => {
                 println!("{} {}\n\t",
                     Blue.bold().paint("::"),
-                    White.bold().paint("Displaying DNS record..."));
+                    White.bold().paint("Retrieving DNS record..."));
             },
             CliMessage::UpdateDns(id, rec) => {
                 print!("{} {} {} {}\n\t{}\n",
@@ -553,11 +561,13 @@ impl<'a> CliMessage<'a> {
                     White.bold().paint("..."));
             },
             CliMessage::Confirm => {
-                print!("{} {} {}\n\n{}[Y/n]: ",
+                println!("{} {} {}",
                     Blue.bold().paint("::"),
-                    Yellow.bold().paint("Warning"),
-                    White.bold().paint("The action you are about to perform modifies existing data..."),
+                    Red.bold().paint("Warning"),
+                    White.bold().paint("The action you are about to perform modifies existing data..."));
+                print!("\t{}[Y/n]: ",
                     White.bold().paint("Are you sure you want to continue?"));
+                io::stdout().flush().ok().expect("Could not flush stdout");
             },
         }
     }
@@ -571,8 +581,6 @@ struct Green;
 struct Blue;
 #[cfg(not(feature = "color"))]
 struct White;
-#[cfg(not(feature = "color"))]
-struct Yellow;
 
 #[cfg(not(feature = "color"))]
 trait Paint {
@@ -596,5 +604,3 @@ impl Paint for Green {}
 impl Paint for Blue {}
 #[cfg(not(feature = "color"))]
 impl Paint for White {}
-#[cfg(not(feature = "color"))]
-impl Paint for Yellow {}

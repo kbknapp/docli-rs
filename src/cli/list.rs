@@ -38,7 +38,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for reg in v.iter() {
                         CliMessage::Region.display();
-                        println!("\t{}", reg);
+                        println!("\t{}\n", &reg.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo regions to dipslay"); }
                 },
@@ -75,7 +75,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for siz in v.iter() {
                         CliMessage::Size.display();
-                        println!("\t{}", siz);
+                        println!("\t{}\n", &siz.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo sizes to dipslay"); }
                 },
@@ -123,7 +123,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for img in v.iter() {
                         CliMessage::ImageList.display();
-                        println!("\t{}", &img.to_string()[..].replace("$", ""));
+                        println!("\t{}\n", &img.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo images to dipslay"); }
                 },
@@ -159,8 +159,8 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(v) => {
                     CliMessage::Success.display();
                     for k in v.iter() {
-                        CliMessage::SshKeys.display();
-                        println!("\t{}", k);
+                        CliMessage::AnonSshKey.display();
+                        println!("\t{}\n", &k.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo SSH keys to dipslay"); }
                 },
@@ -234,7 +234,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for d in v.iter() {
                         CliMessage::Domains.display();
-                        println!("\t{}", d);
+                        println!("\t{}\n", &d.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo domains to dipslay"); }
                 },
@@ -272,7 +272,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for act in v.iter() {
                         CliMessage::Action.display();
-                        println!("\t{}", act);
+                        println!("\t{}\n", &act.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo account actions to dipslay"); }
                 },

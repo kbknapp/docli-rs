@@ -60,9 +60,11 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplets().neighbors().retrieve() {
                 Ok(v) => {
                     CliMessage::Success.display();
-                    for act in v.iter() {
-                        CliMessage::Neighbor.display();
-                        println!("\t{}", act);
+                    for nv in v.iter() {
+                        for dr in nv.iter() {
+                            CliMessage::Neighbor.display();
+                            println!("\t{}\n", &dr.to_string()[..].replace("\n", "\n\t"));
+                        }
                     }
                     if v.is_empty() { println!("\tNo neighbors to dipslay"); }
                 },

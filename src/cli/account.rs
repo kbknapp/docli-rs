@@ -38,7 +38,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for act in v.iter() {
                         CliMessage::Action.display();
-                        println!("\t{}", act);
+                        println!("\t{}\n", &act.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo actions to dipslay"); }
                 },
@@ -75,7 +75,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.account().action(id).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -109,7 +109,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.account().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                     match domgr.account().retrieve_header() {
                         Ok(h)  => println!("\t{}\n",&h.to_string()[..].replace("\n", "\n\t")),
                         Err(_) => println!("\tUnable to retrieve response header information\n"),

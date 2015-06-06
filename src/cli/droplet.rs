@@ -40,7 +40,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for act in v.iter() {
                         CliMessage::Kernel.display();
-                        println!("\t{}", act);
+                        println!("\t{}", &act.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo kernels to dipslay"); }
                 },
@@ -78,7 +78,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for act in v.iter() {
                         CliMessage::Snapshot.display();
-                        println!("\t{}", act);
+                        println!("\t{}", &act.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo snapshots to dipslay"); }
                 },
@@ -116,7 +116,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for act in v.iter() {
                         CliMessage::Backup.display();
-                        println!("\t{}", act);
+                        println!("\t{}", &act.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo backups to dipslay"); }
                 },
@@ -154,7 +154,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for act in v.iter() {
                         CliMessage::Action.display();
-                        println!("\t{}", act);
+                        println!("\t{}\n", &act.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo actions to dipslay"); }
                 },
@@ -165,8 +165,8 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("delete", Some(m))                    => {
-            if !m.is_present("noconfirm") || !cli::confirm() {
-                return
+            if !m.is_present("noconfirm") {
+                if !cli::confirm() { return }
             }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -193,7 +193,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).delete().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -229,7 +229,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                     CliMessage::Success.display();
                     for act in v.iter() {
                         CliMessage::Neighbor.display();
-                        println!("\t{}", act);
+                        println!("\t{}", &act.to_string()[..].replace("\n", "\n\t"));
                     }
                     if v.is_empty() { println!("\tNo neighbors to dipslay"); }
                 },
@@ -265,7 +265,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).disable_backups().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -300,7 +300,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).reboot().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -334,7 +334,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).power_cycle().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -368,7 +368,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).shutdown().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -402,7 +402,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).power_off().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -436,7 +436,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).power_on().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -445,8 +445,8 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("restore", Some(m))                   => {
-            if !m.is_present("noconfirm") || !cli::confirm() {
-                return
+            if !m.is_present("noconfirm") {
+                if !cli::confirm() { return }
             }
             let img = m.value_of("image").unwrap();
             if cfg.verbose || m.is_present("verbose") {
@@ -474,7 +474,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).restore(img).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -508,7 +508,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).reset_password().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -544,7 +544,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).resize(size, disk).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -553,8 +553,8 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("rebuild", Some(m))                   => {
-            if !m.is_present("noconfirm") || !cli::confirm() {
-                return
+            if !m.is_present("noconfirm") {
+                if !cli::confirm() { return }
             }
             let img = m.value_of("image").unwrap();
             if cfg.verbose || m.is_present("verbose") {
@@ -582,7 +582,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).rebuild(img).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -590,9 +590,9 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("upgrade", Some(m))                    => {
-            if !m.is_present("noconfirm") || !cli::confirm() {
-                return
+        ("rename", Some(m))                    => {
+            if !m.is_present("noconfirm") {
+                if !cli::confirm() { return }
             }
             let name = m.value_of("name").unwrap();
             if cfg.verbose || m.is_present("verbose") {
@@ -620,7 +620,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).rename(name).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -629,8 +629,8 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             }
         },
         ("change-kernel", Some(m))             => {
-            if !m.is_present("noconfirm") || !cli::confirm() {
-                return
+            if !m.is_present("noconfirm") {
+                if !cli::confirm() { return }
             }
             let kernel = m.value_of("kernel_id").unwrap();
             if cfg.verbose || m.is_present("verbose") {
@@ -658,7 +658,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).change_kernel(kernel).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -692,7 +692,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).enable_ipv6().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -726,7 +726,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).enable_private_networking().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -761,7 +761,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).snapshot(name).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -769,7 +769,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("show-action", Some(m))               => {
+        ("action", Some(m))               => {
             let a_id = m.value_of("action_id").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -796,7 +796,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).action(a_id).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -804,9 +804,9 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 }
             }
         },
-        ("rename", Some(m))                    => {
-            if !m.is_present("noconfirm") || !cli::confirm() {
-                return
+        ("upgrade", Some(m))                    => {
+            if !m.is_present("noconfirm") {
+                if !cli::confirm() { return }
             }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -833,7 +833,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).upgrade().retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();
@@ -866,7 +866,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
             match domgr.droplet(id).retrieve() {
                 Ok(s) => {
                     CliMessage::Success.display();
-                    println!("\n\t{}\n", s);
+                    println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
                 },
                 Err(e) => {
                     CliMessage::Failure.display();

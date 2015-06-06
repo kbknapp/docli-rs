@@ -35,8 +35,8 @@ fn main() {
     let dns_types = DnsRecType::variants();
     let dns_args = "-n --name [name]         'Name of the DNS record'
                     -d --data [data]         'Data for the DNS record'
-                    -p --priority [priority] 'The priority to set'
-                    -P --port [port]         'The port to use'
+                    -P --priority [priority] 'The priority to set'
+                    -p --port [port]         'The port to use'
                     -w --weight [weight]     'The weight value'";
     let noconfirm = "--noconfirm 'Don't confirm, just do it'";
     let m = App::new("docli")
@@ -107,13 +107,14 @@ fn main() {
                 .args_from_usage(dns_args))
             .subcommand(SubCommand::with_name("records")
                 .about("Lists all DNS records on the domain"))
-            .subcommand(SubCommand::with_name("show-record")
+            .subcommand(SubCommand::with_name("record")
                 .about("Displays information on a specific DNS record")
                 .arg_from_usage("<id>   'The DNS record ID to retrieve info on'"))
             .subcommand(SubCommand::with_name("update-record")
                 .about("Updates a DNS record on the domain")
                 .arg_from_usage(noconfirm)
-                .arg(Arg::from_usage("<type> 'The type of DNS record to create'")
+                .arg_from_usage("<id> 'The DNS record ID to update'")
+                .arg(Arg::from_usage("-t --type [type] 'The type of DNS record to update to'")
                     .possible_values(dns_types.iter()))
                 .args_from_usage(dns_args))
             .subcommand(SubCommand::with_name("delete-record")
@@ -168,7 +169,7 @@ fn main() {
             .subcommand(SubCommand::with_name("restore")
                 .about("Restores a droplet from an image")
                 .arg_from_usage(noconfirm)
-                .arg_from_usage("<image> 'The image to restore to'"))
+                .arg_from_usage("<image> 'The image ID or slug to restore to'"))
             .subcommand(SubCommand::with_name("reset-password")
                 .about("Resets the root password for a droplet"))
             .subcommand(SubCommand::with_name("resize")
@@ -194,13 +195,12 @@ fn main() {
             .subcommand(SubCommand::with_name("snapshot")
                 .arg_from_usage("<name> 'What to name the new snapshot image'")
                 .about("Creates a snapshot of a droplet"))
-            .subcommand(SubCommand::with_name("show-action")
+            .subcommand(SubCommand::with_name("action")
                 .about("Displays a specific action for a droplet")
                 .arg_from_usage("<action_id> 'The action ID to display'"))
-            .subcommand(SubCommand::with_name("rename")
-                .about("Renames a droplet")
+            .subcommand(SubCommand::with_name("upgrade")
                 .arg_from_usage(noconfirm)
-                .arg_from_usage("<name> 'The new name of the droplet'")))
+                .about("Upgrades a droplet")))
         .subcommand(SubCommand::with_name("image")
             .about("Manage images")
             .arg_from_usage("<id> 'The image ID or slug to use (not all commands support using a slug)'")
@@ -213,15 +213,13 @@ fn main() {
             .subcommand(SubCommand::with_name("delete")
                 .about("Deletes an image")
                 .arg_from_usage(noconfirm))
-            .subcommand(SubCommand::with_name("show")
-                .about("Displays details about an image"))
             .subcommand(SubCommand::with_name("transfer")
                 .about("Transfers an image to a new region")
                 .arg_from_usage(noconfirm)
                 .arg_from_usage("<region> 'The region to transfer to'"))
             .subcommand(SubCommand::with_name("convert")
                 .about("Converts a an image (i.e. from a snapshot to a backup)"))
-            .subcommand(SubCommand::with_name("show-action")
+            .subcommand(SubCommand::with_name("action")
                 .about("Displays a particular action of an image")
                 .arg_from_usage("<action_id> 'The action ID to display'")))
         .subcommand(SubCommand::with_name("ssh-keys")
@@ -230,32 +228,18 @@ fn main() {
                 .about("Creatse a new SSH key")
                 .args_from_usage("<name>       'The name of the SSH key'
                                   <public_key> 'The public key of the SSH key'"))
-            .subcommand(SubCommand::with_name("show-key")
+            .subcommand(SubCommand::with_name("key")
                 .about("Displays information on a particular key")
-                .args_from_usage("-i --id [id]                     'The key ID of the key to display'
-                                  -f --finger-print [finger_print] 'The fingerprint of the key to display'"))
-                .arg_group(ArgGroup::with_name("key_id")
-                        .add_all(vec!["id", "finger_print"])
-                        .required(true))
-            .subcommand(SubCommand::with_name("update")
-                .about("Updates a particular SSH key")
+                .args_from_usage("<id> 'The key ID or finger print of the key to display'"))
+            .subcommand(SubCommand::with_name("rename")
+                .about("Renames a particular SSH key")
                 .arg_from_usage(noconfirm)
-                .args_from_usage("<name>                           'The new name to use'
-                                  -i --id [id]                     'The key ID to update'
-                                  -f --finger-print [finger_print] 'The fingerprint of the key to update'")
-                .arg_group(ArgGroup::with_name("sshkeys")
-                    .add_all(vec!["id",
-                                  "finger_print"])
-                    .required(true)))
+                .args_from_usage("<id>   'The key ID or finger print of the key to update'
+                                  <name> 'The new name to use'"))
             .subcommand(SubCommand::with_name("destroy")
                 .about("Destroys a particular SSH key")
                 .arg_from_usage(noconfirm)
-                .args_from_usage("-i --id [id]                     'The key ID to destroy'
-                                  -f --finger-print [finger_print] 'The fingerprint of the key to destroy'")
-                .arg_group(ArgGroup::with_name("sshkeys")
-                    .add_all(vec!["id",
-                                  "finger_print"])
-                    .required(true))))
+                .args_from_usage("<id> 'The key ID or finger print of the key to destroy'")))
         .get_matches();
 
     let mut cfg = Config {

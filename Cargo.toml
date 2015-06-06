@@ -1,6 +1,6 @@
 [package]
 name = "docli"
-version = "0.1.0-alpha2"
+version = "0.1.0-beta"
 authors = ["Kevin K <kbknapp@gmail.com>"]
 description = "A command line utility to managing DigitalOcean infrastructure"
 license = "MIT"
