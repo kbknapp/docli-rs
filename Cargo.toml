@@ -26,3 +26,4 @@ unstable=[]
 [dependencies.ansi_term]
 version = "*"
 optional = true
+
