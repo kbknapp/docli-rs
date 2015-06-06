@@ -9,6 +9,7 @@ documentation = "http://kbknapp.github.io/docli-rs"
 readme = "README.md"
 keywords = ["do", "cli", "digitalocean", "digital", "ocean"]
 homepage = "https://kbknapp.github.io/docli-rs"
+exclude = ["pkg/*"]
 
 [dependencies]
 clap = "*"
