@@ -33,7 +33,7 @@ fn get_auth_token(m: &ArgMatches) -> String {
 
 fn main() {
     let dns_types = DnsRecType::variants();
-    let dns_args = "-n --name [name]         'Name of the DNS record'
+    let dns_args = "-N --name [name]         'Name of the DNS record'
                     -d --data [data]         'Data for the DNS record'
                     -P --priority [priority] 'The priority to set'
                     -p --port [port]         'The port to use'
