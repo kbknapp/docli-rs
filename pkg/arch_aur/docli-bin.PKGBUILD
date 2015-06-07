@@ -15,7 +15,7 @@ replaces=('docli-git')
 backup=()
 install=''
 source=("http://wod.twentyfives.net/bin/${_pkgname}/${_pkgname}-${pkgver//_/-}-${CARCH}-linux.tar.gz")
-sha256sums=('efa5c92c8c1760a98ccd79103c2d3df5ef3bb16a2b5106eea368c50238ddf0c1')
+sha256sums=('3450faeec6452050fb7e1b94f98b6f9bbb6b7fda9b8c2c2507c9bcafa71103af')
 
 package() {
   cd "${srcdir}/${_pkgname}-${pkgver//_/-}-${CARCH}-linux/"
