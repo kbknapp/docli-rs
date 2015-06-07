@@ -2,7 +2,7 @@
 
 _pkgname=docli
 pkgname=${_pkgname}-git
-pkgver=0.1.0-beta
+pkgver=0.1.0-beta2
 pkgrel=1
 pkgdesc='command line utility for managing digitalocean infrastructure'
 arch=('x86_64')
@@ -27,5 +27,7 @@ build() {
 package() {
   cd "$srcdir/$_pkgname"
   mkdir -p "${pkgdir}/usr/bin"
-  cp -p "target/release/${_pkgname}" "${pkgdir}/usr/bin"
+
+  install -D -m644 LICENSE-MIT "${pkgdir}/usr/share/licenses/${_pkgname}/LICENSE-MIT"
+  install -Dm 0755 "target/release/${_pkgname}" "${pkgdir}/usr/bin/${_pkgname}"
 }

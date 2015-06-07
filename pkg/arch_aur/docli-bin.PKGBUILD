@@ -2,8 +2,8 @@
 
 _pkgname=docli
 pkgname=${_pkgname}-bin
-pkgrel=2
-pkgver=0.1.0_beta
+pkgrel=1
+pkgver=0.1.0_beta2
 pkgdesc="A command line utility for managing DigitalOcean infrastructure"
 url="https://kbknapp.github.io/docli-rs"
 provides=('docli')
@@ -18,9 +18,9 @@ source=("http://wod.twentyfives.net/bin/${_pkgname}/${_pkgname}-${pkgver//_/-}-$
 sha256sums=('efa5c92c8c1760a98ccd79103c2d3df5ef3bb16a2b5106eea368c50238ddf0c1')
 
 package() {
-  cd "${srcdir}/${_pkgname}/"
+  cd "${srcdir}/${_pkgname}-${pkgver//_/-}-${CARCH}-linux/"
 
   install -D -m644 LICENSE-MIT "${pkgdir}/usr/share/licenses/${_pkgname}/LICENSE-MIT"
-  install -Dm 0755 bin/docli "${pkgdir}/usr/bin/docli"
+  install -Dm 0755 "bin/${_pkgname}" "${pkgdir}/usr/bin/${_pkgname}"
 }
 
