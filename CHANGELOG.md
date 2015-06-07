@@ -1,3 +1,17 @@
+<a name="v0.1.0-beta2"></a>
+## v0.1.0-beta2 (2015-06-07)
+
+
+#### Documentation
+
+*   updates to readme ([44fcdbef](https://github.com/kbknapp/docli-rs/commit/44fcdbefea8c8d70874abb2f16a199c709f9433c))
+
+#### Bug Fixes
+
+*   --nosend and --verbose propogate fully now ([ede3df4c](https://github.com/kbknapp/docli-rs/commit/ede3df4cb568c70c1fa67cb43d8e4a244da34bc2), closes [#12](https://github.com/kbknapp/docli-rs/issues/12))
+
+
+
 <a name="v0.1.0-beta"></a>
 ## v0.1.0-beta (2015-06-05)
 
