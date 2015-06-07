@@ -5,7 +5,7 @@
 A command-line utility for managing DigitalOcean infrastructure via the [DigitalOcean API v2](https://developers.digitalocean.com/documentation/) 
 
 ## Disclaimer
-This utility is in beta - it may do anything up to, and including, eating your laundry. You can check the request being sent to DigitalOcean without actually sending by using the `docli --nosend --verbose <command>`
+This utility is in beta - it may do anything up to, and including, eating your laundry. You can check the request being sent to DigitalOcean without actually sending by using the `docli --nosend --verbose <command>` (which can be shortened to `docli -nv <command>`)
 
 ## Installation
 
@@ -18,10 +18,11 @@ If you are on Arch linux, you can install from the AUR via the `docli-bin` or `d
 Download the tar.gz, untar, and copy to somewhere in your `$PATH` (if on OS X, replace `linux` with `osx`)
 
 ```
-$ wget http://wod.twentyfives.net/bin/docli/docli-0.1.0-beta-x86_64-linux.tar.gz
-$ tar xvf docli-0.1.0-beta-x86_64-linux.tar.gz
-$ cp docli/bin/docli ~/.bin
+$ wget http://wod.twentyfives.net/bin/docli/docli-0.1.0-beta2-x86_64-linux.tar.gz
+$ tar xvf docli-0.1.0-beta2-x86_64-linux.tar.gz
+$ cp docli-0.1.0-beta2-x86_64-linux/bin/docli ~/.bin
 ```
+
 In the example `~/.bin` is in `$PATH`
 
 ### Windows (None yet...)
