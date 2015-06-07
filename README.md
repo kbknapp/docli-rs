@@ -18,10 +18,11 @@ If you are on Arch linux, you can install from the AUR via the `docli-bin` or `d
 Download the tar.gz, untar, and copy to somewhere in your `$PATH` (if on OS X, replace `linux` with `osx`)
 
 ```
-$ wget http://wod.twentyfives.net/bin/docli/docli-0.1.0-beta-x86_64-linux.tar.gz
-$ tar xvf docli-0.1.0-beta-x86_64-linux.tar.gz
-$ cp docli/bin/docli ~/.bin
+$ wget http://wod.twentyfives.net/bin/docli/docli-0.1.0-beta2-x86_64-linux.tar.gz
+$ tar xvf docli-0.1.0-beta2-x86_64-linux.tar.gz
+$ cp docli-0.1.0-beta2-x86_64-linux/bin/docli ~/.bin
 ```
+
 In the example `~/.bin` is in `$PATH`
 
 ### Windows (None yet...)
