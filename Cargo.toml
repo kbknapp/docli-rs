@@ -13,7 +13,7 @@ exclude = ["pkg/*"]
 
 [dependencies]
 clap = "*"
-doapi = {git = "https://github.com/kbknapp/doapi-rs"}
+doapi = "*"
 
 
 [features]
