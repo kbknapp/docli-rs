@@ -64,7 +64,7 @@ fn main() {
                                   --applications    'Displays all application images'
                                   --private         'Displays all private user images'
                                   --available       'Displays all available images (Default)'")
-                .arg_group(ArgGroup::with_name("images").add_all(vec!["distrobutions",
+                .arg_group(ArgGroup::with_name("images").add_all(&["distrobutions",
                                                                       "applications",
                                                                       "private",
                                                                       "available"])))

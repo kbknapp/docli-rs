@@ -1,6 +1,6 @@
 [package]
 name = "docli"
-version = "0.1.0-beta2"
+version = "0.1.0"
 authors = ["Kevin K <kbknapp@gmail.com>"]
 description = "A command line utility to managing DigitalOcean infrastructure"
 license = "MIT"
@@ -12,9 +12,12 @@ homepage = "https://kbknapp.github.io/docli-rs"
 exclude = ["pkg/*"]
 
 [dependencies]
-clap = "*"
-doapi = "*"
+clap = "~1.3.0"
+doapi = "~0.1.1"
 
+[dependencies.ansi_term]
+version = "~0.6.3"
+optional = true
 
 [features]
 default = ["color"]
@@ -23,7 +26,4 @@ color = ["ansi_term"]
 # for building with nightly and unstable features
 unstable=[]
 
-[dependencies.ansi_term]
-version = "*"
-optional = true
 
