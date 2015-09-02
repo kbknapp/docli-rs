@@ -33,6 +33,8 @@ I have not tried compiling on Windows [yet]. Feel free to clone the repository a
 
 If you'd rather compile from source (takes about 2 minutes on a decent machine) use the following:
 
+**Note:** Currently, you must use Rust nightly in order to compile. 
+
 ```
 $ git clone https://github.com/kbknapp/docli-rs
 $ cd docli-rs
@@ -45,7 +47,7 @@ $ cp target/release/docli ~/.bin
 You can run `docli` from the command line and along with various subcommands to perform actions on your DigitalOcean infrastructure. In order to see what commands are available, run `docli --help` or `docli <command> --help`
 
 ```
-docli v0.1.0alpha2
+docli v0.1.0
 Kevin K. <kbknapp@gmail.com>
 A utility for managing DigitalOcean infrastructure
 
