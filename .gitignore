@@ -16,3 +16,7 @@
 # Temp files
 .*~
 .*-swp
+
+# Backup files
+*.orig
+*.bk

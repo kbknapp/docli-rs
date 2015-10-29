@@ -16,6 +16,6 @@ pub fn confirm() -> bool {
     io::stdin().read_line(&mut s).ok();
     match s[..].trim() {
         "Y" | "y" => return true,
-        _         => return false
+        _ => return false,
     }
 }

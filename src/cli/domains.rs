@@ -8,14 +8,18 @@ use message::CliMessage;
 use cli;
 
 pub fn run(m: &ArgMatches, cfg: &mut Config) {
-    if m.is_present("verbose") { cfg.verbose = true; }
-    if m.is_present("nosend") { cfg.no_send = true; }
+    if m.is_present("verbose") {
+        cfg.verbose = true;
+    }
+    if m.is_present("nosend") {
+        cfg.no_send = true;
+    }
     let domgr = DoManager::with_token(&cfg.auth[..]);
     match m.subcommand() {
-        ("create", Some(m))      => {
+        ("create", Some(m)) => {
             let name = m.value_of("name").unwrap();
             // TODO: Validate IP
-            let ip   = m.value_of("ip").unwrap();
+            let ip = m.value_of("ip").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.domains()
@@ -23,14 +27,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.domains().create(name, ip).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -42,13 +48,13 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", s);
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
+        }
         ("show-domain", Some(m)) => {
             let name = m.value_of("name").unwrap();
             if cfg.verbose || m.is_present("verbose") {
@@ -57,14 +63,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.domain(name).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -76,16 +84,18 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("delete", Some(m))      => {
+        }
+        ("delete", Some(m)) => {
             if !m.is_present("noconfirm") {
-                if !cli::confirm() { return }
+                if !cli::confirm() {
+                    return;
+                }
             }
             let name = m.value_of("name").unwrap();
             if cfg.verbose || m.is_present("verbose") {
@@ -95,14 +105,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.domain(name).delete().retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -114,28 +126,30 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", s);
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        _                        => {
+        }
+        _ => {
             if cfg.verbose {
                 CliMessage::Request(
                     &domgr.domains()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
+            if cfg.no_send {
+                return;
+            }
             if cfg.verbose {
                 CliMessage::JsonResponse.display();
                 match domgr.domains().retrieve_json() {
-                    Ok(s)  => {
+                    Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -150,8 +164,10 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                         CliMessage::Domains.display();
                         println!("\t{}\n", &d.to_string()[..].replace("\n", "\n\t"));
                     }
-                    if v.is_empty() { println!("\tNo domains to dipslay"); }
-                },
+                    if v.is_empty() {
+                        println!("\tNo domains to dipslay");
+                    }
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("{}\n", e);
