@@ -7,12 +7,16 @@ use message::CliMessage;
 use cli;
 
 pub fn run(m: &ArgMatches, cfg: &mut Config) {
-    if m.is_present("verbose") { cfg.verbose = true; }
-    if m.is_present("nosend") { cfg.no_send = true; }
+    if m.is_present("verbose") {
+        cfg.verbose = true;
+    }
+    if m.is_present("nosend") {
+        cfg.no_send = true;
+    }
     let id = m.value_of("id").unwrap();
     let domgr = DoManager::with_token(&cfg.auth[..]);
     match m.subcommand() {
-        ("kernels", Some(m))              => {
+        ("kernels", Some(m)) => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -20,14 +24,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).kernels().retrieve_json() {
-                    Ok(s)  => {
+                    Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -42,15 +48,17 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                         CliMessage::Kernel.display();
                         println!("\t{}", &act.to_string()[..].replace("\n", "\n\t"));
                     }
-                    if v.is_empty() { println!("\tNo kernels to dipslay"); }
-                },
+                    if v.is_empty() {
+                        println!("\tNo kernels to dipslay");
+                    }
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("{}\n", e);
                 }
             }
-        },
-        ("snapshots", Some(m))            => {
+        }
+        ("snapshots", Some(m)) => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -58,14 +66,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).snapshots().retrieve_json() {
-                    Ok(s)  => {
+                    Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -80,15 +90,17 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                         CliMessage::Snapshot.display();
                         println!("\t{}", &act.to_string()[..].replace("\n", "\n\t"));
                     }
-                    if v.is_empty() { println!("\tNo snapshots to dipslay"); }
-                },
+                    if v.is_empty() {
+                        println!("\tNo snapshots to dipslay");
+                    }
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("{}\n", e);
                 }
             }
-        },
-        ("backups", Some(m))              => {
+        }
+        ("backups", Some(m)) => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -96,14 +108,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).backups().retrieve_json() {
-                    Ok(s)  => {
+                    Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -118,15 +132,17 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                         CliMessage::Backup.display();
                         println!("\t{}", &act.to_string()[..].replace("\n", "\n\t"));
                     }
-                    if v.is_empty() { println!("\tNo backups to dipslay"); }
-                },
+                    if v.is_empty() {
+                        println!("\tNo backups to dipslay");
+                    }
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("{}\n", e);
                 }
             }
-        },
-        ("actions", Some(m))              => {
+        }
+        ("actions", Some(m)) => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -134,14 +150,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).actions().retrieve_json() {
-                    Ok(s)  => {
+                    Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -156,17 +174,21 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                         CliMessage::Action.display();
                         println!("\t{}\n", &act.to_string()[..].replace("\n", "\n\t"));
                     }
-                    if v.is_empty() { println!("\tNo actions to dipslay"); }
-                },
+                    if v.is_empty() {
+                        println!("\tNo actions to dipslay");
+                    }
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("{}\n", e);
                 }
             }
-        },
-        ("delete", Some(m))                    => {
+        }
+        ("delete", Some(m)) => {
             if !m.is_present("noconfirm") {
-                if !cli::confirm() { return }
+                if !cli::confirm() {
+                    return;
+                }
             }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -175,14 +197,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).delete().retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -194,14 +218,14 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("neighbors", Some(m))            => {
+        }
+        ("neighbors", Some(m)) => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -209,14 +233,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).neighbors().retrieve_json() {
-                    Ok(s)  => {
+                    Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -231,15 +257,17 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                         CliMessage::Neighbor.display();
                         println!("\t{}", &act.to_string()[..].replace("\n", "\n\t"));
                     }
-                    if v.is_empty() { println!("\tNo neighbors to dipslay"); }
-                },
+                    if v.is_empty() {
+                        println!("\tNo neighbors to dipslay");
+                    }
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("{}\n", e);
                 }
             }
-        },
-        ("disable-backups", Some(m))           => {
+        }
+        ("disable-backups", Some(m)) => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -247,14 +275,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).disable_backups().retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -266,14 +296,14 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("reboot", Some(m))                    => {
+        }
+        ("reboot", Some(m)) => {
             println!("Rebooting droplet with id: {}", id);
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -282,14 +312,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).reboot().retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -301,14 +333,14 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("power-cycle", Some(m))               => {
+        }
+        ("power-cycle", Some(m)) => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -316,14 +348,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).power_cycle().retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -335,14 +369,14 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("shutdown", Some(m))                  => {
+        }
+        ("shutdown", Some(m)) => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -350,14 +384,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).shutdown().retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -369,14 +405,14 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("power-off", Some(m))                 => {
+        }
+        ("power-off", Some(m)) => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -384,14 +420,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).power_off().retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -403,14 +441,14 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("power-on", Some(m))                  => {
+        }
+        ("power-on", Some(m)) => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -418,14 +456,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).power_on().retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -437,16 +477,18 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("restore", Some(m))                   => {
+        }
+        ("restore", Some(m)) => {
             if !m.is_present("noconfirm") {
-                if !cli::confirm() { return }
+                if !cli::confirm() {
+                    return;
+                }
             }
             let img = m.value_of("image").unwrap();
             if cfg.verbose || m.is_present("verbose") {
@@ -456,14 +498,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).restore(img).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -475,14 +519,14 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("reset-password", Some(m))            => {
+        }
+        ("reset-password", Some(m)) => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -490,14 +534,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).reset_password().retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -509,14 +555,14 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("resize", Some(m))                    => {
+        }
+        ("resize", Some(m)) => {
             let disk = m.is_present("disk");
             let size = m.value_of("size").unwrap();
             if cfg.verbose || m.is_present("verbose") {
@@ -526,14 +572,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).resize(size, disk).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -545,16 +593,18 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("rebuild", Some(m))                   => {
+        }
+        ("rebuild", Some(m)) => {
             if !m.is_present("noconfirm") {
-                if !cli::confirm() { return }
+                if !cli::confirm() {
+                    return;
+                }
             }
             let img = m.value_of("image").unwrap();
             if cfg.verbose || m.is_present("verbose") {
@@ -564,14 +614,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).rebuild(img).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -583,16 +635,18 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("rename", Some(m))                    => {
+        }
+        ("rename", Some(m)) => {
             if !m.is_present("noconfirm") {
-                if !cli::confirm() { return }
+                if !cli::confirm() {
+                    return;
+                }
             }
             let name = m.value_of("name").unwrap();
             if cfg.verbose || m.is_present("verbose") {
@@ -602,14 +656,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).rename(name).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -621,16 +677,18 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("change-kernel", Some(m))             => {
+        }
+        ("change-kernel", Some(m)) => {
             if !m.is_present("noconfirm") {
-                if !cli::confirm() { return }
+                if !cli::confirm() {
+                    return;
+                }
             }
             let kernel = m.value_of("kernel_id").unwrap();
             if cfg.verbose || m.is_present("verbose") {
@@ -640,14 +698,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).change_kernel(kernel).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -659,14 +719,14 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("enable-ipv6", Some(m))               => {
+        }
+        ("enable-ipv6", Some(m)) => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplet(id)
@@ -674,14 +734,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).enable_ipv6().retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -693,13 +755,13 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
+        }
         ("enable-private-networking", Some(m)) => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -708,14 +770,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).enable_private_networking().retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -727,14 +791,14 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("snapshot", Some(m))                  => {
+        }
+        ("snapshot", Some(m)) => {
             let name = m.value_of("name").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -743,14 +807,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).snapshot(name).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -762,14 +828,14 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("action", Some(m))               => {
+        }
+        ("action", Some(m)) => {
             let a_id = m.value_of("action_id").unwrap();
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -778,14 +844,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).action(a_id).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -797,16 +865,18 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        ("upgrade", Some(m))                    => {
+        }
+        ("upgrade", Some(m)) => {
             if !m.is_present("noconfirm") {
-                if !cli::confirm() { return }
+                if !cli::confirm() {
+                    return;
+                }
             }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -815,14 +885,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).upgrade().retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -834,28 +906,30 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        _                                      => {
+        }
+        _ => {
             if cfg.verbose {
                 CliMessage::Request(
                     &domgr.droplet(id)
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
+            if cfg.no_send {
+                return;
+            }
             if cfg.verbose {
                 CliMessage::JsonResponse.display();
                 match domgr.droplet(id).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -867,7 +941,7 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", &s.to_string()[..].replace("\n", "\n\t"));
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);

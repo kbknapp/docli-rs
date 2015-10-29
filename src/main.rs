@@ -1,3 +1,17 @@
+#![feature(plugin)]
+#![plugin(serde_macros)]
+#![cfg_attr(feature = "lints", plugin(clippy))]
+#![cfg_attr(feature = "lints", allow(explicit_iter_loop))]
+#![cfg_attr(feature = "lints", allow(should_implement_trait))]
+#![cfg_attr(feature = "lints", deny(warnings))]
+#![deny(missing_docs,
+        missing_debug_implementations,
+        missing_copy_implementations,
+        trivial_casts, trivial_numeric_casts,
+        unsafe_code,
+        unstable_features,
+        unused_import_braces,
+        unused_qualifications)]
 #[macro_use]
 extern crate clap;
 extern crate doapi;
@@ -13,15 +27,17 @@ mod config;
 mod message;
 
 use config::Config;
-use cli::{list, account, dns, domains, droplet, droplets, image, ssh_keys};
+use cli::{account, dns, domains, droplet, droplets, image, list, ssh_keys};
 
 fn get_auth_token(m: &ArgMatches) -> String {
     let tok = if let Some(auth_tok) = m.value_of("token") {
-            auth_tok.to_owned()
+        auth_tok.to_owned()
     } else {
-        std::env::vars().filter(|&(ref k, _)| k == "DO_AUTH_TOKEN")
-                        .map(|(_, v)| v.clone() )
-                        .next().unwrap_or("".to_owned())
+        std::env::vars()
+            .filter(|&(ref k, _)| k == "DO_AUTH_TOKEN")
+            .map(|(_, v)| v.clone())
+            .next()
+            .unwrap_or("".to_owned())
     };
     if tok.len() != 64 {
         println!("No DigitalOcean Auth Token found.\n\n\
@@ -245,18 +261,18 @@ fn main() {
     let mut cfg = Config {
         verbose: m.is_present("verbose"),
         no_send: m.is_present("nosend"),
-        auth: get_auth_token(&m)
+        auth: get_auth_token(&m),
     };
 
     match m.subcommand() {
-        ("account", Some(m))  => account::run(m, &mut cfg),
-        ("domains", Some(m))  => domains::run(m, &mut cfg),
-        ("dns", Some(m))      => dns::run(m, &mut cfg),
+        ("account", Some(m)) => account::run(m, &mut cfg),
+        ("domains", Some(m)) => domains::run(m, &mut cfg),
+        ("dns", Some(m)) => dns::run(m, &mut cfg),
         ("droplets", Some(m)) => droplets::run(m, &mut cfg),
-        ("droplet", Some(m))  => droplet::run(m, &mut cfg),
-        ("image", Some(m))    => image::run(m, &mut cfg),
+        ("droplet", Some(m)) => droplet::run(m, &mut cfg),
+        ("image", Some(m)) => image::run(m, &mut cfg),
         ("ssh-keys", Some(m)) => ssh_keys::run(m, &mut cfg),
-        ("list", Some(m))     => list::run(m, &mut cfg),
-        _                     => ()
+        ("list", Some(m)) => list::run(m, &mut cfg),
+        _ => (),
     }
 }

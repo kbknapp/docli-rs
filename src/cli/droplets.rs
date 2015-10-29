@@ -25,13 +25,17 @@ fn droplet_from_matches(m: &ArgMatches) -> Droplet {
             Some(d.to_owned())
         } else {
             None
-        }
+        },
     }
 }
 
 pub fn run(m: &ArgMatches, cfg: &mut Config) {
-    if m.is_present("verbose") { cfg.verbose = true; }
-    if m.is_present("nosend") { cfg.no_send = true; }
+    if m.is_present("verbose") {
+        cfg.verbose = true;
+    }
+    if m.is_present("nosend") {
+        cfg.no_send = true;
+    }
     let domgr = DoManager::with_token(&cfg.auth[..]);
     match m.subcommand() {
         ("neighbors", Some(m)) => {
@@ -42,14 +46,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplets().neighbors().retrieve_json() {
-                    Ok(s)  => {
+                    Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -66,15 +72,17 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                             println!("\t{}\n", &dr.to_string()[..].replace("\n", "\n\t"));
                         }
                     }
-                    if v.is_empty() { println!("\tNo neighbors to dipslay"); }
-                },
+                    if v.is_empty() {
+                        println!("\tNo neighbors to dipslay");
+                    }
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("{}\n", e);
                 }
             }
-        },
-        ("upgrades", Some(m))  => {
+        }
+        ("upgrades", Some(m)) => {
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
                     &domgr.droplets()
@@ -82,14 +90,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplets().upgrades().retrieve_json() {
-                    Ok(s)  => {
+                    Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -104,15 +114,17 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                         CliMessage::NamelessDroplet.display();
                         println!("\t{}", act);
                     }
-                    if v.is_empty() { println!("\tNo upgrades to dipslay"); }
-                },
+                    if v.is_empty() {
+                        println!("\tNo upgrades to dipslay");
+                    }
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("{}\n", e);
                 }
             }
-        },
-        ("create", Some(m))         => {
+        }
+        ("create", Some(m)) => {
             let droplet_cfg = droplet_from_matches(&m);
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::Request(
@@ -121,14 +133,16 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                           .to_string()
                           .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send || m.is_present("nosend") { return }
+            if cfg.no_send || m.is_present("nosend") {
+                return;
+            }
             if cfg.verbose || m.is_present("verbose") {
                 CliMessage::JsonResponse.display();
                 match domgr.droplets().create(&droplet_cfg).retrieve_json() {
                     Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -140,28 +154,30 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                 Ok(s) => {
                     CliMessage::Success.display();
                     println!("\n\t{}\n", s);
-                },
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("\n\t{}\n", e);
                 }
             }
-        },
-        _                           => {
+        }
+        _ => {
             if cfg.verbose {
                 CliMessage::Request(
                     &domgr.droplets()
                          .to_string()
                          .replace("\n", "\n\t")[..]).display();
             }
-            if cfg.no_send { return }
+            if cfg.no_send {
+                return;
+            }
             if cfg.verbose {
                 CliMessage::JsonResponse.display();
                 match domgr.droplets().retrieve_json() {
-                    Ok(s)  => {
+                    Ok(s) => {
                         CliMessage::Success.display();
                         println!("\n\t{}\n", s);
-                    },
+                    }
                     Err(e) => {
                         CliMessage::Failure.display();
                         println!("\n\t{}\n", e);
@@ -176,8 +192,10 @@ pub fn run(m: &ArgMatches, cfg: &mut Config) {
                         CliMessage::AnonDroplet.display();
                         println!("\t{}", &d.to_string()[..].replace("\n", "\n\t"));
                     }
-                    if v.is_empty() { println!("\tNo droplets to dipslay"); }
-                },
+                    if v.is_empty() {
+                        println!("\tNo droplets to dipslay");
+                    }
+                }
                 Err(e) => {
                     CliMessage::Failure.display();
                     println!("{}\n", e);
