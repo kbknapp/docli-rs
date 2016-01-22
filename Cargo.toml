@@ -1,28 +1,32 @@
 [package]
-name = "docli"
-version = "0.1.0"
 authors = ["Kevin K <kbknapp@gmail.com>"]
 description = "A command line utility to managing DigitalOcean infrastructure"
-license = "MIT"
-repository = "https://github.com/kbknapp/docli-rs.git"
 documentation = "http://kbknapp.github.io/docli-rs"
-readme = "README.md"
-keywords = ["do", "cli", "digitalocean", "digital", "ocean"]
-homepage = "https://kbknapp.github.io/docli-rs"
 exclude = ["pkg/*"]
+homepage = "https://kbknapp.github.io/docli-rs"
+keywords = ["do", "cli", "digitalocean", "digital", "ocean"]
+license = "MIT"
+name = "docli"
+readme = "README.md"
+repository = "https://github.com/kbknapp/docli-rs.git"
+version = "0.1.0"
 
 [dependencies]
-clap = "~1.5"
+clap = "1.5.5"
 doapi = "~0.1"
-ansi_term = {version = "0.7", optional = true}
-clippy = {version = "0.0", optional = true}
+serde_macros = "0.6.10"
+
+[dependencies.ansi_term]
+optional = true
+version = "0.7"
+
+[dependencies.clippy]
+optional = true
+version = "0.0"
 
 [features]
-default = ["color"]
 color = ["ansi_term"]
+default = ["color"]
 lints = ["nightly", "clippy"]
 nightly = []
-# for building with nightly and unstable features
-unstable=["lints"]
-
-
+unstable = ["lints"]
